@@ -8,7 +8,7 @@ public class Matrix4f {
 		return new Matrix4f();
 	}
 	
-	public static Matrix4f getMatrixFromTranslation(Vector3f vec) {
+	public static Matrix4f fromTranslation(Vector3f vec) {
 		Matrix4f matrix = identity();
 		matrix.elements[0 + 3 * 4] = vec.x;
 		matrix.elements[1 + 3 * 4] = vec.y;
@@ -40,7 +40,7 @@ public class Matrix4f {
 		// [ 0 , 0 , 1 , 0 ]
 		// [ 0 , 0 , 0 , 1 ]
 		
-		// [row 0 + col 0 * 4] = 1.0f etc..
+		// [col 0 + row 0 * 4] = 1.0f etc..
 		
 		elements[0 + 0 * 4] = 1.0f;
 		elements[1 + 1 * 4] = 1.0f;
@@ -54,7 +54,6 @@ public class Matrix4f {
 		elements[3 + 2 * 4] += elements[0 + 2 * 4] * vec.x + elements[1 + 2 * 4] * vec.y + elements[2 + 2 * 4] * vec.z;
 		elements[3 + 3 * 4] += elements[0 + 3 * 4] * vec.x + elements[1 + 3 * 4] * vec.y + elements[2 + 3 * 4] * vec.z;
 	}
-	
 	
 	public void rotate(float angle, Vector3f axis) {
 
@@ -102,19 +101,6 @@ public class Matrix4f {
 		elements[1 + 1 * 4] = t11;
 		elements[1 + 2 * 4] = t12;
 		elements[1 + 3 * 4] = t13;
-
-	}
-	
-	// 2D rotation
-	public void rotate(float angle) {
-		
-		float cos = (float) Math.cos(angle);
-		float sin = (float) Math.sin(angle);
-		
-		elements[0 + 0 * 4] = cos;
-		elements[1 + 0 * 4] = sin;
-		elements[0 + 1 * 4] = -sin;
-		elements[1 + 1 * 4] = cos;
 		
 	}
 	

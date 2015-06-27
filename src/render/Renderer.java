@@ -35,7 +35,7 @@ public class Renderer {
 	}
 	
 	// Should be called whenever the framebuffer changes size
-	public void setFramebufferDimensions(int width, int height) {
+	public void setFramebufferSize(int width, int height) {
 		framebufferWidth = width;
 		framebufferHeight = height;
 	}

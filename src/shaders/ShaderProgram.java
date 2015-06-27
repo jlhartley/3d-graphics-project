@@ -26,10 +26,7 @@ public class ShaderProgram {
 	
 	private HashMap<String, Integer> uniformLocationCache = new HashMap<>();
 	
-	//private HashMap<String, Integer> vertexAttribLocationMap = new HashMap<>();
-	
-	public ShaderProgram(String vertexShaderPath, String fragmentShaderPath/*, ArrayList<VertexAttribute> vertexAttributes*/) {
-		
+	public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
 		vertexShaderId = loadShaderFromFile(vertexShaderPath, GL_VERTEX_SHADER);
 		fragmentShaderId = loadShaderFromFile(fragmentShaderPath, GL_FRAGMENT_SHADER);
 		
@@ -45,24 +42,8 @@ public class ShaderProgram {
 	}
 	
 	private void bindAttributes() {
-		
 		glBindAttribLocation(programId, POSITION_ATTRIB_LOCATION, "position");
 		glBindAttribLocation(programId, COLOUR_ATTRIB_LOCATION, "colour");
-		
-		//vertexAttribLocationMap.put("position", 0);
-		//vertexAttribLocationMap.put("colour", 1);
-		
-		
-		// Sets up the association between the shader variable names and numerical index.
-		// An alternative to layout(location = index) in the actual shader GLSL.
-		//for (String name : vertexAttribLocationMap.keySet()) {
-		//	glBindAttribLocation(programId, vertexAttribLocationMap.get(name), name);
-		//}
-		
-		//for (VertexAttribute attribute : vertexAttributes)  {
-		//	glBindAttribLocation(programId, attribute.getIndex(), attribute.getName());
-		//}
-		
 	}
 	
 	private static int loadShaderFromFile(String path, int type) {

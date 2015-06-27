@@ -44,7 +44,7 @@ public class Entity3D {
 	
 	// For rendering
 	public Matrix4f getModelMatrix() {
-		return MathUtils.createTransformationMatrix(position, rotX, rotY, rotZ, scale);
+		return MathUtils.createModelMatrix(position, rotX, rotY, rotZ, scale);
 	}
 	
 	// Getters and setters

@@ -10,8 +10,8 @@ public class MathUtils {
 	public static final Vector3f Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
 	public static final Vector3f Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
 	
-	// For 3D
-	public static Matrix4f createTransformationMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
+	// Model matrix positions a model in the world
+	public static Matrix4f createModelMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
 		Matrix4f matrix = Matrix4f.identity();
 		matrix.translate(translation);
 		matrix.rotate((float) Math.toRadians(rx), X_AXIS);
@@ -21,26 +21,7 @@ public class MathUtils {
 		return matrix;
 	}
 	
-	// For 2D
-	public static Matrix4f createTransformationMatrix(Vector3f translation, float rotAngle, float scale) {
-		Matrix4f matrix = Matrix4f.identity();
-		matrix.translate(translation);
-		matrix.rotate((float) Math.toRadians(rotAngle));
-		matrix.scale(new Vector3f(scale, scale, scale));
-		return matrix;
-	}
-	
-	// For 2D - just fixes the aspect ratio problem
-	public static Matrix4f createProjectionMatrix(int width, int height) {
-		float ratio = (float) width / (float) height;
-		
-		Matrix4f matrix = Matrix4f.identity();
-		matrix.elements[0 + 0 * 4] = 1  / ratio;
-		
-		return matrix;
-	}
-	
-	// For 3D
+	// 3D to 2D projection matrix
 	public static Matrix4f createProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
 		float ratio = (float) width / (float) height;
 		float y_scale = (float) (1f / Math.tan(Math.toRadians(fov / 2f)) * ratio);
@@ -58,7 +39,7 @@ public class MathUtils {
 		return matrix;
 	}
 	
-	// For 3D, of course.
+	// View matrix positions models relative to the camera
 	public static Matrix4f createViewMatrix(Vector3f translation, float pitch, float yaw, float roll) {
 		Matrix4f matrix = Matrix4f.identity();
 		matrix.rotate((float) Math.toRadians(pitch), X_AXIS);
