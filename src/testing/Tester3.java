@@ -27,11 +27,6 @@ public class Tester3 extends Prototyper {
 		
 	}
 	
-	@Override
-	public void onFramebufferResized(int width, int height) {
-		
-	}
-	
 	
 	
 	private float getRandomRotation() {

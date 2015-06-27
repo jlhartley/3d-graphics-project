@@ -36,7 +36,7 @@ public class WindowManager {
 			System.exit(1);
 		}
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
-		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also re-sizable
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create window!");
@@ -44,8 +44,21 @@ public class WindowManager {
 		}
 	}
 	
+	private void initGL() {
+        glfwMakeContextCurrent(window);
+        glfwSwapInterval(1);
+		GLContext.createFromCurrent();
+		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
+	}
 	
-	private void initCallbacks(Callbacks callbacks) {
+	
+	public WindowManager(int width, int height, String title) {
+		initWindow(width, height, title);
+		initGL();
+	}
+	
+	
+	public void setCallbacks(Callbacks callbacks) {
 		// Key callback just calls through to our own interface
 		keyCallback = new GLFWKeyCallback() {
             @Override
@@ -70,22 +83,6 @@ public class WindowManager {
 		};
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 	}
-	
-	
-	private void initGL() {
-        glfwMakeContextCurrent(window);
-        glfwSwapInterval(1);
-		GLContext.createFromCurrent();
-		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
-	}
-	
-	
-	public WindowManager(int width, int height, String title, Callbacks callbacks) {
-		initWindow(width, height, title);
-		initCallbacks(callbacks);
-		initGL();
-	}
-	
 	
 	public void showWindow() {
         glfwShowWindow(window);

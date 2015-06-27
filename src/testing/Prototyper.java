@@ -53,13 +53,17 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	
 	private void setUp() {
 
-		// Set up the window
-		windowManager = new WindowManager(WIDTH, HEIGHT, TITLE, this); // Create window and OpenGL context
-		windowManager.showWindow(); // Make window visible
-
+		// Create window and OpenGL context
+		// It is important this is the first setup stage
+		windowManager = new WindowManager(WIDTH, HEIGHT, TITLE);
+		windowManager.setCallbacks(this); // Callbacks for keyboard and framebuffer resize
+		
 		// Set up the renderer
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
-		renderer.setBackgroundColour(0, 0, 0); // Set colour to black
+		renderer.setBackgroundColour(0, 0, 0); // Set background colour to black
+		
+		// Make window visible now that everything is ready to go!
+		windowManager.showWindow();
 
 	}
 	
@@ -79,12 +83,11 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 			windowManager.update(); // Swap buffers and poll for events
 		}
 		
-		
 	}
-	
 	
 	protected abstract void logic(double deltaTime);
 	protected abstract void render(Renderer renderer);
+	
 	
 	private void cleanUp() {
 		renderer.cleanUp();
