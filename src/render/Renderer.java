@@ -20,12 +20,10 @@ public class Renderer {
 	private static final float FAR_PLANE = 1000; // Far plane distance
 	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
-		
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
 		shaderProgram.useProgram();
 		
 		glEnable(GL_DEPTH_TEST);
-		
 	}
 	
 	public void setBackgroundColour(float r, float g, float b) {
@@ -36,7 +34,7 @@ public class Renderer {
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	}
 	
-	// Should be called every frame in case the window is resized.
+	// Should be called whenever the framebuffer changes size
 	public void setFramebufferDimensions(int width, int height) {
 		framebufferWidth = width;
 		framebufferHeight = height;

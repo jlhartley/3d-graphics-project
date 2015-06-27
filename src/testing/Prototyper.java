@@ -4,7 +4,7 @@ import render.Renderer;
 import window.WindowManager;
 import static org.lwjgl.glfw.GLFW.*;
 
-public abstract class Prototyper implements WindowManager.KeyListener {
+public abstract class Prototyper implements WindowManager.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -20,19 +20,20 @@ public abstract class Prototyper implements WindowManager.KeyListener {
 	private WindowManager windowManager;
 	private Renderer renderer;
 	
+	@Override
+	public void onFramebufferResized(int width, int height) {
+		renderer.setFramebufferDimensions(width, height);
+	}
+
+
 	public Prototyper() {
-		
 		setUp();
-		
 	}
 	
 	
 	public void run() {
-		
-		loop();
-		
+		loop(); // The main game loop
 		cleanUp();
-		
 	}
 	
 	
@@ -43,18 +44,6 @@ public abstract class Prototyper implements WindowManager.KeyListener {
 	
 	protected double getTime() {
 		return glfwGetTime();
-	}
-	
-	protected int getFramebufferHeight() {
-		return windowManager.getFramebufferHeight();
-	}
-	
-	protected int getFramebufferWidth() {
-		return windowManager.getFramebufferWidth();
-	}
-	
-	protected float getFramebufferAspectRatio() {
-		return windowManager.getFramebufferWidth() / windowManager.getFramebufferHeight();
 	}
 	
 	protected void closeWindow() {
@@ -85,7 +74,6 @@ public abstract class Prototyper implements WindowManager.KeyListener {
 			oldTime = glfwGetTime();
 			
 			logic(deltaTime); // Game logic goes here
-			renderer.setFramebufferDimensions(getFramebufferWidth(), getFramebufferHeight());
 			render(renderer); // Rendering entities goes here
 			
 			windowManager.update(); // Swap buffers and poll for events

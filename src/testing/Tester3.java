@@ -16,7 +16,6 @@ public class Tester3 extends Prototyper {
 	public static void main(String[] args) {
 		new Tester3().run();
 	}
-	
 
 	@Override
 	public void onKeyPressed(int keyCode) {
@@ -25,6 +24,11 @@ public class Tester3 extends Prototyper {
 
 	@Override
 	public void onKeyReleased(int keyCode) {
+		
+	}
+	
+	@Override
+	public void onFramebufferResized(int width, int height) {
 		
 	}
 	
