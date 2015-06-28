@@ -21,7 +21,7 @@ public class MathUtils {
 		return matrix;
 	}
 	
-	// 3D to 2D projection matrix
+	// 3D to 2D perspective projection matrix
 	public static Matrix4f createProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
 		float ratio = (float) width / (float) height;
 		float y_scale = (float) (1f / Math.tan(Math.toRadians(fov / 2f)) * ratio);

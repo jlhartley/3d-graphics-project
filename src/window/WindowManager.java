@@ -72,7 +72,7 @@ public class WindowManager {
         };
         glfwSetKeyCallback(window, keyCallback);
         
-		// When the window is resized, update our instance variables and adjust the viewport
+		// When the window is resized, call through to the callback and update the viewport
 		framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {

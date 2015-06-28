@@ -6,10 +6,9 @@ import static org.lwjgl.opengl.GL20.*;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
-import org.lwjgl.BufferUtils;
-
 import math.Matrix4f;
 import math.Vector3f;
+import util.BufferUtils;
 import util.FileUtils;
 
 
@@ -79,13 +78,11 @@ public class ShaderProgram {
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 	
-	
-	FloatBuffer matrix4fBuffer = BufferUtils.createFloatBuffer(4*4); // Can't create a new buffer on each method call due to garbage collector issue.
-	
 	public void setUniformValue(String name, Matrix4f matrix) {
-		matrix4fBuffer.put(matrix.elements);
-		matrix4fBuffer.flip();
-		glUniformMatrix4fv(getUniformLocation(name), false, matrix4fBuffer);
+		FloatBuffer matrixBuffer = BufferUtils.toBuffer(matrix.elements);
+		matrixBuffer.put(matrix.elements);
+		matrixBuffer.flip();
+		glUniformMatrix4fv(getUniformLocation(name), false, matrixBuffer);
 	}
 	
 	
