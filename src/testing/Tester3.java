@@ -8,6 +8,7 @@ import entities.Camera;
 import entities.Entity3D;
 import math.Vector3f;
 import model.CubeModel;
+import model.Model;
 import model.Models;
 import render.Renderer;
 
@@ -29,27 +30,71 @@ public class Tester3 extends Prototyper {
 	
 	
 	
-	private float getRandomRotation() {
-		return (float) (Math.random() * 360);
+	// Either side of (0,0)
+	// E.g +5 to -5
+	private static final int XY_LIMIT = 50;
+	
+	private static final int MAX_DISTANCE = 200;
+	private static final int MIN_DISTANCE = 5;
+	
+	private static final double MAX_SCALE = 1.5;
+	private static final double MIN_SCALE = 0.5;
+	
+	private static Vector3f getRandomPosition() {
+		return new Vector3f(getRandomXYPosition(), getRandomXYPosition(), getRandomZPosition());
 	}
 	
-	private float getRandomPosition() {
-		return (float) (-3 + Math.random() * 6);
+	// Get an X or Y position that ranges from -XY_LIMIT to XY_LIMIT
+	private static float getRandomXYPosition() {
+		return (float) (-XY_LIMIT + Math.random() * 2 * XY_LIMIT);
 	}
 	
+	private static float getRandomZPosition() {
+		return (float) (-MIN_DISTANCE - Math.random() * (MAX_DISTANCE-MIN_DISTANCE));
+	}
+	
+	private Vector3f getRandomRotation() {
+		return new Vector3f((float) (Math.random() * 360), (float) (Math.random() * 360), (float) (Math.random() * 360));
+	}
+	
+	// Get a random scale from MIN_SCALE to MAX_SCALE
+	private static float getRandomScale() {
+		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE-MIN_SCALE));
+	}
+	
+	private static Vector3f getRandomColour() {
+		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
+	}
+	
+	private static Vector3f getRandomVelocity() {
+		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
+	}
+	
+	
+	static final int CUBE_COUNT = 600;
 	
 	LinkedList<Entity3D> cubes = new LinkedList<>();
 	
-	Camera camera = new Camera(new Vector3f(0, 0, 0), 0, 0, 0);
+	public void generateCubes(Model cubeModel) {
+		for (int i = 0; i < CUBE_COUNT; i++) {
+			Vector3f randomPosition = getRandomPosition();
+			Vector3f randomColour = getRandomColour();
+			Vector3f randomRotation = getRandomRotation();
+			Vector3f randomVelocity = getRandomVelocity();
+			float randomScale = getRandomScale();
+			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, randomScale));
+		}
+	}
+	
+	
+	Camera camera = new Camera();
 	
 	public Tester3() {
 		
 		CubeModel cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
 		
-		for (int i = 0; i < 6000; i++) {
-			Vector3f randomPosition = new Vector3f(getRandomPosition(), getRandomPosition(), (float)(-5 - Math.random() * 4000));
-			cubes.add(new Entity3D(cubeModel, randomPosition, new Vector3f(getRandomRotation(), getRandomRotation(), getRandomRotation()), 0.2f));
-		}
+		generateCubes(cubeModel);
+		
 		
 		
 	}
