@@ -7,44 +7,69 @@ import model.VAOModel;
 
 public class Entity3D {
 	
+	// Model holding the vertex attributes
 	private VAOModel model;
 	
+	// Position in world space - x, y and z
 	private Vector3f position;
 	
-	// Rotation
-	private float rotX;
-	private float rotY;
-	private float rotZ;
+	// Rotation in x, y and z axis
+	private Vector3f rotation;
 	
+	// Uniform scale in all axis
 	private float scale;
 	
-	public Entity3D(VAOModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public Entity3D(VAOModel model, Vector3f position, Vector3f rotation, float scale) {
 		this.model = model;
 		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+		this.rotation = rotation;
 		this.scale = scale;
 	}
 	
 	
-	
-	public void increaseRotation(float xIncAmt, float yIncAmt, float zIncAmt) {
-		rotX += xIncAmt;
-		rotY += yIncAmt;
-		rotZ += zIncAmt;
+	// Movement methods
+	public void moveUp(float speed, float deltaTime) {
+		position.y += speed * deltaTime;
 	}
 	
+	public void moveDown(float speed, float deltaTime) {
+		position.y -= speed *  deltaTime;
+	}
+	
+	public void moveForward(float speed, float deltaTime) {
+		position.z -= speed * deltaTime;
+	}
+	
+	public void moveBack(float speed, float deltaTime) {
+		position.z += speed * deltaTime;
+	}
+	
+	public void moveRight(float speed, float deltaTime) {
+		position.x += speed * deltaTime;
+	}
+	
+	public void moveLeft(float speed, float deltaTime) {
+		position.x -= speed * deltaTime;
+	}
+	
+	
+	// TODO: Rotational methods
+	
+	
+	// Translate position by a vector
 	public void translate(Vector3f vec) {
-		position.x += vec.x;
-		position.y += vec.y;
-		position.z += vec.z;
+		position.translate(vec);
+	}
+	
+	// Set position using the provided components
+	public void setPosition(float x, float y, float z) {
+		position = new Vector3f(x, y, z);
 	}
 	
 	
 	// For rendering
 	public Matrix4f getModelMatrix() {
-		return MathUtils.createModelMatrix(position, rotX, rotY, rotZ, scale);
+		return MathUtils.createModelMatrix(position, rotation.x, rotation.y, rotation.z, scale);
 	}
 	
 	// Getters and setters
@@ -56,28 +81,8 @@ public class Entity3D {
 		this.position = position;
 	}
 
-	public float getRotX() {
-		return rotX;
-	}
-
-	public void setRotX(float rotX) {
-		this.rotX = rotX;
-	}
-
-	public float getRotY() {
-		return rotY;
-	}
-
-	public void setRotY(float rotY) {
-		this.rotY = rotY;
-	}
-
-	public float getRotZ() {
-		return rotZ;
-	}
-
-	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
+	public Vector3f getRotation() {
+		return rotation;
 	}
 
 	public float getScale() {
@@ -88,7 +93,32 @@ public class Entity3D {
 		this.scale = scale;
 	}
 
+	// Convenience methods
+	public float getRotX() {
+		return rotation.x;
+	}
 
+	public void setRotX(float rotX) {
+		rotation.x = rotX;
+	}
+
+	public float getRotY() {
+		return rotation.y;
+	}
+
+	public void setRotY(float rotY) {
+		this.rotation.y = rotY;
+	}
+
+	public float getRotZ() {
+		return rotation.z;
+	}
+
+	public void setRotZ(float rotZ) {
+		rotation.z = rotZ;
+	}
+	
+	
 	public VAOModel getModel() {
 		return model;
 	}

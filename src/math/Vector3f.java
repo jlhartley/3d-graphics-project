@@ -3,6 +3,8 @@ package math;
 public class Vector3f {
 	
 	// TODO: Have a base vector class / interface that is independent of dimension
+	
+	// TODO: Have a bunch of static factory methods for the basis vectors
 
 	public float x;
 	public float y;

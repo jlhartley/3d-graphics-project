@@ -48,7 +48,7 @@ public class Tester3 extends Prototyper {
 		
 		for (int i = 0; i < 6000; i++) {
 			Vector3f randomPosition = new Vector3f(getRandomPosition(), getRandomPosition(), (float)(-5 - Math.random() * 4000));
-			cubes.add(new Entity3D(cubeModel, randomPosition, getRandomRotation(), getRandomRotation(), getRandomRotation(), 0.2f));
+			cubes.add(new Entity3D(cubeModel, randomPosition, new Vector3f(getRandomRotation(), getRandomRotation(), getRandomRotation()), 0.2f));
 		}
 		
 		

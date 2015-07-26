@@ -78,6 +78,8 @@ public class ShaderProgram {
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 	
+	// TODO: Explore using a dedicated buffer again
+	
 	public void setUniformValue(String name, Matrix4f matrix) {
 		FloatBuffer matrixBuffer = BufferUtils.toBuffer(matrix.elements);
 		matrixBuffer.put(matrix.elements);

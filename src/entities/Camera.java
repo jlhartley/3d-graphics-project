@@ -84,11 +84,9 @@ public class Camera {
 	}
 	
 	
-	// Translates by a vector by adding the components
+	// Translate position by a vector
 	public void translate(Vector3f vec) {
-		position.x += vec.x;
-		position.y += vec.y;
-		position.z += vec.z;
+		position.translate(vec);
 	}
 	
 	// Set position using the provided components
