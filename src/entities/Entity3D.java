@@ -13,10 +13,10 @@ public class Entity3D {
 	// Position in world space - x, y and z
 	private Vector3f position;
 	
-	// Rotation in x, y and z axis
+	// Rotation in x, y and z axes
 	private Vector3f rotation;
 	
-	// Uniform scale in all axis
+	// Uniform scale in all axes
 	private float scale;
 	
 	public Entity3D(Model model, Vector3f position, Vector3f rotation, float scale) {
