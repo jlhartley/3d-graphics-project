@@ -17,6 +17,12 @@ public class Vector3f {
 		this.z = z;
 	}
 	
+	public void translate(Vector3f vec) {
+		this.x += vec.x;
+		this.y += vec.y;
+		this.z += vec.z;
+	}
+	
 	public double magnitude() {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
