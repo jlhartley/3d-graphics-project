@@ -20,7 +20,9 @@ public class Tester3 extends Prototyper {
 
 	@Override
 	public void onKeyPressed(int keyCode) {
-		
+		if (keyCode == GLFW_KEY_SPACE) {
+			reset();
+		}
 	}
 
 	@Override
@@ -29,20 +31,17 @@ public class Tester3 extends Prototyper {
 	}
 	
 	
-	
 	// Either side of (0,0)
 	// E.g +5 to -5
-	private static final int XY_LIMIT = 50;
+	private static final int XY_LIMIT = 10;
 	
-	private static final int MAX_DISTANCE = 200;
+	private static final int MAX_DISTANCE = 4000;
 	private static final int MIN_DISTANCE = 5;
 	
 	private static final double MAX_SCALE = 1.5;
 	private static final double MIN_SCALE = 0.5;
 	
-	private static Vector3f getRandomPosition() {
-		return new Vector3f(getRandomXYPosition(), getRandomXYPosition(), getRandomZPosition());
-	}
+	
 	
 	// Get an X or Y position that ranges from -XY_LIMIT to XY_LIMIT
 	private static float getRandomXYPosition() {
@@ -50,7 +49,11 @@ public class Tester3 extends Prototyper {
 	}
 	
 	private static float getRandomZPosition() {
-		return (float) (-MIN_DISTANCE - Math.random() * (MAX_DISTANCE-MIN_DISTANCE));
+		return (float) (-MIN_DISTANCE - Math.random() * (MAX_DISTANCE - MIN_DISTANCE));
+	}
+	
+	private static Vector3f getRandomPosition() {
+		return new Vector3f(getRandomXYPosition(), getRandomXYPosition(), getRandomZPosition());
 	}
 	
 	private Vector3f getRandomRotation() {
@@ -59,7 +62,7 @@ public class Tester3 extends Prototyper {
 	
 	// Get a random scale from MIN_SCALE to MAX_SCALE
 	private static float getRandomScale() {
-		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE-MIN_SCALE));
+		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE - MIN_SCALE));
 	}
 	
 	private static Vector3f getRandomColour() {
@@ -71,9 +74,11 @@ public class Tester3 extends Prototyper {
 	}
 	
 	
-	static final int CUBE_COUNT = 600;
+	Camera camera = new Camera();
 	
 	LinkedList<Entity3D> cubes = new LinkedList<>();
+	
+	private static final int CUBE_COUNT = 5000;
 	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
@@ -82,103 +87,103 @@ public class Tester3 extends Prototyper {
 			Vector3f randomRotation = getRandomRotation();
 			Vector3f randomVelocity = getRandomVelocity();
 			float randomScale = getRandomScale();
-			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, randomScale));
+			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, 1));
 		}
 	}
-
-	Camera camera = new Camera();
 	
 	public Tester3() {
-		
 		CubeModel cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
-		
 		generateCubes(cubeModel);
-		
-		
-		
+		reset();
 	}
 	
+	private void reset() {
+		collided = false;
+		won = false;
+		cameraForwardSpeed = 5;
+		camera.setPosition(0, 0, 0);
+	}
 	
-	
-	
-	float speed = 5;
-	
+	// Some 'gameplay' state information
+	float cameraForwardSpeed;
 	boolean collided;
 	boolean won;
 	
+	private static final float MOVEMENT_SPEED = 5.5f;
+	
+	// State information for output
 	float lastReportedDistanceTime;
+	
+	private static final float DISTANCE_REPORT_INTERVAL = 1;
+	
+	private static final int LOW_FRAMERATE = 30;
 	
 	@Override
 	protected void logic(double deltaTime) {
 		
+		// 60fps = 16 milliseconds
 		double frameRate = 1/deltaTime;
 		
-		if (frameRate < 55) {
-			System.out.println("Low framerate: " + frameRate);
-		}
-		
-		if (isKeyPressed(GLFW_KEY_SPACE)) {
-			collided = false;
-			won = false;
-			speed = 5;
-			camera.setPosition(new Vector3f(0, 0, 0));
+		if (frameRate < LOW_FRAMERATE) {
+			System.out.println("Low Framerate: " + frameRate + " FPS");
 		}
 		
 		if (collided || won) {
 			return;
 		}
 		
-		float distance = camera.getPosition().z;
+		// Negative since we travel into the screen in the negative z-direction
+		float distance = -camera.getPosition().z;
 		
-		if (distance < -4000) {
+		if (distance > MAX_DISTANCE) {
 			won = true;
 		}
 		
-		if (lastReportedDistanceTime > 1) {
+		if (lastReportedDistanceTime > DISTANCE_REPORT_INTERVAL) {
 			System.out.println("Distance: " + distance);
 			lastReportedDistanceTime = 0;
 		} else {
 			lastReportedDistanceTime += deltaTime;
 		}
 		
-		
+		// The 'cheat' C key - position with an offset of 50 from the end
 		if (isKeyPressed(GLFW_KEY_C)) {
-			camera.setPosition(new Vector3f(0, 0, -3900));
+			camera.setPosition(0, 0, -(MAX_DISTANCE - 50));
 		}
 		
 		
-		
+		 // Look backwards when shift is pressed
 		if (isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-			camera.setYaw(180); // Look backwards
+			camera.setYaw(180);
 		} else {
 			camera.setYaw(0);
 		}
 		
 		if (isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			speed += 20 * deltaTime; // Accelerate faster!
+			cameraForwardSpeed += 20 * deltaTime; // Accelerate faster!
 		} else {
-			speed += 0.3 * deltaTime; // Accelerate
+			cameraForwardSpeed += 0.3 * deltaTime; // Accelerate
 		}
 		
-		camera.moveForward(speed, (float) deltaTime);
-		
-		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < 3) {
-			camera.moveUp(1.5f, (float) deltaTime);
+		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < XY_LIMIT) {
+			camera.moveUp(MOVEMENT_SPEED, (float) deltaTime);
 		} 
 		
-		if (isKeyPressed(GLFW_KEY_DOWN) && camera.getPosition().y > -3) {
-			camera.moveDown(1.5f, (float) deltaTime);
+		if (isKeyPressed(GLFW_KEY_DOWN) && camera.getPosition().y > -XY_LIMIT) {
+			camera.moveDown(MOVEMENT_SPEED, (float) deltaTime);
 		}
 		
-		if (isKeyPressed(GLFW_KEY_RIGHT) && camera.getPosition().x < 3) {
-			camera.moveRight(1.5f, (float) deltaTime);
+		if (isKeyPressed(GLFW_KEY_RIGHT) && camera.getPosition().x < XY_LIMIT) {
+			camera.moveRight(MOVEMENT_SPEED, (float) deltaTime);
 		}
 		
-		if (isKeyPressed(GLFW_KEY_LEFT) && camera.getPosition().x > -3) {
-			camera.moveLeft(1.5f, (float) deltaTime);
+		if (isKeyPressed(GLFW_KEY_LEFT) && camera.getPosition().x > -XY_LIMIT) {
+			camera.moveLeft(MOVEMENT_SPEED, (float) deltaTime);
 		}
 		
 		for (Entity3D cube : cubes) {
+			
+			// Bounding box collision detection - not correctly sized
 			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.25
 					&& Math.abs(camera.getPosition().x - cube.getPosition().x) < 0.25
 					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.25) {
@@ -187,9 +192,12 @@ public class Tester3 extends Prototyper {
 			
 			// Rotate the cubes!
 			cube.setRotX((float) (getTime()*100));
-			cube.setRotY((float) (getTime()*100));
+			//cube.setRotY((float) (getTime()*100));
 			
 		}
+		
+		// Finally move the camera forward each frame
+		camera.moveForward(cameraForwardSpeed, (float) deltaTime);
 		
 		
 	}
