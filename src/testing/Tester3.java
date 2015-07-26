@@ -155,11 +155,11 @@ public class Tester3 extends Prototyper {
 		renderer.clear();
 		
 		if (collided) {
-			renderer.setBackgroundColour(0.9f, 0.2f, 0.2f);
+			renderer.setClearColour(0.9f, 0.2f, 0.2f);
 		} else if (won) {
-			renderer.setBackgroundColour((float)0/255, (float)97/255, (float)32/255);
+			renderer.setClearColour((float)0/255, (float)97/255, (float)32/255);
 		} else {
-			renderer.setBackgroundColour(0, 0, 0);
+			renderer.setClearColour(0, 0, 0);
 		}
 		
 		for (Entity3D cube : cubes) {

@@ -25,7 +25,9 @@ public class Models {
 		
 	}
 	
-	
+	// The problem with this is that it just makes the reference to each
+	// model object null within the scope of this class - 
+	// there could well be a non-null reference somewhere else
 	public static void cleanUpUsedModels() {
 		
 		if (cubeModel != null) {

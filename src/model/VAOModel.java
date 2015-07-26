@@ -111,7 +111,7 @@ public class VAOModel {
 
 	// Clean up code
 	public void cleanUp() {
-		unbindVBO(); // There should'nt be one bound as it should have been handled earlier when the vertex attribute is added, but just to make sure...
+		unbindVBO(); // There shouldn't be one bound as it should have been handled earlier when the vertex attribute is added, but just to make sure...
 		unbindIBO();
 		unbindVAO();
 		

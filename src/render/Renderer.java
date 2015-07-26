@@ -12,8 +12,9 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 	
 	// Need to update in case aspect ratio changes, so it can be set correctly in the projection matrix
-	private int framebufferWidth;
-	private int framebufferHeight;
+	// Some default values for testing purposes
+	private int framebufferWidth = 1280;
+	private int framebufferHeight= 720;
 	
 	private static final float FOV = 70; // Field of view in degrees
 	private static final float NEAR_PLANE = 0.1f; // Near plane distance
@@ -26,7 +27,7 @@ public class Renderer {
 		glEnable(GL_DEPTH_TEST);
 	}
 	
-	public void setBackgroundColour(float r, float g, float b) {
+	public void setClearColour(float r, float g, float b) {
 		glClearColor(r, g, b, 1);
 	}
 	
@@ -46,17 +47,8 @@ public class Renderer {
 		//VAOModel model = entity.getModel();
 		//model.bindVAO();
 		
+		setMatrices(entity, camera);
 		
-		Matrix4f modelMatrix = entity.getModelMatrix();
-		shaderProgram.setUniformValue("model_matrix", modelMatrix);
-		
-		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(framebufferWidth, framebufferHeight, FOV, NEAR_PLANE, FAR_PLANE);
-		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
-		
-		Matrix4f viewMatrix = camera.getViewMatrix();
-		shaderProgram.setUniformValue("view_matrix", viewMatrix);
-		
-		//shaderProgram.setUniformValue("overallColour", entity.getColour());
 		shaderProgram.setUniformValue("time", time);
 		
 		//glEnable(GL_LINE_SMOOTH);
@@ -67,6 +59,17 @@ public class Renderer {
 		
 		//model.unbindVAO();
 		
+	}
+	
+	public void setMatrices(Entity3D entity, Camera camera) {
+		Matrix4f modelMatrix = entity.getModelMatrix();
+		shaderProgram.setUniformValue("model_matrix", modelMatrix);
+		
+		Matrix4f viewMatrix = camera.getViewMatrix();
+		shaderProgram.setUniformValue("view_matrix", viewMatrix);
+		
+		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(framebufferWidth, framebufferHeight, FOV, NEAR_PLANE, FAR_PLANE);
+		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	
 	public void cleanUp() {

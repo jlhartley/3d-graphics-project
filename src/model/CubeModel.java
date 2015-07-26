@@ -39,7 +39,7 @@ public class CubeModel extends VAOModel {
 	};
 	
 	
-	private static final float[] vertexColourData = {
+	private static final float[] vertexColours = {
 		
 			1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f,
@@ -92,7 +92,7 @@ public class CubeModel extends VAOModel {
 	
 	public CubeModel() {
 		super.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		super.addVertexAttrib(vertexColourData, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
+		super.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
 		super.setIBOData(indices);
 		//super.unbindVAO();
 	}
