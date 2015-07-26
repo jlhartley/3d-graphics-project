@@ -14,15 +14,19 @@ public class Camera {
 	private float yaw; // Rotation in y-axis
 	private float roll; // Rotation in z-axis
 	
+	
 	// Telescoping constructors
+	// Place the camera at the origin with no pitch, yaw or roll
 	public Camera() {
-		this(new Vector3f(), 0, 0, 0);
+		this(new Vector3f());
 	}
 	
+	// Place the camera at the specified position with no pitch, yaw or roll
 	public Camera(Vector3f position) {
 		this(position, 0, 0, 0);
 	}
 	
+	// Place the camera at the specified position with the given pitch, yaw and roll
 	public Camera(Vector3f position, float pitch, float yaw, float roll) {
 		this.position = position;
 		this.pitch = pitch;

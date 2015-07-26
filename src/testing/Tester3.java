@@ -85,8 +85,7 @@ public class Tester3 extends Prototyper {
 			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, randomScale));
 		}
 	}
-	
-	
+
 	Camera camera = new Camera();
 	
 	public Tester3() {
