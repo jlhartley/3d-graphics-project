@@ -2,7 +2,7 @@ package model;
 
 import shaders.ShaderProgram;
 
-public class CubeModel extends VAOModel {
+public class CubeModel extends Model {
 
 	private static final float[] vertexPositions = {
 

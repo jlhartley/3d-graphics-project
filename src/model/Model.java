@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import util.BufferUtils;
 
-public class VAOModel {
+public class Model {
 	
 	private int vaoId; // Only one of these per entity of course, that is the whole point of the class.
 	private ArrayList<Integer> vbos = new ArrayList<>(); // Multiple vbos, one for vertex positions, one for vertex colours, etc.
@@ -25,7 +25,7 @@ public class VAOModel {
 	
 	
 	
-	public VAOModel() {
+	public Model() {
 		
 		// First thing to do is gen and bind the VAO - the 'main object' of this class
 		genAndBindVAO();

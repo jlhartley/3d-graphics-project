@@ -3,12 +3,12 @@ package entities;
 import util.MathUtils;
 import math.Matrix4f;
 import math.Vector3f;
-import model.VAOModel;
+import model.Model;
 
 public class Entity3D {
 	
 	// Model holding the vertex attributes
-	private VAOModel model;
+	private Model model;
 	
 	// Position in world space - x, y and z
 	private Vector3f position;
@@ -19,7 +19,7 @@ public class Entity3D {
 	// Uniform scale in all axis
 	private float scale;
 	
-	public Entity3D(VAOModel model, Vector3f position, Vector3f rotation, float scale) {
+	public Entity3D(Model model, Vector3f position, Vector3f rotation, float scale) {
 		this.model = model;
 		this.position = position;
 		this.rotation = rotation;
@@ -119,7 +119,7 @@ public class Entity3D {
 	}
 	
 	
-	public VAOModel getModel() {
+	public Model getModel() {
 		return model;
 	}
 	

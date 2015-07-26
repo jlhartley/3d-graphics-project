@@ -3,7 +3,6 @@ package model;
 public class Models {
 	
 	private static CubeModel cubeModel;
-	private static ShipModel shipModel;
 	
 	public static CubeModel getCubeModel() {
 		
@@ -12,16 +11,6 @@ public class Models {
 		}
 		
 		return cubeModel;
-		
-	}
-	
-	public static ShipModel getShipModel() {
-		
-		if (shipModel == null) {
-			shipModel = new ShipModel();
-		}
-		
-		return shipModel;
 		
 	}
 	
@@ -35,10 +24,6 @@ public class Models {
 			cubeModel = null;
 		}
 		
-		if (shipModel != null) {
-			shipModel.cleanUp();
-			shipModel = null;
-		}
 		
 	}
 
