@@ -5,9 +5,14 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GLContext;
 
 public class WindowManager {
@@ -86,6 +91,31 @@ public class WindowManager {
 	
 	public void showWindow() {
         glfwShowWindow(window);
+	}
+	
+	// Place the window at the centre of the screen
+	public void centerWindow() {
+		
+		// Get the width and height of the primary monitor in screen coordinates
+		long primaryMonitor = glfwGetPrimaryMonitor();
+		ByteBuffer videoMode = glfwGetVideoMode(primaryMonitor);
+		int screenWidth = GLFWvidmode.width(videoMode);
+		int screenHeight = GLFWvidmode.height(videoMode);
+		
+		// Get the width and height of the window in screen coordinates
+		IntBuffer windowWidthBuffer = BufferUtils.createIntBuffer(1);
+		IntBuffer windowHeightBuffer = BufferUtils.createIntBuffer(1);
+		glfwGetWindowSize(window, windowWidthBuffer, windowHeightBuffer);
+		int windowWidth = windowWidthBuffer.get();
+		int windowHeight = windowHeightBuffer.get();
+		
+		System.out.println("Window width: " + windowWidth);
+		System.out.println("Window height: " + windowHeight);
+		
+		glfwSetWindowPos(window,
+				(screenWidth - windowWidth) / 2,
+				(screenHeight - windowHeight) / 2);
+		
 	}
 	
 	public void update() {
