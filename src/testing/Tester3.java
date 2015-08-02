@@ -33,13 +33,13 @@ public class Tester3 extends Prototyper {
 	
 	// Either side of (0,0)
 	// E.g +5 to -5
-	private static final int XY_LIMIT = 10;
+	private static final int XY_LIMIT = 20;
 	
-	private static final int MAX_DISTANCE = 4000;
+	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
 	
-	private static final double MAX_SCALE = 1.5;
-	private static final double MIN_SCALE = 0.5;
+	//private static final double MAX_SCALE = 1.5;
+	//private static final double MIN_SCALE = 0.5;
 	
 	
 	
@@ -56,10 +56,11 @@ public class Tester3 extends Prototyper {
 		return new Vector3f(getRandomXYPosition(), getRandomXYPosition(), getRandomZPosition());
 	}
 	
-	private Vector3f getRandomRotation() {
+	private static Vector3f getRandomRotation() {
 		return new Vector3f((float) (Math.random() * 360), (float) (Math.random() * 360), (float) (Math.random() * 360));
 	}
 	
+	/*
 	// Get a random scale from MIN_SCALE to MAX_SCALE
 	private static float getRandomScale() {
 		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE - MIN_SCALE));
@@ -72,21 +73,21 @@ public class Tester3 extends Prototyper {
 	private static Vector3f getRandomVelocity() {
 		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
 	}
-	
+	*/
 	
 	Camera camera = new Camera();
 	
 	LinkedList<Entity3D> cubes = new LinkedList<>();
 	
-	private static final int CUBE_COUNT = 5000;
+	private static final int CUBE_COUNT = 4000;
 	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
-			Vector3f randomColour = getRandomColour();
 			Vector3f randomRotation = getRandomRotation();
-			Vector3f randomVelocity = getRandomVelocity();
-			float randomScale = getRandomScale();
+			//Vector3f randomColour = getRandomColour();
+			//Vector3f randomVelocity = getRandomVelocity();
+			//float randomScale = getRandomScale();
 			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, 1));
 		}
 	}
@@ -109,11 +110,16 @@ public class Tester3 extends Prototyper {
 	boolean collided;
 	boolean won;
 	
-	private static final float MOVEMENT_SPEED = 5.5f;
+	private static final float NORMAL_ACCELERATION = 0.3f;
+	
+	private static final float RAPID_ACCELERATION = 20;
+	
+	private static final float MOVEMENT_SPEED = 9.5f;
 	
 	// State information for output
 	float lastReportedDistanceTime;
 	
+	// The time interval between distance reports in seconds
 	private static final float DISTANCE_REPORT_INTERVAL = 1;
 	
 	private static final int LOW_FRAMERATE = 30;
@@ -146,11 +152,11 @@ public class Tester3 extends Prototyper {
 			lastReportedDistanceTime += deltaTime;
 		}
 		
+		
 		// The 'cheat' C key - position with an offset of 50 from the end
 		if (isKeyPressed(GLFW_KEY_C)) {
 			camera.setPosition(0, 0, -(MAX_DISTANCE - 50));
 		}
-		
 		
 		 // Look backwards when shift is pressed
 		if (isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
@@ -159,12 +165,14 @@ public class Tester3 extends Prototyper {
 			camera.setYaw(0);
 		}
 		
+		// Determine how quickly to accelerate
 		if (isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			cameraForwardSpeed += 20 * deltaTime; // Accelerate faster!
+			cameraForwardSpeed += RAPID_ACCELERATION * deltaTime; // Accelerate faster!
 		} else {
-			cameraForwardSpeed += 0.3 * deltaTime; // Accelerate
+			cameraForwardSpeed += NORMAL_ACCELERATION * deltaTime; // Accelerate
 		}
 		
+		// Camera movement controls and limits
 		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < XY_LIMIT) {
 			camera.moveUp(MOVEMENT_SPEED, (float) deltaTime);
 		} 
@@ -183,15 +191,15 @@ public class Tester3 extends Prototyper {
 		
 		for (Entity3D cube : cubes) {
 			
-			// Bounding box collision detection - not correctly sized
-			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.25
-					&& Math.abs(camera.getPosition().x - cube.getPosition().x) < 0.25
-					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.25) {
+			// Bounding box collision detection - not correctly sized / adjusted for rotation
+			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.5
+					&& Math.abs(camera.getPosition().x - cube.getPosition().x) < 0.5
+					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.5) {
 				collided = true;
 			}
 			
 			// Rotate the cubes!
-			cube.setRotX((float) (getTime()*100));
+			//cube.setRotX((float) (getTime()*100));
 			//cube.setRotY((float) (getTime()*100));
 			
 		}
@@ -202,6 +210,9 @@ public class Tester3 extends Prototyper {
 		
 	}
 
+	// TODO: Pass colours using some kind of Colour class
+	//private static final Vector3f WIN_COLOUR = new Vector3f((float)0/255, (float)97/255, (float)32/255);
+	
 	@Override
 	protected void render(Renderer renderer) {
 		renderer.clear();
