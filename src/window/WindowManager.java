@@ -94,7 +94,7 @@ public class WindowManager {
 	}
 	
 	// Place the window at the centre of the screen
-	public void centerWindow() {
+	public void centreWindow() {
 		
 		// Get the width and height of the primary monitor in screen coordinates
 		long primaryMonitor = glfwGetPrimaryMonitor();
