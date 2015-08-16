@@ -19,6 +19,15 @@ public class Entity {
 	// Uniform scale in all axes
 	private float scale;
 	
+	// Telescoping constructors
+	public Entity(Model model, Vector3f position) {
+		this(model, position, new Vector3f());
+	}
+	
+	public Entity(Model model, Vector3f position, Vector3f rotation) {
+		this(model, position, rotation, 1);
+	}
+	
 	public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
 		this.model = model;
 		this.position = position;
