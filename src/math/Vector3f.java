@@ -25,6 +25,12 @@ public class Vector3f {
 		this.z += vec.z;
 	}
 	
+	public void negate() {
+		x = -x;
+		y = -y;
+		z = -z;
+	}
+	
 	public double magnitude() {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
