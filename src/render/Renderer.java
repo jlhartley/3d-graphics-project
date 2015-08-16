@@ -2,7 +2,7 @@ package render;
 
 import static org.lwjgl.opengl.GL11.*;
 import entities.Camera;
-import entities.Entity3D;
+import entities.Entity;
 import math.Matrix4f;
 import shaders.ShaderProgram;
 import util.MathUtils;
@@ -42,7 +42,7 @@ public class Renderer {
 	}
 	
 	
-	public void render(Entity3D entity, Camera camera, float time) {
+	public void render(Entity entity, Camera camera, float time) {
 		
 		//VAOModel model = entity.getModel();
 		//model.bindVAO();
@@ -61,7 +61,7 @@ public class Renderer {
 		
 	}
 	
-	public void setMatrices(Entity3D entity, Camera camera) {
+	public void setMatrices(Entity entity, Camera camera) {
 		Matrix4f modelMatrix = entity.getModelMatrix();
 		shaderProgram.setUniformValue("model_matrix", modelMatrix);
 		

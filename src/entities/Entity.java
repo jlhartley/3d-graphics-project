@@ -5,7 +5,7 @@ import math.Matrix4f;
 import math.Vector3f;
 import model.Model;
 
-public class Entity3D {
+public class Entity {
 	
 	// Model holding the vertex attributes
 	private Model model;
@@ -19,7 +19,7 @@ public class Entity3D {
 	// Uniform scale in all axes
 	private float scale;
 	
-	public Entity3D(Model model, Vector3f position, Vector3f rotation, float scale) {
+	public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
 		this.model = model;
 		this.position = position;
 		this.rotation = rotation;

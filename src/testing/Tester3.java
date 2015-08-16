@@ -5,7 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.LinkedList;
 
 import entities.Camera;
-import entities.Entity3D;
+import entities.Entity;
 import math.Vector3f;
 import model.CubeModel;
 import model.Model;
@@ -77,7 +77,7 @@ public class Tester3 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	LinkedList<Entity3D> cubes = new LinkedList<>();
+	LinkedList<Entity> cubes = new LinkedList<>();
 	
 	private static final int CUBE_COUNT = 4000;
 	
@@ -88,7 +88,7 @@ public class Tester3 extends Prototyper {
 			//Vector3f randomColour = getRandomColour();
 			//Vector3f randomVelocity = getRandomVelocity();
 			//float randomScale = getRandomScale();
-			cubes.add(new Entity3D(cubeModel, randomPosition, randomRotation, 1));
+			cubes.add(new Entity(cubeModel, randomPosition, randomRotation, 1));
 		}
 	}
 	
@@ -189,7 +189,7 @@ public class Tester3 extends Prototyper {
 			camera.moveLeft(MOVEMENT_SPEED, (float) deltaTime);
 		}
 		
-		for (Entity3D cube : cubes) {
+		for (Entity cube : cubes) {
 			
 			// Bounding box collision detection - not correctly sized / adjusted for rotation
 			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.5
@@ -225,7 +225,7 @@ public class Tester3 extends Prototyper {
 			renderer.setClearColour(0, 0, 0);
 		}
 		
-		for (Entity3D cube : cubes) {
+		for (Entity cube : cubes) {
 			renderer.render(cube, camera, (float) getTime());
 		}
 	}
