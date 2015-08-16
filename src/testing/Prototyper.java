@@ -62,7 +62,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
-		// Make window visible now that everything is ready to go!
+		// Centre window and make it visible
+		windowManager.centreWindow();
 		windowManager.showWindow();
 
 	}
