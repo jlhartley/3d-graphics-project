@@ -230,8 +230,20 @@ public class Tester4 extends Prototyper {
 		// Finally move the camera forward each frame
 		camera.moveForward(cameraForwardSpeed, (float) deltaTime);
 		
+		// Cubes bounce off of their container
 		for (MovableEntity movEntity : movingCubes) {
 			movEntity.tick((float) deltaTime);
+			Vector3f position = movEntity.getPosition();
+			Vector3f velocity = movEntity.getVelocity();
+			if (Math.abs(position.x) > XY_LIMIT) {
+				velocity.x = -velocity.x;
+			}
+			if (Math.abs(position.y) > XY_LIMIT) {
+				velocity.y = -velocity.y;
+			}
+			if (Math.abs(position.z) > MAX_DISTANCE) {
+				velocity.z = -velocity.z;
+			}
 		}
 		
 	}
