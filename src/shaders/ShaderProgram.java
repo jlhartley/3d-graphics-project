@@ -6,9 +6,10 @@ import static org.lwjgl.opengl.GL20.*;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
+import org.lwjgl.BufferUtils;
+
 import math.Matrix4f;
 import math.Vector3f;
-import util.BufferUtils;
 import util.FileUtils;
 
 
@@ -78,10 +79,10 @@ public class ShaderProgram {
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 	
-	// TODO: Explore using a dedicated buffer again
+	// Dedicated buffer for matrix uniforms
+	FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(Matrix4f.SIZE);
 	
 	public void setUniformValue(String name, Matrix4f matrix) {
-		FloatBuffer matrixBuffer = BufferUtils.toBuffer(matrix.elements);
 		matrixBuffer.put(matrix.elements);
 		matrixBuffer.flip();
 		glUniformMatrix4fv(getUniformLocation(name), false, matrixBuffer);
