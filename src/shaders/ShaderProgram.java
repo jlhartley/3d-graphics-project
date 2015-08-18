@@ -67,8 +67,8 @@ public class ShaderProgram {
 	
 	// Bunch of overloaded methods for accessing uniforms
 	public void setUniformValue(String name, boolean value) {
-		float floatValue = value ? 1 : 0; // No booleans in GLSL, so 1 for true 0 for false
-		glUniform1f(getUniformLocation(name), floatValue);
+		int intValue = value ? GL_TRUE : GL_FALSE; // No booleans in GLSL, so 1 for true 0 for false
+		glUniform1i(getUniformLocation(name), intValue);
 	}
 	
 	public void setUniformValue(String name, float value) {
