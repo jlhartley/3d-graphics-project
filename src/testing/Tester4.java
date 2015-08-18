@@ -12,6 +12,7 @@ import model.CubeModel;
 import model.Model;
 import model.Models;
 import render.Renderer;
+import util.MathUtils;
 
 public class Tester4 extends Prototyper {
 	
@@ -32,8 +33,6 @@ public class Tester4 extends Prototyper {
 	}
 	
 	
-	// Either side of (0,0)
-	// E.g +5 to -5
 	private static final int XY_LIMIT = 50;
 	
 	private static final int MAX_DISTANCE = 3000;
@@ -44,13 +43,12 @@ public class Tester4 extends Prototyper {
 	
 	
 	
-	// Get an X or Y position that ranges from -XY_LIMIT to XY_LIMIT
 	private static float getRandomXYPosition() {
-		return (float) (-XY_LIMIT + Math.random() * 2 * XY_LIMIT);
+		return (float) MathUtils.randRange(-XY_LIMIT, XY_LIMIT);
 	}
 	
 	private static float getRandomZPosition() {
-		return (float) (-MIN_DISTANCE - Math.random() * (MAX_DISTANCE - MIN_DISTANCE));
+		return (float) MathUtils.randRange(-MIN_DISTANCE, -MAX_DISTANCE);
 	}
 	
 	private static Vector3f getRandomPosition() {
@@ -76,7 +74,7 @@ public class Tester4 extends Prototyper {
 	private static final int MIN_VELOCITY_COMPONENT = -10;
 	
 	private static float getRandomVelocityComponent() {
-		return (float) (MIN_VELOCITY_COMPONENT + Math.random() * (MAX_VELOCITY_COMPONENT - MIN_VELOCITY_COMPONENT));
+		return (float) MathUtils.randRange(MIN_VELOCITY_COMPONENT, MAX_VELOCITY_COMPONENT);
 	}
 	
 	private static Vector3f getRandomVelocity() {
@@ -87,7 +85,6 @@ public class Tester4 extends Prototyper {
 	Camera camera = new Camera();
 	
 	LinkedList<Entity> cubes = new LinkedList<>();
-	
 	LinkedList<MovableEntity> movingCubes = new LinkedList<>();
 	
 	private static final int CUBE_COUNT = 1000;

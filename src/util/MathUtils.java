@@ -49,5 +49,9 @@ public class MathUtils {
 		return matrix;
 	}
 	
+	public static double randRange(double min, double max) {
+		return min + Math.random() * (max - min);
+	}
+	
 	
 }
