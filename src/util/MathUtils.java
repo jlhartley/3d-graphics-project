@@ -34,7 +34,7 @@ public class MathUtils {
 	// Perspective projection matrix
 	public static Matrix4f createProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
 		float ratio = (float) width / (float) height;
-		float y_scale = (float) (1f / Math.tan(Math.toRadians(fov / 2f)) * ratio);
+		float y_scale = (float) (1 / Math.tan(Math.toRadians(fov / 2)) * ratio);
 		float x_scale = y_scale / ratio;
 		float frustrum_length = farplane - nearplane;
 		
