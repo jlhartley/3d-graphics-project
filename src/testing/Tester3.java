@@ -11,6 +11,7 @@ import model.CubeModel;
 import model.Model;
 import model.Models;
 import render.Renderer;
+import util.MathUtils;
 
 public class Tester3 extends Prototyper {
 	
@@ -31,8 +32,6 @@ public class Tester3 extends Prototyper {
 	}
 	
 	
-	// Either side of (0,0)
-	// E.g +5 to -5
 	private static final int XY_LIMIT = 20;
 	
 	private static final int MAX_DISTANCE = 3000;
@@ -43,13 +42,12 @@ public class Tester3 extends Prototyper {
 	
 	
 	
-	// Get an X or Y position that ranges from -XY_LIMIT to XY_LIMIT
 	private static float getRandomXYPosition() {
-		return (float) (-XY_LIMIT + Math.random() * 2 * XY_LIMIT);
+		return (float) MathUtils.randRange(-XY_LIMIT, XY_LIMIT);
 	}
 	
 	private static float getRandomZPosition() {
-		return (float) (-MIN_DISTANCE - Math.random() * (MAX_DISTANCE - MIN_DISTANCE));
+		return (float) MathUtils.randRange(-MIN_DISTANCE, -MAX_DISTANCE);
 	}
 	
 	private static Vector3f getRandomPosition() {
@@ -69,10 +67,6 @@ public class Tester3 extends Prototyper {
 	private static Vector3f getRandomColour() {
 		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
 	}
-	
-	private static Vector3f getRandomVelocity() {
-		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
-	}
 	*/
 	
 	Camera camera = new Camera();
@@ -86,7 +80,6 @@ public class Tester3 extends Prototyper {
 			Vector3f randomPosition = getRandomPosition();
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
-			//Vector3f randomVelocity = getRandomVelocity();
 			//float randomScale = getRandomScale();
 			cubes.add(new Entity(cubeModel, randomPosition, randomRotation, 1));
 		}
