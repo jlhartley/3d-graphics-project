@@ -47,5 +47,11 @@ public class Vector3f {
 	public float magnitude() {
 		return (float) Math.sqrt(x*x + y*y + z*z);
 	}
+	
+	// Normalise the vector - divide each component by the magnitude
+	public void normalise() {
+		float mag = magnitude();
+		set(x / mag, y / mag, z / mag);
+	}
 
 }
