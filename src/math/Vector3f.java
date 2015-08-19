@@ -14,6 +14,11 @@ public class Vector3f {
 
 	// Constructor with components
 	public Vector3f(float x, float y, float z) {
+		set(x, y, z);
+	}
+	
+	// Set vector components
+	public void set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
