@@ -63,6 +63,10 @@ public class Vector3f {
 		//scale(1 / mag);
 	}
 
+	// Get the dot product of this vector and another vector
+	public float dot(Vector3f vec) {
+		return this.x * vec.x + this.y * vec.y + this.z * vec.z;
+	}
 	
 	
 	
