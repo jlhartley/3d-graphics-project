@@ -11,6 +11,11 @@ public class Vector3f {
 	public Vector3f() {
 		
 	}
+	
+	// Constructor for a copy of an existing vector
+	public Vector3f(Vector3f vec) {
+		set(vec.x, vec.y, vec.z);
+	}
 
 	// Constructor with components
 	public Vector3f(float x, float y, float z) {
