@@ -36,6 +36,13 @@ public class Vector3f {
 		this.z += vec.z;
 	}
 	
+	// Multiply by a scalar
+	public void scale(float scale) {
+		x *= scale;
+		y *= scale;
+		z *= scale;
+	}
+	
 	// Make each component negative
 	public void negate() {
 		x = -x;
