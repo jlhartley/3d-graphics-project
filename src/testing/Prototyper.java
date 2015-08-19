@@ -78,7 +78,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 			double deltaTime = glfwGetTime() - oldTime;
 			oldTime = glfwGetTime();
 			
-			logic(deltaTime); // Game logic goes here
+			logic((float) deltaTime); // Game logic goes here
 			render(renderer); // Rendering entities goes here
 			
 			windowManager.update(); // Swap buffers and poll for events
@@ -86,7 +86,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 		
 	}
 	
-	protected abstract void logic(double deltaTime);
+	protected abstract void logic(float deltaTime);
 	protected abstract void render(Renderer renderer);
 	
 	

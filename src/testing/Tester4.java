@@ -145,10 +145,10 @@ public class Tester4 extends Prototyper {
 	private static final int LOW_FRAMERATE = 30;
 	
 	@Override
-	protected void logic(double deltaTime) {
+	protected void logic(float deltaTime) {
 		
 		// 60fps = 16 milliseconds
-		double frameRate = 1/deltaTime;
+		float frameRate = 1/deltaTime;
 		
 		if (frameRate < LOW_FRAMERATE) {
 			System.out.println("Low Framerate: " + frameRate + " FPS");
@@ -194,19 +194,19 @@ public class Tester4 extends Prototyper {
 		
 		// Camera movement controls and limits
 		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < XY_LIMIT) {
-			camera.moveUp(MOVEMENT_SPEED, (float) deltaTime);
+			camera.moveUp(MOVEMENT_SPEED, deltaTime);
 		} 
 		
 		if (isKeyPressed(GLFW_KEY_DOWN) && camera.getPosition().y > -XY_LIMIT) {
-			camera.moveDown(MOVEMENT_SPEED, (float) deltaTime);
+			camera.moveDown(MOVEMENT_SPEED, deltaTime);
 		}
 		
 		if (isKeyPressed(GLFW_KEY_RIGHT) && camera.getPosition().x < XY_LIMIT) {
-			camera.moveRight(MOVEMENT_SPEED, (float) deltaTime);
+			camera.moveRight(MOVEMENT_SPEED, deltaTime);
 		}
 		
 		if (isKeyPressed(GLFW_KEY_LEFT) && camera.getPosition().x > -XY_LIMIT) {
-			camera.moveLeft(MOVEMENT_SPEED, (float) deltaTime);
+			camera.moveLeft(MOVEMENT_SPEED, deltaTime);
 		}
 		
 		for (Entity cube : cubes) {
@@ -225,11 +225,11 @@ public class Tester4 extends Prototyper {
 		}
 		
 		// Finally move the camera forward each frame
-		camera.moveForward(cameraForwardSpeed, (float) deltaTime);
+		camera.moveForward(cameraForwardSpeed, deltaTime);
 		
 		// Cubes bounce off of their container
 		for (MovableEntity movEntity : movingCubes) {
-			movEntity.tick((float) deltaTime);
+			movEntity.tick(deltaTime);
 			Vector3f position = movEntity.getPosition();
 			Vector3f velocity = movEntity.getVelocity();
 			if (Math.abs(position.x) > XY_LIMIT) {
