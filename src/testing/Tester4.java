@@ -38,10 +38,6 @@ public class Tester4 extends Prototyper {
 	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
 	
-	//private static final double MAX_SCALE = 1.5;
-	//private static final double MIN_SCALE = 0.5;
-	
-	
 	
 	private static float getRandomXYPosition() {
 		return (float) MathUtils.randRange(-XY_LIMIT, XY_LIMIT);
@@ -60,11 +56,6 @@ public class Tester4 extends Prototyper {
 	}
 	
 	/*
-	// Get a random scale from MIN_SCALE to MAX_SCALE
-	private static float getRandomScale() {
-		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE - MIN_SCALE));
-	}
-	
 	private static Vector3f getRandomColour() {
 		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
 	}
@@ -95,9 +86,7 @@ public class Tester4 extends Prototyper {
 			Vector3f randomPosition = getRandomPosition();
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
-			//Vector3f randomVelocity = getRandomVelocity();
-			//float randomScale = getRandomScale();
-			cubes.add(new Entity(cubeModel, randomPosition, randomRotation, 1));
+			cubes.add(new Entity(cubeModel, randomPosition, randomRotation));
 		}
 		
 		for (int i = 0; i < MOVING_CUBE_COUNT; i++) {
@@ -105,8 +94,7 @@ public class Tester4 extends Prototyper {
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
 			Vector3f randomVelocity = getRandomVelocity();
-			//float randomScale = getRandomScale();
-			movingCubes.add(new MovableEntity(cubeModel, randomPosition, randomRotation, randomVelocity, 1));
+			movingCubes.add(new MovableEntity(cubeModel, randomPosition, randomRotation, randomVelocity));
 		}
 		
 		cubes.addAll(movingCubes);
@@ -218,9 +206,6 @@ public class Tester4 extends Prototyper {
 				collided = true;
 			}
 			
-			// Rotate the cubes!
-			//cube.setRotX((float) (getTime()*100));
-			//cube.setRotY((float) (getTime()*100));
 			
 		}
 		

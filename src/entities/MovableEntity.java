@@ -6,6 +6,11 @@ import model.Model;
 public class MovableEntity extends Entity {
 	
 	private Vector3f velocity;
+	
+	// Telescoping constructors
+	public MovableEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity) {
+		this(model, position, rotation, velocity, 1);
+	}
 
 	public MovableEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity, float scale) {
 		super(model, position, rotation, scale);
