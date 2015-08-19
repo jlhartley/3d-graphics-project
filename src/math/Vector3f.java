@@ -61,4 +61,12 @@ public class Vector3f {
 		set(x / mag, y / mag, z / mag);
 	}
 
+	
+	
+	
+	@Override
+	public String toString() {
+		return "{x: " + x + ", y: " + y + ", z: " + z + "}"; 
+	}
+	
 }
