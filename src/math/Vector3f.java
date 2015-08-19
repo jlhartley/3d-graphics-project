@@ -59,6 +59,8 @@ public class Vector3f {
 	public void normalise() {
 		float mag = magnitude();
 		set(x / mag, y / mag, z / mag);
+		// Alternative
+		//scale(1 / mag);
 	}
 
 	
