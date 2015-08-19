@@ -6,9 +6,7 @@ public class Vector3f {
 	
 	// TODO: Have a bunch of static factory methods for the basis vectors
 
-	public float x;
-	public float y;
-	public float z;
+	public float x, y, z;
 
 	public Vector3f() {
 	}
