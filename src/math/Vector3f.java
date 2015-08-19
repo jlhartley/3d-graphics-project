@@ -44,8 +44,8 @@ public class Vector3f {
 	}
 	
 	// Pythagorean calculation for the magnitude of a vector
-	public double magnitude() {
-		return Math.sqrt(x*x + y*y + z*z);
+	public float magnitude() {
+		return (float) Math.sqrt(x*x + y*y + z*z);
 	}
 
 }
