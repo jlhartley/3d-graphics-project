@@ -20,6 +20,9 @@ public class Tester4 extends Prototyper {
 		new Tester4().run();
 	}
 
+	
+	
+	// Input callbacks
 	@Override
 	public void onKeyPressed(int keyCode) {
 		if (keyCode == GLFW_KEY_SPACE) {
@@ -33,12 +36,33 @@ public class Tester4 extends Prototyper {
 	}
 	
 	
-	private static final int XY_LIMIT = 50;
+	// Constants
 	
+	// Output
+	private static final float DISTANCE_REPORT_INTERVAL = 1;
+	private static final int LOW_FRAMERATE = 30;
+	
+	// Spatial dimensions
+	private static final int XY_LIMIT = 50;
 	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
 	
+	// Cube count
+	private static final int CUBE_COUNT = 1000;
+	private static final int MOVING_CUBE_COUNT = 3000;
 	
+	// Cube movement
+	private static final int MAX_VELOCITY_COMPONENT = 10;
+	private static final int MIN_VELOCITY_COMPONENT = -10;
+	
+	// Camera movement
+	private static final float NORMAL_ACCELERATION = 0.3f;
+	private static final float RAPID_ACCELERATION = 20;
+	
+	private static final float MOVEMENT_SPEED = 9.5f;
+	
+	
+	// Entity configuration methods
 	private static float getRandomXYPosition() {
 		return (float) MathUtils.randRange(-XY_LIMIT, XY_LIMIT);
 	}
@@ -55,15 +79,6 @@ public class Tester4 extends Prototyper {
 		return new Vector3f((float) (Math.random() * 360), (float) (Math.random() * 360), (float) (Math.random() * 360));
 	}
 	
-	/*
-	private static Vector3f getRandomColour() {
-		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
-	}
-	*/
-	
-	private static final int MAX_VELOCITY_COMPONENT = 10;
-	private static final int MIN_VELOCITY_COMPONENT = -10;
-	
 	private static float getRandomVelocityComponent() {
 		return (float) MathUtils.randRange(MIN_VELOCITY_COMPONENT, MAX_VELOCITY_COMPONENT);
 	}
@@ -72,14 +87,17 @@ public class Tester4 extends Prototyper {
 		return new Vector3f(getRandomVelocityComponent(), getRandomVelocityComponent(), getRandomVelocityComponent());
 	}
 	
+	/*
+	private static Vector3f getRandomColour() {
+		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
+	}
+	*/
+	
 	
 	Camera camera = new Camera();
 	
 	LinkedList<Entity> cubes = new LinkedList<>();
 	LinkedList<MovableEntity> movingCubes = new LinkedList<>();
-	
-	private static final int CUBE_COUNT = 1000;
-	private static final int MOVING_CUBE_COUNT = 3000;
 	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
@@ -113,24 +131,13 @@ public class Tester4 extends Prototyper {
 		camera.setPosition(0, 0, 0);
 	}
 	
-	// Some 'gameplay' state information
+	// Some 'game play' state information
 	float cameraForwardSpeed;
 	boolean collided;
 	boolean won;
 	
-	private static final float NORMAL_ACCELERATION = 0.3f;
-	
-	private static final float RAPID_ACCELERATION = 20;
-	
-	private static final float MOVEMENT_SPEED = 9.5f;
-	
 	// State information for output
 	float lastReportedDistanceTime;
-	
-	// The time interval between distance reports in seconds
-	private static final float DISTANCE_REPORT_INTERVAL = 1;
-	
-	private static final int LOW_FRAMERATE = 30;
 	
 	@Override
 	protected void logic(float deltaTime) {
