@@ -6,7 +6,25 @@ import java.nio.IntBuffer;
 
 public class BufferUtils {
 	
-	// TODO: Review all of this
+	/* 
+	 * Much of the code in this class is for using buffers efficiently
+	 * and avoiding the problems associated with Java GC calls.
+	 * 
+	 * Each method is set out like this:
+	 * 
+	 * First check if we can reuse the same object.
+	 * This is dependent on the buffer being non-null
+	 * and having sufficient capacity.
+	 * 
+	 * If the buffer has sufficient capacity, just the limit is too restrictive 
+	 * due to it being used previously for a smaller array, then clear it.
+	 * 
+	 * This is because buffers can be under-used (not used to their maximum capacity)
+	 * if the buffer was initialised with a larger capacity for a previous array.
+	 * 
+	 * There is no object creation unless absolutely necessary.
+	 * 
+	 */
 	
 	private static DoubleBuffer doubleBuffer;
 	private static FloatBuffer floatBuffer;
@@ -28,12 +46,8 @@ public class BufferUtils {
 	
 	public static FloatBuffer toBuffer(float[] array) {
 		
-		// Check if we can reuse the same object.
-		// This relies on the floatBuffer being non-null and having sufficient capacity.
 		if (floatBuffer == null || array.length > floatBuffer.capacity()) {
 			floatBuffer = org.lwjgl.BufferUtils.createFloatBuffer(array.length);
-			// If the floatBuffer has sufficient capacity, just the limit is too restrictive 
-			// due to it being used previously for a smaller array, then clear it.
 		} else if (array.length > floatBuffer.limit()) {
 			floatBuffer.clear();
 		}
