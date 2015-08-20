@@ -2,7 +2,7 @@ package model;
 
 public class CubeModel extends Model {
 
-	private static final float[] vertexPositions = {
+	public static final float[] vertexPositions = {
 
 		-0.5f,0.5f,-0.5f,	
 		-0.5f,-0.5f,-0.5f,	
@@ -37,7 +37,7 @@ public class CubeModel extends Model {
 	};
 	
 	
-	private static final float[] vertexColours = {
+	public static final float[] vertexColours = {
 		
 			1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f,
@@ -71,7 +71,7 @@ public class CubeModel extends Model {
 	};
 	
 	
-	private static final int[] indices = {
+	public static final int[] indices = {
 			
 			0,1,3,	
 			3,1,2,	
