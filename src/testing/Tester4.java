@@ -99,6 +99,8 @@ public class Tester4 extends Prototyper {
 	LinkedList<Entity> cubes = new LinkedList<>();
 	LinkedList<MovableEntity> movingCubes = new LinkedList<>();
 	
+	Entity startSquare = new Entity(Models.getSquareModel(), new Vector3f(0, 0, -MIN_DISTANCE));
+	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
@@ -116,6 +118,7 @@ public class Tester4 extends Prototyper {
 		}
 		
 		cubes.addAll(movingCubes);
+		
 	}
 	
 	public Tester4() {
@@ -255,11 +258,13 @@ public class Tester4 extends Prototyper {
 		for (Entity cube : cubes) {
 			renderer.render(cube, camera, (float) getTime());
 		}
+		
+		renderer.render(startSquare, camera, (float) getTime());
 	}
 
 	@Override
 	protected void cleanUpModels() {
-		Models.getCubeModel().cleanUp();
+		Models.cleanUpUsedModels();
 	}
 	
 	

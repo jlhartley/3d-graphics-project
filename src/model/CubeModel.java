@@ -94,7 +94,7 @@ public class CubeModel extends Model {
 		super.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
 		super.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
 		super.setIBOData(indices);
-		//super.unbindVAO();
+		super.unbindVAO();
 	}
 	
 	

@@ -1,9 +1,11 @@
 package render;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import entities.Camera;
 import entities.Entity;
 import math.Matrix4f;
+import model.Model;
 import shaders.ShaderProgram;
 import util.MathUtils;
 
@@ -41,11 +43,18 @@ public class Renderer {
 		framebufferHeight = height;
 	}
 	
+	// Associate entities with a given model for batch rendering
+	//HashMap<Model, List<Entity>> entityModelMap = new HashMap<>();
+	
+	private void prepareModel(Model model) {
+		model.bindVAO();
+	}
 	
 	public void render(Entity entity, Camera camera, float time) {
 		
-		//VAOModel model = entity.getModel();
-		//model.bindVAO();
+		Model model = entity.getModel();
+		
+		prepareModel(model);
 		
 		setMatrices(entity, camera);
 		
@@ -55,13 +64,14 @@ public class Renderer {
 		//glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		
-		glDrawElements(GL_TRIANGLES, entity.getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
 		
 		//model.unbindVAO();
 		
 	}
 	
 	public void setMatrices(Entity entity, Camera camera) {
+		
 		Matrix4f modelMatrix = entity.getModelMatrix();
 		shaderProgram.setUniformValue("model_matrix", modelMatrix);
 		
@@ -70,6 +80,7 @@ public class Renderer {
 		
 		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(framebufferWidth, framebufferHeight, FOV, NEAR_PLANE, FAR_PLANE);
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
+		
 	}
 	
 	public void cleanUp() {
