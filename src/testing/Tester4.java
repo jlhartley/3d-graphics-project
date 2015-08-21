@@ -159,7 +159,7 @@ public class Tester4 extends Prototyper {
 	
 	public Model generateCubeFieldModel() {
 		
-		Model model = new Model();
+		Model cubeField = new Model();
 		
 		CubeModel cubeModel = Models.getCubeModel();
 		
@@ -178,7 +178,7 @@ public class Tester4 extends Prototyper {
 		
 		for (int i = 0; i < cubeCount; i++) {
 			
-			Entity cube = new Entity(cubeModel, new Vector3f(i * 2, 0, 0));
+			Entity cube = new Entity(cubeModel, new Vector3f(i * 2, 0, 0), new Vector3f(i*20, 0, 0));
 			Matrix4f modelTransform = cube.getModelMatrix();
 			//modelTransform.scale(new Vector3f(0.2f, 0.2f, 0.2f));
 			ArrayList<Vector3f> vertexPositionsList = getModelVertexPositions();
@@ -221,12 +221,12 @@ public class Tester4 extends Prototyper {
 			System.out.println(indices[i] + ", " + indices[i+1] + ", " + indices[i+2] + ",");
 		}
 		
-		model.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		model.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
-		model.setIBOData(indices);
-		model.unbindVAO();
+		cubeField.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
+		cubeField.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
+		cubeField.setIBOData(indices);
+		cubeField.unbindVAO();
 		
-		return model;
+		return cubeField;
 		
 		
 	}
