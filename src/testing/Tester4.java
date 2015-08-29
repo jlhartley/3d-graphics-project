@@ -163,7 +163,7 @@ public class Tester4 extends Prototyper {
 		
 		CubeModel cubeModel = Models.getCubeModel();
 		
-		int cubeCount = 10;
+		int cubeCount = 125;
 		
 		ArrayList<Vector3f> allVertexPositionsList = new ArrayList<>();
 		
@@ -178,7 +178,7 @@ public class Tester4 extends Prototyper {
 		
 		for (int i = 0; i < cubeCount; i++) {
 			
-			Entity cube = new Entity(cubeModel, new Vector3f(i * 2, 0, 0), new Vector3f(i*20, 0, 0));
+			Entity cube = new Entity(cubeModel, new Vector3f((i%5) * 1.5f, (i/5)%5 * 1.5f, (i/25) * 1.5f));
 			Matrix4f modelTransform = cube.getModelMatrix();
 			//modelTransform.scale(new Vector3f(0.2f, 0.2f, 0.2f));
 			ArrayList<Vector3f> vertexPositionsList = getModelVertexPositions();
