@@ -1,7 +1,5 @@
 package model;
 
-import shaders.ShaderProgram;
-
 public class CubeModel extends Model {
 
 	private static final float[] vertexPositions = {
@@ -91,10 +89,7 @@ public class CubeModel extends Model {
 	};
 	
 	public CubeModel() {
-		super.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		super.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
-		super.setIBOData(indices);
-		super.unbindVAO();
+		super(vertexPositions, vertexColours, indices);
 	}
 	
 	

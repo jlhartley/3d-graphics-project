@@ -261,12 +261,6 @@ public class Tester4 extends Prototyper {
 		
 		renderer.render(startSquare, camera, (float) getTime());
 	}
-
-	@Override
-	protected void cleanUpModels() {
-		Models.cleanUpUsedModels();
-	}
-	
 	
 
 }

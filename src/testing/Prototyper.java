@@ -1,6 +1,7 @@
 package testing;
 
 import render.Renderer;
+import util.ModelUtils;
 import window.WindowManager;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -92,10 +93,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	
 	private void cleanUp() {
 		renderer.cleanUp();
-		cleanUpModels();
+		ModelUtils.cleanUp();
 		windowManager.close();
 	}
-	
-	protected abstract void cleanUpModels();
 	
 }
