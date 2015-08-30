@@ -213,7 +213,6 @@ public class Tester3 extends Prototyper {
 	
 	@Override
 	protected void render(Renderer renderer) {
-		renderer.clear();
 		
 		if (collided) {
 			renderer.setClearColour(0.9f, 0.2f, 0.2f);

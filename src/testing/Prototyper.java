@@ -80,6 +80,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 			oldTime = glfwGetTime();
 			
 			logic((float) deltaTime); // Game logic goes here
+			renderer.clear();
 			render(renderer); // Rendering entities goes here
 			
 			windowManager.update(); // Swap buffers and poll for events
