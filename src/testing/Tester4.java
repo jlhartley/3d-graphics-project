@@ -273,10 +273,10 @@ public class Tester4 extends Prototyper {
 		}
 		
 		for (Entity cube : cubes) {
-			renderer.render(cube, camera, getTime());
+			renderer.render(cube, camera);
 		}
 		
-		renderer.render(startSquare, camera, getTime());
+		renderer.render(startSquare, camera);
 	}
 	
 

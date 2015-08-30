@@ -48,7 +48,7 @@ public class Renderer {
 		model.bindVAO();
 	}
 	
-	public void render(Entity entity, Camera camera, float time) {
+	public void render(Entity entity, Camera camera) {
 		
 		Model model = entity.getModel();
 		
@@ -56,7 +56,7 @@ public class Renderer {
 		
 		setMatrices(entity, camera);
 		
-		shaderProgram.setUniformValue("time", time);
+		//shaderProgram.setUniformValue("time", time);
 		
 		//glEnable(GL_LINE_SMOOTH);
 		//glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);

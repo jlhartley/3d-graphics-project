@@ -226,7 +226,7 @@ public class Tester3 extends Prototyper {
 		//	renderer.render(cube, camera, getTime());
 		//}
 		
-		renderer.render(cubeField, camera, getTime());
+		renderer.render(cubeField, camera);
 	}
 	
 	
