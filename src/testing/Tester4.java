@@ -3,20 +3,18 @@ package testing;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import entities.Camera;
 import entities.Entity;
 import entities.MovableEntity;
-import math.Matrix4f;
 import math.Vector3f;
 import model.CubeModel;
 import model.Model;
+import model.ModelBuilder;
 import model.Models;
 import render.Renderer;
-import shaders.ShaderProgram;
 import util.MathUtils;
 
 public class Tester4 extends Prototyper {
@@ -126,115 +124,30 @@ public class Tester4 extends Prototyper {
 		
 	}
 	
-	// Should be passing in model here
-	public ArrayList<Vector3f> getModelVertexPositions() {
-		
-		ArrayList<Vector3f> vertexPositions = new ArrayList<>();
-		
-		float[] cubeVertices = CubeModel.vertexPositions;
-		
-		for (int i = 0; i < cubeVertices.length; i+=3) {
-			Vector3f pos = new Vector3f(cubeVertices[i], cubeVertices[i+1], cubeVertices[i+2]);
-			vertexPositions.add(pos);
-		}
-		
-		return vertexPositions;
-	}
 	
-	public float[] vertexListToArray(List<Vector3f> vertexList) {
-		
-		float[] vertexPositions = new float[vertexList.size() * 3];
-		
-		int index = 0;
-		for (Vector3f pos : vertexList) {
-			vertexPositions[index] = pos.x;
-			vertexPositions[index+1] = pos.y;
-			vertexPositions[index+2] = pos.z;
-			index += 3;
-		}
-		
-		return vertexPositions;
-		
-	}
-	
-	public Model generateCubeFieldModel() {
-		
-		Model cubeField = new Model();
-		
-		CubeModel cubeModel = Models.getCubeModel();
-		
-		int cubeCount = 125;
-		
-		ArrayList<Vector3f> allVertexPositionsList = new ArrayList<>();
-		
-		int[] indices = new int[CubeModel.indices.length * cubeCount];
-		float[] vertexColours = new float[CubeModel.vertexColours.length * cubeCount];
-		float[] vertexPositions;
-		
-		// Random colours
-		for (int i = 0; i < vertexColours.length; i++) {
-			vertexColours[i] = (float) Math.random();
-		}
-		
-		for (int i = 0; i < cubeCount; i++) {
-			
-			Entity cube = new Entity(cubeModel, new Vector3f((i%5) * 1.5f, (i/5)%5 * 1.5f, (i/25) * 1.5f));
-			Matrix4f modelTransform = cube.getModelMatrix();
-			//modelTransform.scale(new Vector3f(0.2f, 0.2f, 0.2f));
-			ArrayList<Vector3f> vertexPositionsList = getModelVertexPositions();
-			
-			for (Vector3f pos : vertexPositionsList) {
-				pos.multiply(modelTransform);
-			}
-			
-			allVertexPositionsList.addAll(vertexPositionsList);
-			
-			
-			// Index code
-			// There will be a bunch more vertices
-			int valueOffset = i * CubeModel.vertexPositions.length / 3;
-			
-			// The index buffer is now for multiple cubes
-			int placementOffset = i * CubeModel.indices.length;
-			
-			for (int j = 0; j < CubeModel.indices.length; j++) {
-				indices[j + placementOffset] = CubeModel.indices[j] + valueOffset;
-			}
-			
-			
-			
-			
-			
-		}
-		
-		vertexPositions = vertexListToArray(allVertexPositionsList);
-		
-		System.out.println("Vertex Positions Length: " + vertexPositions.length);
-		System.out.println("Vertex Colours Length: " + vertexColours.length);
-		System.out.println("Indices Length: " + indices.length);
-		
-		for (int i = 0; i < vertexPositions.length; i += 3) {
-			System.out.println(vertexPositions[i] + ", " + vertexPositions[i+1] + ", " + vertexPositions[i+2] + ",");
-		}
-		
-		for (int i = 0; i < indices.length; i += 3) {
-			System.out.println(indices[i] + ", " + indices[i+1] + ", " + indices[i+2] + ",");
-		}
-		
-		cubeField.addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		cubeField.addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
-		cubeField.setIBOData(indices);
-		cubeField.unbindVAO();
-		
-		return cubeField;
-		
-		
-	}
+
 	
 	public Tester4() {
-		CubeModel cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
-		Model cubeFieldModel = generateCubeFieldModel();
-		generateCubes(cubeFieldModel);
+		
+		CubeModel cubeModel = Models.getCubeModel();
+		Model squareModel = Models.getSquareModel();
+		
+		List<Entity> cubesOfCompositeCube = new ArrayList<>();
+		int cubeCount = 27;
+		for (int i = 0; i < cubeCount; i++) {
+			Vector3f pos = new Vector3f((i%3) * 1.5f, (i/3)%3 * 1.5f, (i/9) * 1.5f);
+			Entity cube = new Entity(cubeModel, pos);
+			cubesOfCompositeCube.add(cube);
+		}
+		
+		ModelBuilder modelBuilder = new ModelBuilder();
+		modelBuilder.addEntities(cubesOfCompositeCube);
+		
+		Model compositeModel = modelBuilder.build();
+		generateCubes(compositeModel);
+		
+		
+		
 		reset();
 	}
 	
