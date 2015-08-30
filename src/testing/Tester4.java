@@ -140,12 +140,10 @@ public class Tester4 extends Prototyper {
 			cubesOfCompositeCube.add(cube);
 		}
 		
-		ModelBuilder modelBuilder = new ModelBuilder();
-		modelBuilder.addEntities(cubesOfCompositeCube);
+		ModelBuilder modelBuilder = new ModelBuilder(cubesOfCompositeCube);
 		
 		Model compositeModel = modelBuilder.build();
 		generateCubes(compositeModel);
-		
 		
 		
 		reset();

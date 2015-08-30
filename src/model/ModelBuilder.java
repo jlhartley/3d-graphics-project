@@ -15,6 +15,16 @@ public class ModelBuilder {
 	private int totalVertexColoursLength;
 	private int totalIndicesLength;
 	
+	
+	public ModelBuilder() {
+		
+	}
+	
+	public ModelBuilder(List<Entity> entities) {
+		addEntities(entities);
+	}
+	
+	
 	public void addEntity(Entity entity) {
 		entities.add(entity);
 		Model model = entity.getModel();
