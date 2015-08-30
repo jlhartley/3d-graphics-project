@@ -3,12 +3,13 @@ package testing;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import entities.Camera;
 import entities.Entity;
 import math.Vector3f;
-import model.CubeModel;
 import model.Model;
+import model.ModelBuilder;
 import model.Models;
 import render.Renderer;
 import util.MathUtils;
@@ -71,9 +72,11 @@ public class Tester3 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	LinkedList<Entity> cubes = new LinkedList<>();
+	List<Entity> cubes = new LinkedList<>();
 	
-	private static final int CUBE_COUNT = 4000;
+	Entity cubeField;
+	
+	private static final int CUBE_COUNT = 30000;
 	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
@@ -81,13 +84,15 @@ public class Tester3 extends Prototyper {
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
 			//float randomScale = getRandomScale();
-			cubes.add(new Entity(cubeModel, randomPosition, randomRotation, 1));
+			cubes.add(new Entity(cubeModel, randomPosition, randomRotation));
 		}
 	}
 	
 	public Tester3() {
-		CubeModel cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
+		Model cubeModel = Models.getCubeModel();
 		generateCubes(cubeModel);
+		ModelBuilder cubeFieldBuilder = new ModelBuilder(cubes);
+		cubeField = new Entity(cubeFieldBuilder.build(), new Vector3f());
 		reset();
 	}
 	
@@ -218,9 +223,11 @@ public class Tester3 extends Prototyper {
 			renderer.setClearColour(0, 0, 0);
 		}
 		
-		for (Entity cube : cubes) {
-			renderer.render(cube, camera, (float) getTime());
-		}
+		//for (Entity cube : cubes) {
+		//	renderer.render(cube, camera, (float) getTime());
+		//}
+		
+		renderer.render(cubeField, camera, (float) getTime());
 	}
 	
 	
