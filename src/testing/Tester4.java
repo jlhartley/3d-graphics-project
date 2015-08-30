@@ -133,7 +133,7 @@ public class Tester4 extends Prototyper {
 		for (int i = 0; i < modelCount; i++) {
 			Vector3f pos = new Vector3f((i%2) * 5, (i/2)%2 * 5, (i/4) * 5);
 			// Correct offset
-			pos.translate(new Vector3f(-5, -5, -5));
+			pos.translate(new Vector3f(-2.5f, -2.5f, -2.5f));
 			
 			Entity entity = new Entity(Models.getCubeGridModel(), pos);
 			superModelBuilder.addEntity(entity);
