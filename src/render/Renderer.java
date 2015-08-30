@@ -13,11 +13,6 @@ public class Renderer {
 	
 	private ShaderProgram shaderProgram;
 	
-	// Need to update in case aspect ratio changes, so it can be set correctly in the projection matrix
-	// Some default values for testing purposes
-	private int framebufferWidth = 1280;
-	private int framebufferHeight= 720;
-	
 	private static final float FOV = 70; // Field of view in degrees
 	private static final float NEAR_PLANE = 0.1f; // Near plane distance
 	private static final float FAR_PLANE = 1000; // Far plane distance
@@ -38,9 +33,12 @@ public class Renderer {
 	}
 	
 	// Should be called whenever the framebuffer changes size
-	public void setFramebufferSize(int width, int height) {
-		framebufferWidth = width;
-		framebufferHeight = height;
+	public void updateFramebufferSize(int width, int height) {
+		// Update the viewport
+		glViewport(0, 0, width, height);
+		// Recalculate the projection matrix
+		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	
 	// Associate entities with a given model for batch rendering
@@ -50,7 +48,7 @@ public class Renderer {
 		model.bindVAO();
 	}
 	
-	public void render(Entity entity, Camera camera, float time) {
+	public void render(Entity entity, Camera camera) {
 		
 		Model model = entity.getModel();
 		
@@ -58,7 +56,7 @@ public class Renderer {
 		
 		setMatrices(entity, camera);
 		
-		shaderProgram.setUniformValue("time", time);
+		//shaderProgram.setUniformValue("time", time);
 		
 		//glEnable(GL_LINE_SMOOTH);
 		//glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
@@ -77,9 +75,6 @@ public class Renderer {
 		
 		Matrix4f viewMatrix = camera.getViewMatrix();
 		shaderProgram.setUniformValue("view_matrix", viewMatrix);
-		
-		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(framebufferWidth, framebufferHeight, FOV, NEAR_PLANE, FAR_PLANE);
-		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 		
 	}
 	

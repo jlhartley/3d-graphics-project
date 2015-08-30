@@ -78,12 +78,10 @@ public class WindowManager {
         };
         glfwSetKeyCallback(window, keyCallback);
         
-		// When the window is resized, update the viewport and call through to the callback
+		// When the window is resized just call through to our own callback
 		framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
-				System.out.println("Framebuffer width: " + width + ", Framebuffer height: " + height);
-				glViewport(0, 0, width, height);
 				callbacks.onFramebufferResized(width, height);
 			}
 		};

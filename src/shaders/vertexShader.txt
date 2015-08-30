@@ -20,11 +20,11 @@ uniform float time;
 
 void main()
 {   
-    //pass_colour = colour;
+    pass_colour = colour;
     
-    vec3 timeBasedColour = vec3(sin(PI/2+time*10), sin(3*PI/2+time*10), sin(PI+time*10));
+    //vec3 timeBasedColour = vec3(sin(PI/2+time*10), sin(3*PI/2+time*10), sin(PI+time*10));
     
-    pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
+    //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
     
     gl_Position = vec4(position, 1.0) * model_matrix * view_matrix * projection_matrix;
 }
