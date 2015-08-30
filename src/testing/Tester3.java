@@ -225,7 +225,7 @@ public class Tester3 extends Prototyper {
 
 	@Override
 	protected void cleanUpModels() {
-		Models.getCubeModel().cleanUp();
+		Models.cleanUpUsedModels();
 	}
 	
 	

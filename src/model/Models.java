@@ -1,6 +1,7 @@
 package model;
 
 import shaders.ShaderProgram;
+import util.ModelUtils;
 
 public class Models {
 	
@@ -30,11 +31,7 @@ public class Models {
 	private static Model squareModel;
 	
 	private static void buildSquareModel() {
-		squareModel = new Model();
-		squareModel.addVertexAttrib(squareVertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		squareModel.addVertexAttrib(squareColourData, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
-		squareModel.setIBOData(squareIndices);
-		squareModel.unbindVAO();
+		squareModel = new Model(squareVertexPositions, squareColourData, squareIndices);
 	}
 	
 	public static Model getSquareModel() {
@@ -62,14 +59,16 @@ public class Models {
 	public static void cleanUpUsedModels() {
 		
 		if (cubeModel != null) {
-			cubeModel.cleanUp();
+			//cubeModel.cleanUp();
 			cubeModel = null;
 		}
 		
 		if (squareModel != null) {
-			squareModel.cleanUp();
+			//squareModel.cleanUp();
 			squareModel = null;
 		}
+		
+		ModelUtils.cleanUp();
 		
 		
 	}
