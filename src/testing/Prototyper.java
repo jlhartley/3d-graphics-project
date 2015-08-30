@@ -23,7 +23,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	
 	@Override
 	public void onFramebufferResized(int width, int height) {
-		renderer.setFramebufferSize(width, height);
+		System.out.println("Framebuffer Width: " + width + ", Height: " + height);
+		renderer.updateFramebufferSize(width, height);
 	}
 
 
