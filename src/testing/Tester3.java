@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import entities.Camera;
 import entities.Entity;
 import math.Vector3f;
-import model.CubeModel;
 import model.Model;
 import model.Models;
 import render.Renderer;
@@ -86,7 +85,7 @@ public class Tester3 extends Prototyper {
 	}
 	
 	public Tester3() {
-		CubeModel cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
+		Model cubeModel = Models.getCubeModel(); // Must be cleaned up at the end
 		generateCubes(cubeModel);
 		reset();
 	}

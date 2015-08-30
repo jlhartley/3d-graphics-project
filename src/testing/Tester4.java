@@ -10,7 +10,6 @@ import entities.Camera;
 import entities.Entity;
 import entities.MovableEntity;
 import math.Vector3f;
-import model.CubeModel;
 import model.Model;
 import model.ModelBuilder;
 import model.Models;
@@ -129,7 +128,7 @@ public class Tester4 extends Prototyper {
 	
 	public Tester4() {
 		
-		CubeModel cubeModel = Models.getCubeModel();
+		Model cubeModel = Models.getCubeModel();
 		Model squareModel = Models.getSquareModel();
 		
 		List<Entity> cubesOfCompositeCube = new ArrayList<>();
