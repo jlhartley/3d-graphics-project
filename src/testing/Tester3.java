@@ -222,11 +222,6 @@ public class Tester3 extends Prototyper {
 			renderer.render(cube, camera, (float) getTime());
 		}
 	}
-
-	@Override
-	protected void cleanUpModels() {
-		Models.cleanUpUsedModels();
-	}
 	
 	
 
