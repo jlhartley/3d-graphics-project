@@ -40,6 +40,7 @@ public class WindowManager {
 			System.err.println("Could not initialise GLFW!");
 			System.exit(1);
 		}
+		System.out.println("GLFW Version: " + glfwGetVersionString());
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -108,9 +109,6 @@ public class WindowManager {
 		glfwGetWindowSize(window, windowWidthBuffer, windowHeightBuffer);
 		int windowWidth = windowWidthBuffer.get();
 		int windowHeight = windowHeightBuffer.get();
-		
-		System.out.println("Window width: " + windowWidth);
-		System.out.println("Window height: " + windowHeight);
 		
 		glfwSetWindowPos(window,
 				(screenWidth - windowWidth) / 2,
