@@ -2,9 +2,7 @@ package testing;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import entities.Camera;
 import entities.Entity;
@@ -51,7 +49,7 @@ public class Tester4 extends Prototyper {
 	
 	// Cube count
 	private static final int CUBE_COUNT = 1000;
-	private static final int MOVING_CUBE_COUNT = 3000;
+	private static final int MOVING_CUBE_COUNT = 1;
 	
 	// Cube movement
 	private static final int MAX_VELOCITY_COMPONENT = 10;
@@ -106,7 +104,6 @@ public class Tester4 extends Prototyper {
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
-			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
 			cubes.add(new Entity(cubeModel, randomPosition));
 		}
@@ -128,31 +125,22 @@ public class Tester4 extends Prototyper {
 	
 	public Tester4() {
 		
-		Model cubeModel = Models.getCubeModel();
-		Model squareModel = Models.getSquareModel();
+		//Model cubeModel = Models.getCubeModel();
+		//Model squareModel = Models.getSquareModel();
 		
-		ModelBuilder explodedCubeBuilder = new ModelBuilder();
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, 0.7f)));
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -0.7f)));
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0.7f, 0), new Vector3f(90, 0, 0)));
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, -0.7f, 0), new Vector3f(90, 0, 0)));
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0.7f, 0, 0), new Vector3f(0, 90, 0)));
-		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-0.7f, 0, 0), new Vector3f(0, 90, 0)));
-		Model explodedCubeModel = explodedCubeBuilder.build();
-		
-		ModelBuilder superCubeBuilder = new ModelBuilder();
-		int cubeCount = 27;
-		for (int i = 0; i < cubeCount; i++) {
-			Vector3f pos = new Vector3f((i%3) * 1.5f, (i/3)%3 * 1.5f, (i/9) * 1.5f);
+		ModelBuilder superModelBuilder = new ModelBuilder();
+		int modelCount = 8;
+		for (int i = 0; i < modelCount; i++) {
+			Vector3f pos = new Vector3f((i%2) * 5, (i/2)%2 * 5, (i/4) * 5);
 			// Correct offset
-			pos.translate(new Vector3f(-1.5f, -1.5f, -1.5f));
+			pos.translate(new Vector3f(-5, -5, -5));
 			
-			Entity cube = new Entity(explodedCubeModel, pos);
-			superCubeBuilder.addEntity(cube);
+			Entity entity = new Entity(Models.getCubeGridModel(), pos);
+			superModelBuilder.addEntity(entity);
 		}
-		Model superCubeModel = superCubeBuilder.build();
+		Model superModel = superModelBuilder.build();
 		
-		generateCubes(superCubeModel);
+		generateCubes(superModel);
 		
 		reset();
 	}

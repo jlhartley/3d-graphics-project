@@ -1,5 +1,8 @@
 package model;
 
+import entities.Entity;
+import math.Vector3f;
+
 public class Models {
 	
 	// SQUARE
@@ -125,6 +128,52 @@ public class Models {
 			cubeModel = new Model(cubeVertexPositions, cubeVertexColours, cubeIndices);
 		}
 		return cubeModel;
+	}
+	
+	
+	
+	// Custom built models
+	
+	// EXPLODED CUBE
+	
+	private static Model explodedCubeModel;
+	
+	public static Model getExplodedCubeModel() {
+		if (explodedCubeModel == null) {
+			Model squareModel = getSquareModel();
+			ModelBuilder explodedCubeBuilder = new ModelBuilder();
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, 0.7f)));
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -0.7f)));
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0.7f, 0), new Vector3f(90, 0, 0)));
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, -0.7f, 0), new Vector3f(90, 0, 0)));
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0.7f, 0, 0), new Vector3f(0, 90, 0)));
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-0.7f, 0, 0), new Vector3f(0, 90, 0)));
+			explodedCubeModel = explodedCubeBuilder.build();
+		}
+		return explodedCubeModel;
+	}
+	
+	
+	// CUBE GRID
+	
+	private static Model cubeGridModel;
+	
+	public static Model getCubeGridModel() {
+		if (cubeGridModel == null) {
+			Model cubeModel = getCubeModel();
+			ModelBuilder cubeGridBuilder = new ModelBuilder();
+			int cubeCount = 27;
+			for (int i = 0; i < cubeCount; i++) {
+				Vector3f pos = new Vector3f((i%3) * 1.5f, (i/3)%3 * 1.5f, (i/9) * 1.5f);
+				// Correct offset
+				pos.translate(new Vector3f(-1.5f, -1.5f, -1.5f));
+				
+				Entity cube = new Entity(cubeModel, pos);
+				cubeGridBuilder.addEntity(cube);
+			}
+			cubeGridModel = cubeGridBuilder.build();
+		}
+		return cubeGridModel;
 	}
 
 }
