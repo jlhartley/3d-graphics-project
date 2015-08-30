@@ -43,8 +43,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 		return windowManager.isKeyPressed(key);
 	}
 	
-	protected double getTime() {
-		return glfwGetTime();
+	protected float getTime() {
+		return (float) glfwGetTime();
 	}
 	
 	protected void closeWindow() {

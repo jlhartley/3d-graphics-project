@@ -197,8 +197,8 @@ public class Tester3 extends Prototyper {
 			}
 			
 			// Rotate the cubes!
-			//cube.setRotX((float) (getTime()*100));
-			//cube.setRotY((float) (getTime()*100));
+			//cube.setRotX(getTime() * 100);
+			//cube.setRotY(getTime() * 100);
 			
 		}
 		
@@ -224,10 +224,10 @@ public class Tester3 extends Prototyper {
 		}
 		
 		//for (Entity cube : cubes) {
-		//	renderer.render(cube, camera, (float) getTime());
+		//	renderer.render(cube, camera, getTime());
 		//}
 		
-		renderer.render(cubeField, camera, (float) getTime());
+		renderer.render(cubeField, camera, getTime());
 	}
 	
 	
