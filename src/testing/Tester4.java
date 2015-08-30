@@ -131,19 +131,28 @@ public class Tester4 extends Prototyper {
 		Model cubeModel = Models.getCubeModel();
 		Model squareModel = Models.getSquareModel();
 		
-		List<Entity> cubesOfCompositeCube = new ArrayList<>();
+		ModelBuilder explodedCubeBuilder = new ModelBuilder();
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, 0.7f)));
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -0.7f)));
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0.7f, 0), new Vector3f(90, 0, 0)));
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, -0.7f, 0), new Vector3f(90, 0, 0)));
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0.7f, 0, 0), new Vector3f(0, 90, 0)));
+		explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-0.7f, 0, 0), new Vector3f(0, 90, 0)));
+		Model explodedCubeModel = explodedCubeBuilder.build();
+		
+		ModelBuilder superCubeBuilder = new ModelBuilder();
 		int cubeCount = 27;
 		for (int i = 0; i < cubeCount; i++) {
 			Vector3f pos = new Vector3f((i%3) * 1.5f, (i/3)%3 * 1.5f, (i/9) * 1.5f);
-			Entity cube = new Entity(cubeModel, pos);
-			cubesOfCompositeCube.add(cube);
+			// Correct offset
+			pos.translate(new Vector3f(-1.5f, -1.5f, -1.5f));
+			
+			Entity cube = new Entity(explodedCubeModel, pos);
+			superCubeBuilder.addEntity(cube);
 		}
+		Model superCubeModel = superCubeBuilder.build();
 		
-		ModelBuilder modelBuilder = new ModelBuilder(cubesOfCompositeCube);
-		
-		Model compositeModel = modelBuilder.build();
-		generateCubes(compositeModel);
-		
+		generateCubes(superCubeModel);
 		
 		reset();
 	}
