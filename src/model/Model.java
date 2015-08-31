@@ -18,13 +18,18 @@ public class Model {
 		this.vertexColours = vertexColours;
 		this.indices = indices;
 		
+		initVAO();
+	}
+	
+	private void initVAO() {
 		vaoId = genAndBindVAO();
-		genAndBindIBO();
 		addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
 		addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
 		setIndices(indices);
 		unbindVAO();
 	}
+	
+	
 	
 	public float[] getVertexPositions() {
 		return vertexPositions;

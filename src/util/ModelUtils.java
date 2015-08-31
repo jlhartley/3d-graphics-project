@@ -30,14 +30,19 @@ public class ModelUtils {
 	
 	
 	// IBO code
-	public static int genAndBindIBO() {
+	public static void setIndices(int[] indices) {
+		genAndBindIBO();
+		putDataInIBO(indices);
+	}
+	
+	private static int genAndBindIBO() {
 		int iboId = glGenBuffers();
 		ibos.add(iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		return iboId;
 	}
 	
-	public static void setIndices(int[] indices) {
+	private static void putDataInIBO(int[] indices) {
 		IntBuffer indicesBuffer = BufferUtils.toBuffer(indices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 	}
