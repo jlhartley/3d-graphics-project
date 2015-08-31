@@ -91,6 +91,8 @@ public class OBJParser {
 			vertexPositions[i*3 + 2] = pos.z;
 		}
 		
+		indices = new int[indicesList.size()];
+		
 		// Copy the indices into the array
 		for (int i = 0; i < indicesList.size(); i++) {
 			indices[i] = indicesList.get(i);

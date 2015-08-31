@@ -101,6 +101,8 @@ public class Tester4 extends Prototyper {
 	
 	Entity startSquare = new Entity(Models.getSquareModel(), new Vector3f(0, 0, -MIN_DISTANCE));
 	
+	Entity dragon = new Entity(Models.getDragonModel(), new Vector3f(0, 0, -100));
+	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
@@ -223,19 +225,13 @@ public class Tester4 extends Prototyper {
 		}
 		
 		for (Entity cube : cubes) {
-			
 			// Bounding box collision detection - not correctly sized / adjusted for rotation
 			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.5
 					&& Math.abs(camera.getPosition().x - cube.getPosition().x) < 0.5
 					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.5) {
 				collided = true;
 			}
-			
-			
 		}
-		
-		// Finally move the camera forward each frame
-		camera.moveForward(cameraForwardSpeed, deltaTime);
 		
 		// Cubes bounce off of their container
 		for (MovableEntity movEntity : movingCubes) {
@@ -252,6 +248,12 @@ public class Tester4 extends Prototyper {
 				velocity.z = -velocity.z;
 			}
 		}
+		
+		// Rotate the dragon
+		dragon.setRotY(getTime() * 100);
+		
+		// Finally move the camera forward each frame
+		camera.moveForward(cameraForwardSpeed, deltaTime);
 		
 	}
 
@@ -274,6 +276,9 @@ public class Tester4 extends Prototyper {
 		}
 		
 		renderer.render(startSquare, camera);
+		
+		renderer.render(dragon, camera);
+		
 	}
 	
 
