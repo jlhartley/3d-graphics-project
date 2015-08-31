@@ -49,7 +49,7 @@ public class Tester4 extends Prototyper {
 	
 	// Cube count
 	private static final int CUBE_COUNT = 1000;
-	private static final int MOVING_CUBE_COUNT = 1;
+	private static final int MOVING_CUBE_COUNT = 50;
 	
 	// Cube movement
 	private static final int MAX_VELOCITY_COMPONENT = 10;
@@ -119,9 +119,6 @@ public class Tester4 extends Prototyper {
 		cubes.addAll(movingCubes);
 		
 	}
-	
-	
-
 	
 	public Tester4() {
 		

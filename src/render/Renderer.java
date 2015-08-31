@@ -56,10 +56,6 @@ public class Renderer {
 		
 		setMatrices(entity, camera);
 		
-		//shaderProgram.setUniformValue("time", time);
-		
-		//glEnable(GL_LINE_SMOOTH);
-		//glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		
 		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
