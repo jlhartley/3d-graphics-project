@@ -2,6 +2,7 @@ package model;
 
 import entities.Entity;
 import math.Vector3f;
+import model.parser.OBJParser;
 
 public class Models {
 	
@@ -35,8 +36,6 @@ public class Models {
 		}
 		return squareModel;
 	}
-	
-	
 	
 	
 	// CUBE
@@ -132,6 +131,7 @@ public class Models {
 	
 	
 	
+	
 	// Custom built models
 	
 	// EXPLODED CUBE
@@ -174,6 +174,25 @@ public class Models {
 			cubeGridModel = cubeGridBuilder.build();
 		}
 		return cubeGridModel;
+	}
+	
+	
+	
+	
+	// Parsed models
+	
+	// DRAGON
+	
+	private static final String DRAGON_MODEL_FILENAME = "dragon";
+	
+	private static Model dragonModel;
+	
+	public static Model getDragonModel() {
+		if (dragonModel == null) {
+			OBJParser parser = new OBJParser(DRAGON_MODEL_FILENAME);
+			dragonModel = parser.getModel();
+		}
+		return dragonModel;
 	}
 
 }
