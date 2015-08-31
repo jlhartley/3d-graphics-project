@@ -31,7 +31,61 @@ public class OBJParser {
 	}
 	
 	
+	private static Vector3f lineToVector3f(String[] lineParts) {
+		// Start at index 1 because the first part of the line is the identifier
+		// E.g "v ", "vt ", "vn " etc.
+		float x = Float.parseFloat(lineParts[1]);
+		float y = Float.parseFloat(lineParts[2]);
+		float z = Float.parseFloat(lineParts[3]);
+		return new Vector3f(x, y, z);
+	}
 	
+	// For a line such as:
+	// v 0.123 0.234 0.345
+	private void parseVertexLine(String line) {
+		String[] lineParts = line.split(" ");
+		
+		if (line.startsWith("v ")) { // Vertex position definition
+			Vector3f pos = lineToVector3f(lineParts);
+			vertexPositionsList.add(pos);
+		} else if (line.startsWith("vt ")) { // Vertex texture coordinate definition
+			// TODO: add implementation
+		} else if (line.startsWith("vn ")) { // Vertex normal definition
+			Vector3f normal = lineToVector3f(lineParts);
+			vertexNormalsList.add(normal);
+		}
+	}
+	
+	// For a line formatted like this:
+	// f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+	private void parseFaceLine(String line) {
+		String[] lineParts = line.split(" ");
+		
+		// Iterate though each of the 3 vertices that makes up a face, starting
+		// at index 1 because the first part of the line is the "f " identifier
+		for (int vertex = 1; vertex <= 3; vertex++) {
+			// Split the index data into the position, texture and normal index data
+			// - 1 to convert from OBJ 1-based index system
+			String[] vertexIndexData = lineParts[vertex].split("/");
+			int vertexPositionIndex = Integer.parseInt(vertexIndexData[0]) - 1;
+			int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
+			int vertexNormalIndex = Integer.parseInt(vertexIndexData[2]) - 1;
+			processIndexData(vertexPositionIndex, vertexTextureIndex, vertexNormalIndex);
+		}
+	}
+	
+	private void processIndexData(int vertexPositionIndex, int vertexTextureIndex, int vertexNormalIndex) {
+		
+		indicesList.add(vertexPositionIndex);
+		
+		// Align everything to the vertex position index
+		// Multiple writes will occur because some vertices will belong to multiple faces
+		Vector3f vertexNormal = vertexNormalsList.get(vertexNormalIndex);
+		vertexNormals[vertexPositionIndex*3] = vertexNormal.x;
+		vertexNormals[vertexPositionIndex*3 + 1] = vertexNormal.y;
+		vertexNormals[vertexPositionIndex*3 + 2] = vertexNormal.z;
+		
+	}
 	
 	public Model getModel() {
 		
@@ -41,47 +95,26 @@ public class OBJParser {
 			
 			// Read until we reach the face definitions
 			while (!(line = reader.readLine()).startsWith("f ")) {
-				
-				String[] lineParts = line.split(" ");
-				
-				if (line.startsWith("v ")) {
-					float x = Float.parseFloat(lineParts[1]);
-					float y = Float.parseFloat(lineParts[2]);
-					float z = Float.parseFloat(lineParts[3]);
-					vertexPositionsList.add(new Vector3f(x, y, z));
-				} else if (line.startsWith("vt ")) {
-					
-				} else if (line.startsWith("vn ")) {
-					float x = Float.parseFloat(lineParts[1]);
-					float y = Float.parseFloat(lineParts[2]);
-					float z = Float.parseFloat(lineParts[3]);
-					vertexNormalsList.add(new Vector3f(x, y, z));
-				}
-				
+				parseVertexLine(line);
 			}
 			
-			// Multiplied by 3 since there are 3 components for each vector
-			vertexPositions = new float[vertexPositionsList.size() * 3];
+			// size * 3 since there are 3 components for each vector
 			vertexNormals = new float[vertexNormalsList.size() * 3];
 			
+			
 			do {
-				if (line.startsWith("f ")) {
-					String[] lineParts = line.split(" ");
-					// Each vertex contains 3 numbers separated by "/"
-					String[] vertex1 = lineParts[1].split("/");  
-					String[] vertex2 = lineParts[2].split("/");  
-					String[] vertex3 = lineParts[3].split("/");  
-					processFaceVertex(vertex1);
-					processFaceVertex(vertex2);
-					processFaceVertex(vertex3);
-				}
-			} while ((line = reader.readLine()) != null);
+				parseFaceLine(line);
+			} while ((line = reader.readLine()) != null && line.startsWith("f "));
 		
 		} catch (FileNotFoundException e) {
 			System.err.println("The file: \"" + fullPath + "\" could not be found.");
 		} catch (IOException e) {
 			System.err.println("An I/O exception occurred.");
 		}
+		
+		
+		
+		vertexPositions = new float[vertexPositionsList.size() * 3];
 		
 		// Copy the vertex positions into the array
 		for (int i = 0; i < vertexPositionsList.size(); i++) {
@@ -100,25 +133,6 @@ public class OBJParser {
 		
 		
 		return new Model(vertexPositions, vertexNormals, indices);
-	}
-	
-	
-	private void processFaceVertex(String[] vertexData) {
-		// - 1 to convert from OBJ 1-based index system
-		int vertexPositionPointer = Integer.parseInt(vertexData[0]) - 1;
-		//int vertexTexturePointer = Integer.parseInt(vertexData[1]) - 1;
-		int vertexNormalPointer = Integer.parseInt(vertexData[2]) - 1;
-		
-		//Vector3f vertexPos = vertexPositionsList.get(vertexPositionPointer);
-		Vector3f vertexNormal = vertexNormalsList.get(vertexNormalPointer);
-		
-		// Align everything to the vertex position
-		// Multiple writes will occur because some vertices will belong to multiple faces
-		indicesList.add(vertexPositionPointer);
-		vertexNormals[vertexPositionPointer*3] = vertexNormal.x;
-		vertexNormals[vertexPositionPointer*3 + 1] = vertexNormal.y;
-		vertexNormals[vertexPositionPointer*3 + 2] = vertexNormal.z;
-		
 	}
 	
 	
