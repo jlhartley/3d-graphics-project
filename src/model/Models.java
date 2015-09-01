@@ -22,9 +22,11 @@ public class Models {
 		0, 0, 1 // V3 - blue
 	};
 	
+	// Each triangle must be specified with the vertices winding in an
+	// anti-clockwise direction for face culling purposes
 	private static final int[] squareIndices = {
-		0, 3, 1, // Triangle 1 - V0, V3, V1
-		1, 2, 3 // Triangle 2 - V1, V2, V3
+		0, 1, 3, // Triangle 1
+		3, 1, 2 // Triangle 2
 	};
 	
 	
@@ -41,82 +43,58 @@ public class Models {
 	// CUBE
 	
 	public static final float[] cubeVertexPositions = {
-			-0.5f,0.5f,-0.5f,	
-			-0.5f,-0.5f,-0.5f,	
-			0.5f,-0.5f,-0.5f,	
-			0.5f,0.5f,-0.5f,		
+			// Face 1 - Front
+			-0.5f,0.5f,-0.5f,	// V0
+			-0.5f,-0.5f,-0.5f,	// V1
+			0.5f,-0.5f,-0.5f,	// V2
+			0.5f,0.5f,-0.5f,	// V3
 
-			-0.5f,0.5f,0.5f,	
-			-0.5f,-0.5f,0.5f,	
-			0.5f,-0.5f,0.5f,	
-			0.5f,0.5f,0.5f,
-
-			0.5f,0.5f,-0.5f,	
-			0.5f,-0.5f,-0.5f,	
-			0.5f,-0.5f,0.5f,	
-			0.5f,0.5f,0.5f,
-
-			-0.5f,0.5f,-0.5f,	
-			-0.5f,-0.5f,-0.5f,	
-			-0.5f,-0.5f,0.5f,	
-			-0.5f,0.5f,0.5f,
-
-			-0.5f,0.5f,0.5f,
-			-0.5f,0.5f,-0.5f,
-			0.5f,0.5f,-0.5f,
-			0.5f,0.5f,0.5f,
-
-			-0.5f,-0.5f,0.5f,
-			-0.5f,-0.5f,-0.5f,
-			0.5f,-0.5f,-0.5f,
-			0.5f,-0.5f,0.5f
+			// Face 2 - Back
+			-0.5f,0.5f,0.5f,	// V4
+			-0.5f,-0.5f,0.5f,	// V5
+			0.5f,-0.5f,0.5f,	// V6
+			0.5f,0.5f,0.5f,		// V7
 	};
 	
 	public static final float[] cubeVertexColours = {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
+			// Face 1 - Front
+			1.0f, 0.0f, 0.0f,	// Red
+			0.0f, 0.0f, 1.0f,	// Blue
+			0.0f, 1.0f, 0.0f,	// Green
+			1.0f, 1.0f, 0.0f,	// Yellow
 			
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-			
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-			
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-			
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-			
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f
+			// Face 2 - Back
+			1.0f, 0.0f, 0.0f,	// Red
+			0.0f, 0.0f, 1.0f,	// Blue
+			0.0f, 1.0f, 0.0f,	// Green
+			1.0f, 1.0f, 0.0f,	// Yellow
 	};
 	
+	// Each face is defined here by a square consisting of 2 triangles
 	public static final int[] cubeIndices = {
-			0,1,3,	
-			3,1,2,	
-			4,5,7,
-			7,5,6,
-			8,9,11,
-			11,9,10,
-			12,13,15,
-			15,13,14,	
-			16,17,19,
-			19,17,18,
-			20,21,23,
-			23,21,22
+			// Front face
+			0,1,3,
+			3,1,2,
+			
+			// Right face
+			3,2,7,
+			7,2,6,
+			
+			// Left face
+			4,5,0,
+			0,5,1,
+			
+			// Top face
+			4,0,7,
+			7,0,3,
+			
+			// Bottom face
+			1,5,2,
+			2,5,6,
+			
+			// Back face
+			7,6,4,
+			4,6,5
 	};
 	
 	

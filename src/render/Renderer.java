@@ -22,6 +22,10 @@ public class Renderer {
 		shaderProgram.useProgram();
 		
 		glEnable(GL_DEPTH_TEST);
+		
+		//glFrontFace(GL_CCW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 	}
 	
 	public void setClearColour(float r, float g, float b) {
