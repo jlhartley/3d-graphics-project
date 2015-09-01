@@ -134,7 +134,7 @@ public class Tester4 extends Prototyper {
 			// Correct offset
 			pos.translate(new Vector3f(-2.5f, -2.5f, -2.5f));
 			
-			Entity entity = new Entity(Models.getCubeGridModel(), pos);
+			Entity entity = new Entity(Models.getIcosphereModel(), pos);
 			superModelBuilder.addEntity(entity);
 		}
 		Model superModel = superModelBuilder.build();

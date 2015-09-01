@@ -64,17 +64,19 @@ public class OBJParser {
 		// Iterate though each of the 3 vertices that makes up a face, starting
 		// at index 1 because the first part of the line is the "f " identifier
 		for (int vertex = 1; vertex <= 3; vertex++) {
+			
 			// Split the index data into the position, texture and normal index data
 			// - 1 to convert from OBJ 1-based index system
 			String[] vertexIndexData = lineParts[vertex].split("/");
 			int vertexPositionIndex = Integer.parseInt(vertexIndexData[0]) - 1;
-			int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
+			//int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
 			int vertexNormalIndex = Integer.parseInt(vertexIndexData[2]) - 1;
-			processIndexData(vertexPositionIndex, vertexTextureIndex, vertexNormalIndex);
+			
+			processIndexData(vertexPositionIndex, /*vertexTextureIndex, */ vertexNormalIndex);
 		}
 	}
 	
-	private void processIndexData(int vertexPositionIndex, int vertexTextureIndex, int vertexNormalIndex) {
+	private void processIndexData(int vertexPositionIndex, /*int vertexTextureIndex, */ int vertexNormalIndex) {
 		
 		indicesList.add(vertexPositionIndex);
 		
@@ -98,8 +100,11 @@ public class OBJParser {
 				parseVertexLine(line);
 			}
 			
+			// Use the size of the vertexPositionsList and not the vertexNormalsList,
+			// this is because there must be only 1 normal entry for each vertex.
+			// In many OBJ files there are vastly different numbers of normals to vertices.
 			// size * 3 since there are 3 components for each vector
-			vertexNormals = new float[vertexNormalsList.size() * 3];
+			vertexNormals = new float[vertexPositionsList.size() * 3];
 			
 			
 			do {

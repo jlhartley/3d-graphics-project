@@ -172,5 +172,17 @@ public class Models {
 		}
 		return dragonModel;
 	}
+	
+	private static final String ICOSPHERE_MODEL_FILENAME = "icosphere";
+	
+	private static Model icosphereModel;
+	
+	public static Model getIcosphereModel() {
+		if (icosphereModel == null) {
+			OBJParser parser = new OBJParser(ICOSPHERE_MODEL_FILENAME);
+			icosphereModel = parser.getModel();
+		}
+		return icosphereModel;
+	}
 
 }
