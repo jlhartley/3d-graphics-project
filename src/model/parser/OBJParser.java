@@ -137,7 +137,8 @@ public class OBJParser {
 		}
 		
 		
-		return new Model(vertexPositions, vertexNormals, indices);
+		// Currently just using the normals to colour the model
+		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
 	}
 	
 	
