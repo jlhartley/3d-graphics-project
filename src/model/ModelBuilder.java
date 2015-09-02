@@ -5,7 +5,7 @@ import java.util.List;
 
 import entities.Entity;
 import math.Matrix4f;
-import math.Vector3f;
+import math.Vector4f;
 
 public class ModelBuilder {
 	
@@ -89,7 +89,8 @@ public class ModelBuilder {
 			
 			// Copy over the vertex positions after the previous model, transforming as we go
 			for (int i = 0; i < modelVertexPositions.length; i+=3) {
-				Vector3f pos = new Vector3f(modelVertexPositions[i], modelVertexPositions[i+1], modelVertexPositions[i+2]);
+				// Since the position is a point the w component is set to 1
+				Vector4f pos = new Vector4f(modelVertexPositions[i], modelVertexPositions[i+1], modelVertexPositions[i+2], 1);
 				pos.multiply(transform);
 				// Insert values into the array after the previous model in the correct places
 				vertexPositions[vertexPosOffset + i] = pos.x;
