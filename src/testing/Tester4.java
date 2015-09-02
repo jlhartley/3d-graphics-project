@@ -11,6 +11,7 @@ import math.Vector3f;
 import model.Model;
 import model.ModelBuilder;
 import model.Models;
+import model.parser.OBJParser2;
 import render.Renderer;
 import util.MathUtils;
 

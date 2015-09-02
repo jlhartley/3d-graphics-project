@@ -3,6 +3,7 @@ package model;
 import entities.Entity;
 import math.Vector3f;
 import model.parser.OBJParser;
+import model.parser.OBJParser2;
 
 public class Models {
 	
@@ -45,6 +46,8 @@ public class Models {
 	
 	
 	// CUBE
+	
+	/*
 	
 	public static final float[] cubeVertexPositions = {
 			// Face 1 - Front
@@ -115,7 +118,7 @@ public class Models {
 		return cubeModel;
 	}
 	
-	
+	*/
 	
 	
 	// Custom built models
@@ -191,6 +194,18 @@ public class Models {
 			icosphereModel = parser.getModel();
 		}
 		return icosphereModel;
+	}
+	
+	private static final String CUBE_MODEL_FILENAME = "cube";
+	
+	private static Model cubeModel;
+	
+	public static Model getCubeModel() {
+		if (cubeModel == null) {
+			OBJParser2 parser = new OBJParser2(CUBE_MODEL_FILENAME);
+			cubeModel = parser.getModel();
+		}
+		return cubeModel;
 	}
 
 }
