@@ -23,6 +23,10 @@ void main()
 {   
     pass_colour = colour;
     
+    //pass_colour = (vec4(normal, 0) * model_matrix).xyz;
+    
+    //pass_colour = (vec4(normalize(position), 0) * model_matrix).xyz;
+    
     //vec3 timeBasedColour = vec3(sin(PI/2+time*10), sin(3*PI/2+time*10), sin(PI+time*10));
     
     //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
