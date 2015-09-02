@@ -101,15 +101,18 @@ public class OBJParser {
 			}
 			
 			// Use the size of the vertexPositionsList and not the vertexNormalsList,
-			// this is because there must be only 1 normal entry for each vertex.
+			// this is because there must be exactly 1 normal entry for each vertex.
 			// In many OBJ files there are vastly different numbers of normals to vertices.
 			// size * 3 since there are 3 components for each vector
 			vertexNormals = new float[vertexPositionsList.size() * 3];
 			
 			
 			do {
-				parseFaceLine(line);
-			} while ((line = reader.readLine()) != null && line.startsWith("f "));
+				// Make sure that the line is a face definition
+				if (line.startsWith("f ")) {
+					parseFaceLine(line);
+				}
+			} while ((line = reader.readLine()) != null);
 		
 		} catch (FileNotFoundException e) {
 			System.err.println("The file: \"" + fullPath + "\" could not be found.");
