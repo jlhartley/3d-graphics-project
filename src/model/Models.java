@@ -15,7 +15,11 @@ public class Models {
 		0.5f, 0.5f, 0 // V3 - top right
 	};
 	
-	private static final float[] squareColourData = {
+	private static final float[] squareVertexNormals = {
+			
+	};
+	
+	private static final float[] squareVertexColours = {
 		0, 0, 0, // V0 - black
 		1, 0, 0, // V1 - red
 		1, 1, 1, // V2 - white
@@ -34,7 +38,7 @@ public class Models {
 	
 	public static Model getSquareModel() {
 		if (squareModel == null) {
-			squareModel = new Model(squareVertexPositions, squareColourData, squareIndices);
+			squareModel = new Model(squareVertexPositions, squareVertexNormals, squareVertexColours, squareIndices);
 		}
 		return squareModel;
 	}
@@ -54,6 +58,10 @@ public class Models {
 			-0.5f,-0.5f,0.5f,	// V5
 			0.5f,-0.5f,0.5f,	// V6
 			0.5f,0.5f,0.5f,		// V7
+	};
+	
+	private static final float[] cubeVertexNormals = {
+			
 	};
 	
 	public static final float[] cubeVertexColours = {
@@ -102,7 +110,7 @@ public class Models {
 	
 	public static Model getCubeModel() {
 		if (cubeModel == null) {
-			cubeModel = new Model(cubeVertexPositions, cubeVertexColours, cubeIndices);
+			cubeModel = new Model(cubeVertexPositions, cubeVertexNormals, cubeVertexColours, cubeIndices);
 		}
 		return cubeModel;
 	}
