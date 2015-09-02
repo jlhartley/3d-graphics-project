@@ -68,15 +68,6 @@ public class Vector3f {
 		return this.x * vec.x + this.y * vec.y + this.z * vec.z;
 	}
 	
-	// Perform matrix multiplication on this vector
-	public void multiply(Matrix4f matrix) {
-		float[] elements = matrix.elements;
-		float w = 1; // The 4th vector component
-		float xnew = x * elements[0 + 0 * 4] + y * elements[1 + 0 * 4] + z * elements[2 + 0 * 4] + w * elements[3 + 0 * 4];
-		float ynew = x * elements[0 + 1 * 4] + y * elements[1 + 1 * 4] + z * elements[2 + 1 * 4] + w * elements[3 + 1 * 4];
-		float znew = x * elements[0 + 2 * 4] + y * elements[1 + 2 * 4] + z * elements[2 + 2 * 4] + w * elements[3 + 2 * 4];
-		set(xnew, ynew, znew);
-	}
 	
 	
 	@Override
