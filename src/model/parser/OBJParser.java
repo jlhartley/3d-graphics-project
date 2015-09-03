@@ -26,8 +26,8 @@ public class OBJParser {
 	private int[] indices;
 	
 	
-	public OBJParser(String fileName) {
-		this.fullPath = PATH + fileName + EXTENSION;
+	public OBJParser(String relativePath) {
+		this.fullPath = PATH + relativePath + EXTENSION;
 	}
 	
 	

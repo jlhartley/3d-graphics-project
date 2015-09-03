@@ -184,13 +184,18 @@ public class Models {
 		return dragonModel;
 	}
 	
-	private static final String ICOSPHERE_MODEL_FILENAME = "icosphere";
+	private static final String ICOSPHERE_DIRECTORY = "ico-spheres";
+	private static final String ICOSPHERE_BASE_FILENAME = "icosphere";
+	private static final String ICOSPHERE_SHADING = "smooth";
+	private static final int ICOSPHERE_SUBDIVISIONS = 4;
 	
 	private static Model icosphereModel;
 	
 	public static Model getIcosphereModel() {
 		if (icosphereModel == null) {
-			OBJParser parser = new OBJParser(ICOSPHERE_MODEL_FILENAME);
+			String relativePath = ICOSPHERE_DIRECTORY + "/" + ICOSPHERE_BASE_FILENAME + ICOSPHERE_SUBDIVISIONS + "-"
+					+ ICOSPHERE_SHADING;
+			OBJParser parser = new OBJParser(relativePath);
 			icosphereModel = parser.getModel();
 		}
 		return icosphereModel;
