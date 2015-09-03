@@ -19,11 +19,16 @@ public class OBJParser2 {
 	
 	private List<Vector3f> vertexPositionsList = new ArrayList<>();
 	private List<Vector3f> vertexNormalsList = new ArrayList<>();
-	private List<Integer> indicesList = new ArrayList<>();
 	
 	
 	private List<Vector3f> vertexPositionsListOrdered = new ArrayList<>();
 	private List<Vector3f> vertexNormalsListOrdered = new ArrayList<>();
+	
+	
+	private List<Vector3f> vertexPositionsListOut = new ArrayList<>();
+	private List<Vector3f> vertexNormalsListOut = new ArrayList<>();
+	
+	private List<Integer> indicesList = new ArrayList<>();
 	
 	
 	private float[] vertexPositions;
@@ -83,18 +88,54 @@ public class OBJParser2 {
 	}
 	
 	
-	int indexCount = 0;
 	
 	private void processIndexData(int vertexPositionIndex, /*int vertexTextureIndex, */ int vertexNormalIndex) {
 		
 		vertexPositionsListOrdered.add(vertexPositionsList.get(vertexPositionIndex));
 		vertexNormalsListOrdered.add(vertexNormalsList.get(vertexNormalIndex));
 		
-		indicesList.add(indexCount++);
-		
 	}
 	
 	
+	private int getDuplicateVertexIndex(Vector3f posIn, Vector3f normIn) {
+		// Basic linear search
+		for (int i = 0; i < vertexPositionsListOut.size(); i++) {
+			
+			Vector3f pos = vertexPositionsListOut.get(i);
+			Vector3f norm = vertexNormalsListOut.get(i);
+			
+			if (posIn.x == pos.x && posIn.y == pos.y && posIn.z == pos.z &&
+					normIn.x == norm.x && normIn.y == norm.y && normIn.z == norm.z) {
+				return i;
+			}
+			
+		}
+		
+		return -1;
+	}
+	
+	private void indexVertices() {
+		
+		for (int i = 0; i < vertexPositionsListOrdered.size(); i++) {
+			
+			Vector3f pos = vertexPositionsListOrdered.get(i);
+			Vector3f norm = vertexNormalsListOrdered.get(i);
+			
+			int duplicateVertexIndex = getDuplicateVertexIndex(pos, norm);
+			
+			if (duplicateVertexIndex != -1) {
+				indicesList.add(duplicateVertexIndex);
+			} else {
+				// This is a new index for a truly unique vertex
+				int newIndex = vertexPositionsListOut.size();
+				vertexPositionsListOut.add(pos);
+				vertexNormalsListOut.add(norm);
+				indicesList.add(newIndex);
+			}
+			
+		}
+		
+	}
 	
 	public Model getModel() {
 		
@@ -122,20 +163,22 @@ public class OBJParser2 {
 		}
 		
 		
-		vertexPositions = new float[vertexPositionsListOrdered.size() * 3];
-		vertexNormals = new float[vertexNormalsListOrdered.size() * 3];
+		indexVertices();
+		
+		vertexPositions = new float[vertexPositionsListOut.size() * 3];
+		vertexNormals = new float[vertexNormalsListOut.size() * 3];
 		
 		// Copy the vertex positions into the array
-		for (int i = 0; i < vertexPositionsListOrdered.size(); i++) {
-			Vector3f pos = vertexPositionsListOrdered.get(i);
+		for (int i = 0; i < vertexPositionsListOut.size(); i++) {
+			Vector3f pos = vertexPositionsListOut.get(i);
 			vertexPositions[i*3] = pos.x;
 			vertexPositions[i*3 + 1] = pos.y;
 			vertexPositions[i*3 + 2] = pos.z;
 		}
 		
 		// Copy the vertex positions into the array
-		for (int i = 0; i < vertexNormalsListOrdered.size(); i++) {
-			Vector3f pos = vertexNormalsListOrdered.get(i);
+		for (int i = 0; i < vertexNormalsListOut.size(); i++) {
+			Vector3f pos = vertexNormalsListOut.get(i);
 			vertexNormals[i*3] = pos.x;
 			vertexNormals[i*3 + 1] = pos.y;
 			vertexNormals[i*3 + 2] = pos.z;
@@ -147,6 +190,12 @@ public class OBJParser2 {
 		for (int i = 0; i < indicesList.size(); i++) {
 			indices[i] = indicesList.get(i);
 		}
+		
+		
+		System.out.println("Loaded model: " + fullPath);
+		System.out.println("Unique vertex count: " + vertexPositions.length);
+		System.out.println("Total vertex count: " + indices.length);
+		System.out.println("Model triangle count: " + indices.length / 3);
 		
 		
 		// Currently just using the normals to colour the model

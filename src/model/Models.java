@@ -195,8 +195,8 @@ public class Models {
 	
 	private static final String ICOSPHERE_DIRECTORY = "ico-spheres";
 	private static final String ICOSPHERE_BASE_FILENAME = "icosphere";
-	private static final String ICOSPHERE_SHADING = "smooth";
-	private static final int ICOSPHERE_SUBDIVISIONS = 4;
+	private static final String ICOSPHERE_SHADING = "flat";
+	private static final int ICOSPHERE_SUBDIVISIONS = 3;
 	
 	private static Model icosphereModel;
 	
@@ -204,7 +204,7 @@ public class Models {
 		if (icosphereModel == null) {
 			String relativePath = ICOSPHERE_DIRECTORY + "/" + ICOSPHERE_BASE_FILENAME + ICOSPHERE_SUBDIVISIONS + "-"
 					+ ICOSPHERE_SHADING;
-			OBJParser parser = new OBJParser(relativePath);
+			OBJParser2 parser = new OBJParser2(relativePath);
 			icosphereModel = parser.getModel();
 		}
 		return icosphereModel;

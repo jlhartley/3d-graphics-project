@@ -139,6 +139,10 @@ public class OBJParser {
 			indices[i] = indicesList.get(i);
 		}
 		
+		System.out.println("Loaded model: " + fullPath);
+		System.out.println("Unique vertex count: " + vertexPositions.length);
+		System.out.println("Total vertex count: " + indices.length);
+		System.out.println("Model triangle count: " + indices.length / 3);
 		
 		// Currently just using the normals to colour the model
 		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
