@@ -69,6 +69,14 @@ public class Vector3f {
 	}
 	
 	
+	// A static method for getting the cross product of two vectors
+	public static Vector3f cross(Vector3f vec1, Vector3f vec2) {
+		float x = vec1.y * vec2.z - vec1.z * vec2.y;
+		float y = vec1.z * vec2.x - vec1.x * vec2.z;
+		float z = vec1.x * vec2.y - vec1.y * vec2.x;
+		return new Vector3f(x, y, z);
+	}
+	
 	
 	@Override
 	public String toString() {
