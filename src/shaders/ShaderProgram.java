@@ -15,9 +15,10 @@ import util.FileUtils;
 
 public class ShaderProgram {
 	
-	// Constants used when binding named attributes to an index. Also used when setting up the VAO.
+	// Constants used when binding named attributes to an index. Also used when setting up a VAO for a model.
 	public static final int POSITION_ATTRIB_LOCATION = 0;
-	public static final int COLOUR_ATTRIB_LOCATION = 1;
+	public static final int NORMAL_ATTRIB_LOCATION = 1;
+	public static final int COLOUR_ATTRIB_LOCATION = 2;
 	
 	
 	private int vertexShaderId;
@@ -43,6 +44,7 @@ public class ShaderProgram {
 	
 	private void bindAttributes() {
 		glBindAttribLocation(programId, POSITION_ATTRIB_LOCATION, "position");
+		glBindAttribLocation(programId, NORMAL_ATTRIB_LOCATION, "normal");
 		glBindAttribLocation(programId, COLOUR_ATTRIB_LOCATION, "colour");
 	}
 	

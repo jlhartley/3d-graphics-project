@@ -3,6 +3,7 @@ package model;
 import entities.Entity;
 import math.Vector3f;
 import model.parser.OBJParser;
+import model.parser.OBJParser2;
 
 public class Models {
 	
@@ -15,7 +16,11 @@ public class Models {
 		0.5f, 0.5f, 0 // V3 - top right
 	};
 	
-	private static final float[] squareColourData = {
+	private static final float[] squareVertexNormals = {
+			
+	};
+	
+	private static final float[] squareVertexColours = {
 		0, 0, 0, // V0 - black
 		1, 0, 0, // V1 - red
 		1, 1, 1, // V2 - white
@@ -34,13 +39,15 @@ public class Models {
 	
 	public static Model getSquareModel() {
 		if (squareModel == null) {
-			squareModel = new Model(squareVertexPositions, squareColourData, squareIndices);
+			squareModel = new Model(squareVertexPositions, squareVertexNormals, squareVertexColours, squareIndices);
 		}
 		return squareModel;
 	}
 	
 	
 	// CUBE
+	
+	/*
 	
 	public static final float[] cubeVertexPositions = {
 			// Face 1 - Front
@@ -54,6 +61,10 @@ public class Models {
 			-0.5f,-0.5f,0.5f,	// V5
 			0.5f,-0.5f,0.5f,	// V6
 			0.5f,0.5f,0.5f,		// V7
+	};
+	
+	private static final float[] cubeVertexNormals = {
+			
 	};
 	
 	public static final float[] cubeVertexColours = {
@@ -102,12 +113,12 @@ public class Models {
 	
 	public static Model getCubeModel() {
 		if (cubeModel == null) {
-			cubeModel = new Model(cubeVertexPositions, cubeVertexColours, cubeIndices);
+			cubeModel = new Model(cubeVertexPositions, cubeVertexNormals, cubeVertexColours, cubeIndices);
 		}
 		return cubeModel;
 	}
 	
-	
+	*/
 	
 	
 	// Custom built models
@@ -120,12 +131,21 @@ public class Models {
 		if (explodedCubeModel == null) {
 			Model squareModel = getSquareModel();
 			ModelBuilder explodedCubeBuilder = new ModelBuilder();
+			// Must be careful here with the rotation, for face culling purposes
+			// TODO: Have face culling disabled on a per model basis, for models such as this
+			//Front
 			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, 0.7f)));
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -0.7f)));
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0.7f, 0), new Vector3f(90, 0, 0)));
+			// Back
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -0.7f), new Vector3f(180, 0, 0)));
+			// Top
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0.7f, 0), new Vector3f(270, 0, 0)));
+			// Bottom
 			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, -0.7f, 0), new Vector3f(90, 0, 0)));
+			// Right
 			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0.7f, 0, 0), new Vector3f(0, 90, 0)));
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-0.7f, 0, 0), new Vector3f(0, 90, 0)));
+			// Left
+			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-0.7f, 0, 0), new Vector3f(0, 270, 0)));
+			
 			explodedCubeModel = explodedCubeBuilder.build();
 		}
 		return explodedCubeModel;
@@ -173,16 +193,33 @@ public class Models {
 		return dragonModel;
 	}
 	
-	private static final String ICOSPHERE_MODEL_FILENAME = "icosphere";
+	private static final String ICOSPHERE_DIRECTORY = "ico-spheres/";
+	private static final String ICOSPHERE_BASE_FILENAME = "icosphere";
+	private static final String ICOSPHERE_SHADING = "flat";
+	private static final int ICOSPHERE_SUBDIVISIONS = 3;
 	
 	private static Model icosphereModel;
 	
 	public static Model getIcosphereModel() {
 		if (icosphereModel == null) {
-			OBJParser parser = new OBJParser(ICOSPHERE_MODEL_FILENAME);
+			String relativePath = ICOSPHERE_DIRECTORY + ICOSPHERE_BASE_FILENAME + ICOSPHERE_SUBDIVISIONS + "-"
+					+ ICOSPHERE_SHADING;
+			OBJParser2 parser = new OBJParser2(relativePath);
 			icosphereModel = parser.getModel();
 		}
 		return icosphereModel;
+	}
+	
+	private static final String CUBE_MODEL_FILENAME = "cube";
+	
+	private static Model cubeModel;
+	
+	public static Model getCubeModel() {
+		if (cubeModel == null) {
+			OBJParser2 parser = new OBJParser2(CUBE_MODEL_FILENAME);
+			cubeModel = parser.getModel();
+		}
+		return cubeModel;
 	}
 
 }

@@ -13,7 +13,7 @@ import model.Model;
 public class OBJParser {
 	
 	private static final String EXTENSION = ".obj";
-	private static final String PATH = "res//models//";
+	private static final String PATH = "res/models/";
 	
 	private String fullPath;
 	
@@ -26,8 +26,8 @@ public class OBJParser {
 	private int[] indices;
 	
 	
-	public OBJParser(String fileName) {
-		this.fullPath = PATH + fileName + EXTENSION;
+	public OBJParser(String relativePath) {
+		this.fullPath = PATH + relativePath + EXTENSION;
 	}
 	
 	
@@ -101,15 +101,18 @@ public class OBJParser {
 			}
 			
 			// Use the size of the vertexPositionsList and not the vertexNormalsList,
-			// this is because there must be only 1 normal entry for each vertex.
+			// this is because there must be exactly 1 normal entry for each vertex.
 			// In many OBJ files there are vastly different numbers of normals to vertices.
 			// size * 3 since there are 3 components for each vector
 			vertexNormals = new float[vertexPositionsList.size() * 3];
 			
 			
 			do {
-				parseFaceLine(line);
-			} while ((line = reader.readLine()) != null && line.startsWith("f "));
+				// Make sure that the line is a face definition
+				if (line.startsWith("f ")) {
+					parseFaceLine(line);
+				}
+			} while ((line = reader.readLine()) != null);
 		
 		} catch (FileNotFoundException e) {
 			System.err.println("The file: \"" + fullPath + "\" could not be found.");
@@ -136,8 +139,14 @@ public class OBJParser {
 			indices[i] = indicesList.get(i);
 		}
 		
+		// Debugging info
+		System.out.println("Loaded model: " + fullPath);
+		System.out.println("Unique vertex count: " + vertexPositions.length / 3);
+		System.out.println("Total vertex count: " + indices.length);
+		System.out.println("Triangle count: " + indices.length / 3);
 		
-		return new Model(vertexPositions, vertexNormals, indices);
+		// Currently just using the normals to colour the model
+		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
 	}
 	
 	
