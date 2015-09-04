@@ -13,26 +13,28 @@ import model.Model;
 public class OBJParser2 {
 	
 	private static final String EXTENSION = ".obj";
-	private static final String PATH = "res//models//";
+	private static final String PATH = "res/models/";
 	
 	private String fullPath;
 	
-	private List<Vector3f> vertexPositionsList = new ArrayList<>();
-	private List<Vector3f> vertexNormalsList = new ArrayList<>();
+	// Vertex data that is read directly from file into these arrays
+	private List<Vector3f> positionsIn = new ArrayList<>();
+	private List<Vector3f> normalsIn = new ArrayList<>();
 	
+	// All the vertex data arranged in drawing order, non-indexed (with duplicates)
+	private int totalVertexCount = 0; // Reflects the size of both of these lists
+	private List<Vector3f> unindexedPositions = new ArrayList<>();
+	private List<Vector3f> unindexedNormals = new ArrayList<>();
 	
-	private List<Vector3f> vertexPositionsListOrdered = new ArrayList<>();
-	private List<Vector3f> vertexNormalsListOrdered = new ArrayList<>();
+	// The final data, all indexed (without duplicates)
+	private int uniqueVertexCount = 0; // Reflects the size of both of these lists
+	private List<Vector3f> indexedPositions = new ArrayList<>();
+	private List<Vector3f> indexedNormals = new ArrayList<>();
 	
-	
-	private List<Vector3f> vertexPositionsListOut = new ArrayList<>();
-	private List<Vector3f> vertexNormalsListOut = new ArrayList<>();
-	
-	private List<Integer> indicesList = new ArrayList<>();
-	
-	
+	// The final arrays
 	private float[] vertexPositions;
 	private float[] vertexNormals;
+	
 	private int[] indices;
 	
 	
@@ -57,14 +59,16 @@ public class OBJParser2 {
 		
 		if (line.startsWith("v ")) { // Vertex position definition
 			Vector3f pos = lineToVector3f(lineParts);
-			vertexPositionsList.add(pos);
+			positionsIn.add(pos);
 		} else if (line.startsWith("vt ")) { // Vertex texture coordinate definition
 			// TODO: add implementation
 		} else if (line.startsWith("vn ")) { // Vertex normal definition
 			Vector3f normal = lineToVector3f(lineParts);
-			vertexNormalsList.add(normal);
+			normalsIn.add(normal);
 		}
 	}
+	
+	
 	
 	// For a line formatted like this:
 	// f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
@@ -82,60 +86,72 @@ public class OBJParser2 {
 			//int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
 			int vertexNormalIndex = Integer.parseInt(vertexIndexData[2]) - 1;
 			
-			processIndexData(vertexPositionIndex, /*vertexTextureIndex, */ vertexNormalIndex);
+			processIndexData(vertexPositionIndex, vertexNormalIndex);
 			
 		}
 	}
 	
-	
-	
-	private void processIndexData(int vertexPositionIndex, /*int vertexTextureIndex, */ int vertexNormalIndex) {
+	private void processIndexData(int vertexPositionIndex, int vertexNormalIndex) {
 		
-		vertexPositionsListOrdered.add(vertexPositionsList.get(vertexPositionIndex));
-		vertexNormalsListOrdered.add(vertexNormalsList.get(vertexNormalIndex));
+		// Grab the data out of the correct place and simply append it to the respective list
+		unindexedPositions.add(positionsIn.get(vertexPositionIndex));
+		unindexedNormals.add(normalsIn.get(vertexNormalIndex));
+		
+		totalVertexCount++;
 		
 	}
 	
 	
-	private int getDuplicateVertexIndex(Vector3f posIn, Vector3f normIn) {
+	
+	
+	private void indexVertices() {
+		
+		// There will be an index added for each of the current vertices
+		// declared in the unindexed lists
+		indices = new int[totalVertexCount];
+		
+		for (int i = 0; i < totalVertexCount; i++) {
+			
+			Vector3f unindexedPos = unindexedPositions.get(i);
+			Vector3f unindexedNorm = unindexedNormals.get(i);
+			
+			int duplicateVertexIndex = getDuplicateVertexIndex(unindexedPos, unindexedNorm);
+			
+			if (duplicateVertexIndex != -1) {
+				// Add the index of the duplicate vertex, instead of adding the same vertex data twice
+				indices[i] = duplicateVertexIndex;
+			} else {
+				// This is a truly unique vertex
+				indexedPositions.add(unindexedPos);
+				indexedNormals.add(unindexedNorm);
+				// Use the current unique vertex count to determine the next index
+				indices[i] = uniqueVertexCount;
+				uniqueVertexCount++;
+			}
+			
+		}
+		
+	}
+	
+	private int getDuplicateVertexIndex(Vector3f unindexedPos, Vector3f unindexedNorm) {
 		// Basic linear search
-		for (int i = 0; i < vertexPositionsListOut.size(); i++) {
+		for (int i = 0; i < indexedPositions.size(); i++) {
 			
-			Vector3f pos = vertexPositionsListOut.get(i);
-			Vector3f norm = vertexNormalsListOut.get(i);
+			Vector3f indexedPos = indexedPositions.get(i);
+			Vector3f indexedNorm = indexedNormals.get(i);
 			
-			if (posIn.x == pos.x && posIn.y == pos.y && posIn.z == pos.z &&
-					normIn.x == norm.x && normIn.y == norm.y && normIn.z == norm.z) {
+			if (unindexedPos.x == indexedPos.x && unindexedPos.y == indexedPos.y && unindexedPos.z == indexedPos.z &&
+					unindexedNorm.x == indexedNorm.x && unindexedNorm.y == indexedNorm.y && unindexedNorm.z == indexedNorm.z) {
 				return i;
 			}
 			
 		}
 		
+		// Returns -1 if there was no duplicate
 		return -1;
 	}
 	
-	private void indexVertices() {
-		
-		for (int i = 0; i < vertexPositionsListOrdered.size(); i++) {
-			
-			Vector3f pos = vertexPositionsListOrdered.get(i);
-			Vector3f norm = vertexNormalsListOrdered.get(i);
-			
-			int duplicateVertexIndex = getDuplicateVertexIndex(pos, norm);
-			
-			if (duplicateVertexIndex != -1) {
-				indicesList.add(duplicateVertexIndex);
-			} else {
-				// This is a new index for a truly unique vertex
-				int newIndex = vertexPositionsListOut.size();
-				vertexPositionsListOut.add(pos);
-				vertexNormalsListOut.add(norm);
-				indicesList.add(newIndex);
-			}
-			
-		}
-		
-	}
+	
 	
 	public Model getModel() {
 		
@@ -144,17 +160,15 @@ public class OBJParser2 {
 			String line;
 			
 			// Read until we reach the face definitions
-			while (!(line = reader.readLine()).startsWith("f ")) {
-				parseVertexLine(line);
-			}
-			
-			
-			do {
-				// Make sure that the line is a face definition
-				if (line.startsWith("f ")) {
+			while ((line = reader.readLine()) != null) {
+				
+				if (line.startsWith("v")) {
+					parseVertexLine(line);
+				} else if (line.startsWith("f")) {
 					parseFaceLine(line);
 				}
-			} while ((line = reader.readLine()) != null);
+				
+			}
 		
 		} catch (FileNotFoundException e) {
 			System.err.println("The file: \"" + fullPath + "\" could not be found.");
@@ -165,37 +179,32 @@ public class OBJParser2 {
 		
 		indexVertices();
 		
-		vertexPositions = new float[vertexPositionsListOut.size() * 3];
-		vertexNormals = new float[vertexNormalsListOut.size() * 3];
+		// There are 3 (x, y and z) components to each vertex
+		vertexPositions = new float[uniqueVertexCount * 3];
+		vertexNormals = new float[uniqueVertexCount * 3];
 		
 		// Copy the vertex positions into the array
-		for (int i = 0; i < vertexPositionsListOut.size(); i++) {
-			Vector3f pos = vertexPositionsListOut.get(i);
+		for (int i = 0; i < uniqueVertexCount; i++) {
+			Vector3f pos = indexedPositions.get(i);
 			vertexPositions[i*3] = pos.x;
 			vertexPositions[i*3 + 1] = pos.y;
 			vertexPositions[i*3 + 2] = pos.z;
 		}
 		
-		// Copy the vertex positions into the array
-		for (int i = 0; i < vertexNormalsListOut.size(); i++) {
-			Vector3f pos = vertexNormalsListOut.get(i);
-			vertexNormals[i*3] = pos.x;
-			vertexNormals[i*3 + 1] = pos.y;
-			vertexNormals[i*3 + 2] = pos.z;
-		}
-		
-		indices = new int[indicesList.size()];
-		
-		// Copy the indices into the array
-		for (int i = 0; i < indicesList.size(); i++) {
-			indices[i] = indicesList.get(i);
+		// Copy the vertex normals into the array
+		for (int i = 0; i < uniqueVertexCount; i++) {
+			Vector3f norm = indexedNormals.get(i);
+			vertexNormals[i*3] = norm.x;
+			vertexNormals[i*3 + 1] = norm.y;
+			vertexNormals[i*3 + 2] = norm.z;
 		}
 		
 		
+		// Debugging info
 		System.out.println("Loaded model: " + fullPath);
-		System.out.println("Unique vertex count: " + vertexPositions.length);
-		System.out.println("Total vertex count: " + indices.length);
-		System.out.println("Model triangle count: " + indices.length / 3);
+		System.out.println("Unique vertex count: " + uniqueVertexCount);
+		System.out.println("Total vertex count: " + totalVertexCount);
+		System.out.println("Triangle count: " + totalVertexCount / 3);
 		
 		
 		// Currently just using the normals to colour the model
