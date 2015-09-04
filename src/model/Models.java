@@ -17,7 +17,10 @@ public class Models {
 	};
 	
 	private static final float[] squareVertexNormals = {
-			
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1
 	};
 	
 	private static final float[] squareVertexColours = {
