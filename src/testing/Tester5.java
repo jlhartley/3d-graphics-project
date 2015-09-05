@@ -1,5 +1,7 @@
 package testing;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,20 +77,37 @@ public class Tester5 extends Prototyper {
 		
 	}
 	
+	//private float calcTimePeriod(float radius) {
+		//return 
+	//}
+	
 	private void updatePlanetPosition(Entity planet, float deltaTime) {
-		Matrix4f transform = Matrix4f.identity();
-		transform.rotate(deltaTime * 2, MathUtils.Y_AXIS);
+		//Matrix4f transform = Matrix4f.identity();
+		//transform.rotate(deltaTime * 2, MathUtils.Y_AXIS);
 		
 		Vector3f planetPos = planet.getPosition();
-		Vector4f vec4 = new Vector4f(planetPos.x, planetPos.y, planetPos.z, 1);
+		//Vector4f vec4 = new Vector4f(planetPos.x, planetPos.y, planetPos.z, 1);
 		
-		vec4.multiply(transform);
+		//vec4.multiply(transform);
 		
-		planet.setPosition(vec4.x, vec4.y, vec4.z);
+		//planet.setPosition(vec4.x, vec4.y, vec4.z);
+		
+		float radius = calculateOrbitRadius(planetPos);
+		// Full rotation every 3.6 seconds
+		float x = (float) (radius * Math.cos(Math.toRadians(getTime() * 2000 / radius)));
+		float z = (float) -(radius * Math.sin(Math.toRadians(getTime() * 2000 / radius)));
+		planet.setPosition(x, 0, z);
 	}
 
 	@Override
 	protected void logic(float deltaTime) {
+		
+		if (isKeyPressed(GLFW_KEY_S)) {
+			camera.increasePitch(30, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_W)) {
+			camera.decreasePitch(30, deltaTime);
+		}
+		
 		for (MovableEntity planet : planets) {
 			//updatePlanetVelocity(planet);
 			//planet.tick(deltaTime);
