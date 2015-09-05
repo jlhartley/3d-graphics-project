@@ -370,6 +370,39 @@ public class Models {
 		return icosphereModel;
 	}
 	
+	
+	private static final String UVSPHERE_DIRECTORY = "uv-spheres/";
+	private static final String UVSPHERE_BASE_FILENAME = "uvsphere";
+	private static final String UVSPHERE_SHADING = "smooth";
+	
+	private static Model uvsphereModel;
+	
+	public static Model getUVsphereModel() {
+		if (uvsphereModel == null) {
+			String relativePath = UVSPHERE_DIRECTORY + UVSPHERE_BASE_FILENAME + "-" + UVSPHERE_SHADING;
+			OBJParser2 parser = new OBJParser2(relativePath);
+			uvsphereModel = parser.getModel();
+		}
+		return uvsphereModel;
+	}
+	
+	
+	private static final String TORUS_BASE_FILENAME = "torus";
+	private static final String TORUS_SHADING = "smooth";
+	
+	private static Model torusModel;
+	
+	public static Model getTorusModel() {
+		if (torusModel == null) {
+			String relativePath = TORUS_BASE_FILENAME + "-" + TORUS_SHADING;
+			OBJParser parser = new OBJParser(relativePath);
+			torusModel = parser.getModel();
+		}
+		return torusModel;
+	}
+	
+	
+	
 	/*private static final String CUBE_MODEL_FILENAME = "cube";
 	
 	private static Model cubeModel;
