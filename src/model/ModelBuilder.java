@@ -135,9 +135,14 @@ public class ModelBuilder {
 			
 		}
 		
+		
+		// Debugging info
+		System.out.println("Built new model");
+		System.out.println("Unique vertex count: " + vertexPositions.length / 3);
+		System.out.println("Total vertex count: " + indices.length);
+		System.out.println("Triangle count: " + indices.length / 3);
+		
 		return new Model(vertexPositions, vertexNormals, vertexColours, indices);
-		
-		
 	}
 	
 	
