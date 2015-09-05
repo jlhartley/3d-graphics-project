@@ -48,8 +48,8 @@ public class Tester4 extends Prototyper {
 	private static final int MIN_DISTANCE = 5;
 	
 	// Cube count
-	private static final int CUBE_COUNT = 1000;
-	private static final int MOVING_CUBE_COUNT = 50;
+	private static final int CUBE_COUNT = 200;
+	private static final int MOVING_CUBE_COUNT = 200;
 	
 	// Cube movement
 	private static final int MAX_VELOCITY_COMPONENT = 10;
@@ -126,7 +126,9 @@ public class Tester4 extends Prototyper {
 		
 		Model cubeModel = Models.getCubeModel();
 		Model cubeGridModel = Models.getCubeGridModel();
-		//Model squareModel = Models.getSquareModel();
+		Model uvSphereModel = Models.getUVsphereModel();
+		Model torusModel = Models.getTorusModel();
+		Model explodedCubeModel = Models.getExplodedCubeModel();
 		
 		ModelBuilder modelBuilder = new ModelBuilder();
 		int modelCount = 8;
@@ -145,6 +147,12 @@ public class Tester4 extends Prototyper {
 		generateCubes(cubeModel);
 		
 		generateCubes(cubeGridModel);
+		
+		generateCubes(uvSphereModel);
+		
+		generateCubes(torusModel);
+		
+		generateCubes(explodedCubeModel);
 		
 		reset();
 	}
