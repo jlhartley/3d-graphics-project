@@ -38,7 +38,8 @@ public class WindowManager {
 		int initSuccess = glfwInit();
 		if (initSuccess == GL_FALSE) {
 			System.err.println("Could not initialise GLFW!");
-			System.exit(1);
+			close();
+			System.exit(1); // Indicate abnormal termination with the nonzero status code
 		}
 		System.out.println("GLFW Version: " + glfwGetVersionString());
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
@@ -46,7 +47,8 @@ public class WindowManager {
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create window!");
-			System.exit(1); // Indicate abnormal termination with the nonzero status code
+			close();
+			System.exit(1);
 		}
 	}
 	
@@ -131,11 +133,17 @@ public class WindowManager {
 		return glfwWindowShouldClose(window) == GL_TRUE;
 	}
 	
+	// Handles GLFW cleanup and exit
 	public void close() {
-		// Handles GLFW cleanup and exit
-		glfwDestroyWindow(window);
-		keyCallback.release();
-		framebufferSizeCallback.release();
+		if (window != NULL) {
+			glfwDestroyWindow(window);
+		}
+		if (keyCallback != null) {
+			keyCallback.release();
+		}
+		if (framebufferSizeCallback != null) {
+			framebufferSizeCallback.release();
+		}
 		glfwTerminate();
 		errorCallback.release();
 	}
