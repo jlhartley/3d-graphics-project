@@ -33,7 +33,7 @@ public class Tester3 extends Prototyper {
 	}
 	
 	
-	private static final int XY_LIMIT = 20;
+	private static final int XY_LIMIT = 200;
 	
 	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
@@ -76,7 +76,7 @@ public class Tester3 extends Prototyper {
 	
 	Entity cubeField;
 	
-	private static final int CUBE_COUNT = 30000;
+	private static final int CUBE_COUNT = 300000;
 	
 	public void generateCubes(Model cubeModel) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
