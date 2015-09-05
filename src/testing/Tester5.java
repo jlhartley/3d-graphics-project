@@ -33,6 +33,32 @@ public class Tester5 extends Prototyper {
 	}
 	
 	
+	// Constants
+	
+	// Output
+	private static final float POSITION_REPORT_INTERVAL = 1;
+	private static final int LOW_FRAMERATE = 30;
+	
+	// Spatial dimensions
+	private static final int XY_LIMIT = 50;
+	private static final int MAX_DISTANCE = 3000;
+	private static final int MIN_DISTANCE = 5;
+	
+	// Cube count
+	private static final int CUBE_COUNT = 1000;
+	private static final int MOVING_CUBE_COUNT = 50;
+	
+	// Cube movement
+	private static final int MAX_VELOCITY_COMPONENT = 10;
+	private static final int MIN_VELOCITY_COMPONENT = -10;
+	
+	// Camera movement
+	private static final float NORMAL_MOVEMENT_SPEED = 9.5f;
+	private static final float FAST_MOVEMENT_SPEED = 15;
+	private static final float ROTATION_MOVEMENT_SPEED = 30; // Degrees per second
+	
+	
+	
 	Camera camera = new Camera();
 	
 	List<MovableEntity> planets = new ArrayList<>();
@@ -98,15 +124,14 @@ public class Tester5 extends Prototyper {
 		float z = (float) -(radius * Math.sin(Math.toRadians(getTime() * 2000 / radius)));
 		planet.setPosition(x, 0, z);
 	}
-
+	
+	
+	
+	
 	@Override
 	protected void logic(float deltaTime) {
-		
-		if (isKeyPressed(GLFW_KEY_S)) {
-			camera.increasePitch(30, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_W)) {
-			camera.decreasePitch(30, deltaTime);
-		}
+		displayFramerate(deltaTime);
+		moveCamera(deltaTime);
 		
 		for (MovableEntity planet : planets) {
 			//updatePlanetVelocity(planet);
@@ -114,6 +139,72 @@ public class Tester5 extends Prototyper {
 			updatePlanetPosition(planet, deltaTime);
 		}
 	}
+	
+	private void displayFramerate(float deltaTime) {
+		float frameRate = 1/deltaTime;
+		
+		if (frameRate < LOW_FRAMERATE) {
+			System.out.println("Low Framerate: " + frameRate + " FPS");
+		}
+	}
+	
+	private void moveCamera(float deltaTime) {
+		
+		float movementSpeed;
+		if (isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
+			movementSpeed = FAST_MOVEMENT_SPEED;
+		} else {
+			movementSpeed = NORMAL_MOVEMENT_SPEED;
+		}
+		
+		// Positional controls
+		// Forward and back
+		if (isKeyPressed(GLFW_KEY_UP)) {
+			camera.moveForward(movementSpeed, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_DOWN)) {
+			camera.moveBack(movementSpeed, deltaTime);
+		}
+		
+		// Right and left
+		if (isKeyPressed(GLFW_KEY_RIGHT)) {
+			camera.moveRight(movementSpeed, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_LEFT)) {
+			camera.moveLeft(movementSpeed, deltaTime);
+		}
+		
+		// Up and down
+		if (isKeyPressed(GLFW_KEY_PAGE_UP)) {
+			camera.moveUp(movementSpeed, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_PAGE_DOWN)){
+			camera.moveDown(movementSpeed, deltaTime);
+		}
+		
+		
+		// Rotational controls
+		// Pitch
+		if (isKeyPressed(GLFW_KEY_S)) {
+			camera.increasePitch(ROTATION_MOVEMENT_SPEED, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_W)) {
+			camera.decreasePitch(ROTATION_MOVEMENT_SPEED, deltaTime);
+		}
+		
+		// Yaw
+		if (isKeyPressed(GLFW_KEY_D)) {
+			camera.increaseYaw(ROTATION_MOVEMENT_SPEED, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_A)) {
+			camera.decreaseYaw(ROTATION_MOVEMENT_SPEED, deltaTime);
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	protected void render(Renderer renderer) {
