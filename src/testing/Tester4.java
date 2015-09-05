@@ -124,10 +124,11 @@ public class Tester4 extends Prototyper {
 	
 	public Tester4() {
 		
-		//Model cubeModel = Models.getCubeModel();
+		Model cubeModel = Models.getCubeModel();
+		Model cubeGridModel = Models.getCubeGridModel();
 		//Model squareModel = Models.getSquareModel();
 		
-		ModelBuilder superModelBuilder = new ModelBuilder();
+		ModelBuilder modelBuilder = new ModelBuilder();
 		int modelCount = 8;
 		for (int i = 0; i < modelCount; i++) {
 			Vector3f pos = new Vector3f((i%2) * 5, (i/2)%2 * 5, (i/4) * 5);
@@ -135,11 +136,15 @@ public class Tester4 extends Prototyper {
 			pos.translate(new Vector3f(-2.5f, -2.5f, -2.5f));
 			
 			Entity entity = new Entity(Models.getIcosphereModel(), pos);
-			superModelBuilder.addEntity(entity);
+			modelBuilder.addEntity(entity);
 		}
-		Model superModel = superModelBuilder.build();
+		Model customModel = modelBuilder.build();
 		
-		generateCubes(superModel);
+		generateCubes(customModel);
+		
+		generateCubes(cubeModel);
+		
+		generateCubes(cubeGridModel);
 		
 		reset();
 	}
@@ -231,6 +236,7 @@ public class Tester4 extends Prototyper {
 					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.5) {
 				collided = true;
 			}
+			cube.setRotY(getTime() * 100);
 		}
 		
 		// Cubes bounce off of their container
