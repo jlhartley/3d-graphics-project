@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class ModelUtils {
 	
+	// Track all VAOs, VBOs and IBOs for cleanup purposes
 	private static ArrayList<Integer> vaos = new ArrayList<>();
 	private static ArrayList<Integer> vbos = new ArrayList<>();
 	private static ArrayList<Integer> ibos = new ArrayList<>();

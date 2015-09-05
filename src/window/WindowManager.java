@@ -71,6 +71,7 @@ public class WindowManager {
 		keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
+            	// Here repeat does not count as a key press
                 if (action == GLFW_PRESS) {
                 	callbacks.onKeyPressed(key);
                 } else if (action == GLFW_RELEASE) {
@@ -90,8 +91,13 @@ public class WindowManager {
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 	}
 	
+	
 	public void showWindow() {
         glfwShowWindow(window);
+	}
+	
+	public void hideWindow() {
+		glfwHideWindow(window);
 	}
 	
 	// Place the window at the centre of the screen
@@ -116,6 +122,7 @@ public class WindowManager {
 		
 	}
 	
+	// Swap buffers and poll for events
 	public void update() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();

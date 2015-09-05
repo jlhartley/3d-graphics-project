@@ -314,7 +314,6 @@ public class Models {
 			int cubesPerSide = 3;
 			float spacing = 1.5f;
 			float offset = -((float)(cubesPerSide - 1) / 2) * spacing;
-			System.out.println(offset);
 			int cubeCount = cubesPerSide*cubesPerSide*cubesPerSide;
 			// Use of integer division and modulo operator for generating grid
 			for (int i = 0; i < cubeCount; i++) {
