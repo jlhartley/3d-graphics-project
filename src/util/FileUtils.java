@@ -30,6 +30,7 @@ public class FileUtils {
 	}
 	
 	
+	// For float array
 	public static void writeArrayToFile(String path, float[] array, int lineBreakInterval) {
 		
 		try ( FileWriter writer = new FileWriter(path) ) {
@@ -41,8 +42,25 @@ public class FileUtils {
 				writer.write(array[i] + ", ");
 			}
 		
-		} catch (FileNotFoundException e) {
-			System.err.println("The file: \"" + path + "\" could not be found.");
+		} catch (IOException e) {
+			System.err.println("An I/O exception occurred.");
+		}
+		
+	}
+	
+	
+	// For int array
+	public static void writeArrayToFile(String path, int[] array, int lineBreakInterval) {
+		
+		try ( FileWriter writer = new FileWriter(path) ) {
+			
+			for (int i = 0; i < array.length; i++) {
+				if (i != 0 && i % lineBreakInterval == 0) {
+					writer.write('\n');
+				}
+				writer.write(array[i] + ", ");
+			}
+		
 		} catch (IOException e) {
 			System.err.println("An I/O exception occurred.");
 		}
