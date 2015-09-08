@@ -88,6 +88,8 @@ public class Tester5 extends Prototyper {
 	}
 	
 	
+	Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 3);
+	
 	public Tester5() {
 		// Place the camera up and back from the origin
 		Vector3f initialCameraPos = new Vector3f(0, 50, 50);
@@ -95,6 +97,8 @@ public class Tester5 extends Prototyper {
 		camera.setPitch(45); // Point camera downwards
 		
 		addPlanets();
+		//MovableEntity planet = new MovableEntity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), new Vector3f(), 2);
+		//planets.add(planet);
 	}
 	
 	
@@ -208,6 +212,8 @@ public class Tester5 extends Prototyper {
 
 	@Override
 	protected void render(Renderer renderer) {
+		
+		renderer.render(sun, camera);
 		
 		for (Entity planet : planets) {
 			renderer.render(planet, camera);
