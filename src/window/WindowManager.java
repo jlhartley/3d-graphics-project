@@ -66,7 +66,7 @@ public class WindowManager {
 	}
 	
 	
-	public void setCallbacks(Callbacks callbacks) {
+	public void setCallbacks(final Callbacks callbacks) {
 		// Key callback just calls through to our own interface
 		keyCallback = new GLFWKeyCallback() {
             @Override
