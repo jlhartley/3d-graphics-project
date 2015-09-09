@@ -7,14 +7,11 @@ import java.util.List;
 
 import entities.Camera;
 import entities.Entity;
-import entities.MovableEntity;
-import math.Matrix4f;
+import entities.Planet;
 import math.Vector3f;
-import math.Vector4f;
 import model.Model;
 import model.Models;
 import render.Renderer;
-import util.MathUtils;
 
 public class Tester5 extends Prototyper {
 	
@@ -36,21 +33,7 @@ public class Tester5 extends Prototyper {
 	// Constants
 	
 	// Output
-	private static final float POSITION_REPORT_INTERVAL = 1;
-	private static final int LOW_FRAMERATE = 30;
-	
-	// Spatial dimensions
-	private static final int XY_LIMIT = 50;
-	private static final int MAX_DISTANCE = 3000;
-	private static final int MIN_DISTANCE = 5;
-	
-	// Cube count
-	private static final int CUBE_COUNT = 1000;
-	private static final int MOVING_CUBE_COUNT = 50;
-	
-	// Cube movement
-	private static final int MAX_VELOCITY_COMPONENT = 10;
-	private static final int MIN_VELOCITY_COMPONENT = -10;
+	private static final float FRAMERATE_REPORT_INTERVAL = 1;
 	
 	// Camera movement
 	private static final float NORMAL_MOVEMENT_SPEED = 9.5f;
@@ -61,34 +44,32 @@ public class Tester5 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	List<MovableEntity> planets = new ArrayList<>();
+	List<Planet> planets = new ArrayList<>();
+	
+	Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 3);
 	
 	private void addPlanets() {
 		
 		Model sphereModel = Models.getUVsphereModel();
 		
-		int planetCount = 10;
+		int planetCount = 50;
 		
 		for (int i = 0; i < planetCount; i++) {
-			Vector3f pos = getPlanetPosition();
-			planets.add(new MovableEntity(sphereModel, pos, new Vector3f(), new Vector3f()));
+			//Vector3f pos = getPlanetPosition();
+			Vector3f pos = new Vector3f();
+			int xOffset = 5; // Offset to avoid overlapping the sun
+			pos.x = i/2 + xOffset; // Each planet has unique x;
+			float orbitalRadius = calculateOrbitalRadius(pos);
+			float timePeriod = pos.x/10; // Base the orbital time period directly on the x coordinate
+			planets.add(new Planet(sphereModel, pos, orbitalRadius, timePeriod));
 		}
 		
 	}
 	
-	private float calculateOrbitRadius(Vector3f pos) {
+	private float calculateOrbitalRadius(Vector3f pos) {
 		return (float) Math.sqrt(pos.x*pos.x + pos.z*pos.z);
 	}
 	
-	private Vector3f getPlanetPosition() {
-		float x = (float) MathUtils.randRange(-20, 20);
-		float y = 0; // All planets in same y-plane
-		float z = (float) MathUtils.randRange(-20, 20);
-		return new Vector3f(x, y, z);
-	}
-	
-	
-	Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 3);
 	
 	public Tester5() {
 		// Place the camera up and back from the origin
@@ -97,58 +78,34 @@ public class Tester5 extends Prototyper {
 		camera.setPitch(45); // Point camera downwards
 		
 		addPlanets();
-		//MovableEntity planet = new MovableEntity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), new Vector3f(), 2);
-		//planets.add(planet);
 	}
-	
-	
-	
-	private void updatePlanetVelocity(MovableEntity planet) {
-		
-	}
-	
-	//private float calcTimePeriod(float radius) {
-		//return 
-	//}
-	
-	private void updatePlanetPosition(Entity planet, float deltaTime) {
-		//Matrix4f transform = Matrix4f.identity();
-		//transform.rotate(deltaTime * 2, MathUtils.Y_AXIS);
-		
-		Vector3f planetPos = planet.getPosition();
-		//Vector4f vec4 = new Vector4f(planetPos.x, planetPos.y, planetPos.z, 1);
-		
-		//vec4.multiply(transform);
-		
-		//planet.setPosition(vec4.x, vec4.y, vec4.z);
-		
-		float radius = calculateOrbitRadius(planetPos);
-		// Full rotation every 3.6 seconds
-		float x = (float) (radius * Math.cos(Math.toRadians(getTime() * 2000 / radius)));
-		float z = (float) -(radius * Math.sin(Math.toRadians(getTime() * 2000 / radius)));
-		planet.setPosition(x, 0, z);
-	}
-	
-	
 	
 	
 	@Override
 	protected void logic(float deltaTime) {
+		
 		displayFramerate(deltaTime);
 		moveCamera(deltaTime);
 		
-		for (MovableEntity planet : planets) {
-			//updatePlanetVelocity(planet);
-			//planet.tick(deltaTime);
-			updatePlanetPosition(planet, deltaTime);
+		for (Planet planet : planets) {
+			planet.setPositionFromTime(getTime());
 		}
+		
+		
 	}
 	
+	
+	
+	private float lastFramerateReportTime;
 	private void displayFramerate(float deltaTime) {
-		float frameRate = 1/deltaTime;
 		
-		if (frameRate < LOW_FRAMERATE) {
-			System.out.println("Low Framerate: " + frameRate + " FPS");
+		if (lastFramerateReportTime > FRAMERATE_REPORT_INTERVAL) {
+			float frameRate = 1/deltaTime;
+
+			System.out.println("Framerate: " + frameRate + " FPS");
+			lastFramerateReportTime = 0;
+		} else {
+			lastFramerateReportTime += deltaTime;
 		}
 	}
 	
