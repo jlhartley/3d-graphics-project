@@ -52,16 +52,18 @@ public class Tester5 extends Prototyper {
 		
 		Model sphereModel = Models.getUVsphereModel();
 		
-		int planetCount = 50;
+		int planetCount = 200;
 		
 		for (int i = 0; i < planetCount; i++) {
 			//Vector3f pos = getPlanetPosition();
 			Vector3f pos = new Vector3f();
-			int xOffset = 5; // Offset to avoid overlapping the sun
-			pos.x = i/2 + xOffset; // Each planet has unique x;
+			int xOffset = 25; // Offset to avoid overlapping the sun
+			pos.x = i + xOffset; // Each planet has unique x;
 			float orbitalRadius = calculateOrbitalRadius(pos);
-			float timePeriod = pos.x/10; // Base the orbital time period directly on the x coordinate
-			planets.add(new Planet(sphereModel, pos, orbitalRadius, timePeriod));
+			// Look at Kepler's third law here
+			float timePeriod = (float) (Math.sqrt(pos.x*pos.x*pos.x)/100); // Base the orbital time period on x^2
+			// Randomly set the initial angle of the planet
+			planets.add(new Planet(sphereModel, pos, orbitalRadius, timePeriod, (float) (Math.random() * 360)));
 		}
 		
 	}
@@ -73,7 +75,7 @@ public class Tester5 extends Prototyper {
 	
 	public Tester5() {
 		// Place the camera up and back from the origin
-		Vector3f initialCameraPos = new Vector3f(0, 50, 50);
+		Vector3f initialCameraPos = new Vector3f(0, 200, 200);
 		camera.setPosition(initialCameraPos);
 		camera.setPitch(45); // Point camera downwards
 		

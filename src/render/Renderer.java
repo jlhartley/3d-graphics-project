@@ -48,15 +48,11 @@ public class Renderer {
 	// Associate entities with a given model for batch rendering
 	//HashMap<Model, List<Entity>> entityModelMap = new HashMap<>();
 	
-	private void prepareModel(Model model) {
-		model.bindVAO();
-	}
-	
 	public void render(Entity entity, Camera camera) {
 		
 		Model model = entity.getModel();
 		
-		prepareModel(model);
+		model.bindVAO();
 		
 		setMatrices(entity, camera);
 		
