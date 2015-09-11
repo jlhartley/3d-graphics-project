@@ -26,7 +26,7 @@ public class Tester5 extends Prototyper {
 
 	@Override
 	public void onKeyReleased(int keyCode) {
-
+		
 	}
 	
 	
@@ -36,8 +36,8 @@ public class Tester5 extends Prototyper {
 	private static final float FRAMERATE_REPORT_INTERVAL = 1;
 	
 	// Camera movement
-	private static final float NORMAL_MOVEMENT_SPEED = 9.5f;
-	private static final float FAST_MOVEMENT_SPEED = 15;
+	private static final float NORMAL_MOVEMENT_SPEED = 50;
+	private static final float FAST_MOVEMENT_SPEED = 150;
 	private static final float ROTATION_MOVEMENT_SPEED = 30; // Degrees per second
 	
 	
@@ -46,7 +46,7 @@ public class Tester5 extends Prototyper {
 	
 	List<Planet> planets = new ArrayList<>();
 	
-	Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 3);
+	Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 5);
 	
 	private void addPlanets() {
 		
@@ -75,7 +75,7 @@ public class Tester5 extends Prototyper {
 	
 	public Tester5() {
 		// Place the camera up and back from the origin
-		Vector3f initialCameraPos = new Vector3f(0, 200, 200);
+		Vector3f initialCameraPos = new Vector3f(0, 250, 280);
 		camera.setPosition(initialCameraPos);
 		camera.setPitch(45); // Point camera downwards
 		
