@@ -7,7 +7,7 @@ import java.util.List;
 
 import entities.Camera;
 import entities.Entity;
-import entities.Planet;
+import entities.celestial.Planet;
 import math.Vector3f;
 import model.Model;
 import model.Models;

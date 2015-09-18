@@ -1,11 +1,18 @@
-package entities;
+package entities.celestial;
 
+import entities.Entity;
 import math.Vector3f;
 import model.Model;
 
 public class Planet extends Entity {
 	
+	// Mass in kilogrammes
+	private float mass;
+	
+	// Distance from the sun
 	private float orbitalRadius;
+	
+	// Time taken for one complete orbit
 	private float timePeriod;
 	
 	private float initialAngle;
