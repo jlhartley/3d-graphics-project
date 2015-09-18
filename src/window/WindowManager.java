@@ -44,6 +44,7 @@ public class WindowManager {
 		System.out.println("GLFW Version: " + glfwGetVersionString());
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
+		glfwWindowHint(GLFW_SAMPLES, 16); // Added 16x anti-aliasing
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create window!");
