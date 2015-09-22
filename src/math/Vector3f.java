@@ -4,6 +4,8 @@ public class Vector3f {
 	
 	// TODO: Have a base vector class / interface that is independent of dimension
 	// TODO: Have a bunch of static factory methods for the basis vectors
+	
+	// TODO: Have a set magnitude method
 
 	public float x, y, z;
 

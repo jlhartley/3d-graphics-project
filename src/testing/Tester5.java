@@ -59,6 +59,10 @@ public class Tester5 extends Prototyper {
 			Vector3f pos = new Vector3f();
 			int xOffset = 25; // Offset to avoid overlapping the sun
 			pos.x = i + xOffset; // Each planet has unique x;
+			
+			pos.x = (float) (Math.random() * 500);
+			pos.z = (float) (Math.random() * 500);
+			
 			float orbitalRadius = calculateOrbitalRadius(pos);
 			// Look at Kepler's third law here
 			float timePeriod = (float) (Math.sqrt(pos.x*pos.x*pos.x)/100); // Base the orbital time period on x^2
@@ -80,6 +84,14 @@ public class Tester5 extends Prototyper {
 		camera.setPitch(45); // Point camera downwards
 		
 		addPlanets();
+		
+		for (Planet planet : planets) {
+			planet.setMass((float) (Math.random() * 1000));
+		}
+		
+		Planet p0 = planets.get(0);
+		p0.setMass(100000000);
+		p0.setScale(10);
 	}
 	
 	
@@ -89,12 +101,30 @@ public class Tester5 extends Prototyper {
 		displayFramerate(deltaTime);
 		moveCamera(deltaTime);
 		
-		for (Planet planet : planets) {
-			planet.setPositionFromTime(getTime());
+		//for (Planet planet : planets) {
+		//	planet.setPositionFromTime(getTime());
+		//}
+		
+		//Planet p0 = planets.get(0);
+		//Planet p1 = planets.get(1);
+		
+		//p0.tick(p0.getAccelerationVectorToPlanet(p1), deltaTime);
+		
+		//System.out.println(p0.getPosition());
+		
+		for (Planet planet1 : planets) {
+			for (Planet planet2 : planets) {
+				if (planet1 == planet2) {
+					continue;
+				}
+				planet1.tick(planet1.getAccelerationVectorToPlanet(planet2), deltaTime);
+				//System.out.println(planet1.getPosition());
+			}
 		}
 		
-		
 	}
+	
+	
 	
 	
 	
@@ -110,6 +140,7 @@ public class Tester5 extends Prototyper {
 			lastFramerateReportTime += deltaTime;
 		}
 	}
+	
 	
 	private void moveCamera(float deltaTime) {
 		
