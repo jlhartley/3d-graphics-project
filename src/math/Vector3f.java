@@ -31,11 +31,23 @@ public class Vector3f {
 		this.z = z;
 	}
 	
-	// Translate by another vector by adding the components
+	// Translate by a vector by adding the components
 	public void translate(Vector3f vec) {
+		add(vec);
+	}
+	
+	// Add a vector to this vector
+	public void add(Vector3f vec) {
 		this.x += vec.x;
 		this.y += vec.y;
 		this.z += vec.z;
+	}
+	
+	// Subtract a vector from this vector
+	public void sub(Vector3f vec) {
+		this.x -= vec.x;
+		this.y -= vec.y;
+		this.z -= vec.z;
 	}
 	
 	// Multiply by a scalar
