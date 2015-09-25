@@ -21,9 +21,9 @@ uniform float time;
 
 void main()
 {   
-	//pass_colour = colour;
+	pass_colour = colour;
 
-    pass_colour = vec3(1,1,1);
+    //pass_colour = vec3(1,1,1);
     
     //pass_colour = (vec4(normal, 0) * model_matrix).xyz;
     

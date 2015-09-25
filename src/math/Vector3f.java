@@ -64,9 +64,14 @@ public class Vector3f {
 		z = -z;
 	}
 	
+	// For efficiency - sometimes this is required
+	public float magnitudeSquared() {
+		return x*x + y*y + z*z;
+	}
+	
 	// Pythagorean calculation for the magnitude of a vector
 	public float magnitude() {
-		return (float) Math.sqrt(x*x + y*y + z*z);
+		return (float) Math.sqrt(magnitudeSquared());
 	}
 	
 	// Normalise the vector - divide each component by the magnitude
