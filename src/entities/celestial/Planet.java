@@ -21,7 +21,7 @@ public class Planet extends Entity {
 	// Starting angle in the planets orbit
 	//private float initialAngle;
 	
-	private Vector3f velocity = new Vector3f();
+	private Vector3f velocity;
 	
 	// Constructors
 	public Planet(Model model, Vector3f position) {
@@ -63,32 +63,31 @@ public class Planet extends Entity {
 	
 	
 	
-	// Mutable Vector vs static Vector issue
-	public Vector3f getAccelerationVectorToPlanet(Planet planet) {
+	// Mutable Vector verses static Vector issue
+	public Vector3f accelerationVectorTo(Planet planet) {
 		
 		Vector3f pos1 = getPosition();
 		Vector3f pos2 = planet.getPosition();
 		
 		Vector3f vecToPlanet = new Vector3f(pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z);
 		
-		
 		vecToPlanet.normalise();
 		vecToPlanet.scale(getForce(planet) / mass); // F = ma, a = F / m
+		
 		return vecToPlanet;
 	}
 	
-	
+	// Newton's law of universal gravitation
 	public float getForce(Planet planet) {
-		return (float) (Constants.G * this.getMass() * planet.getMass() / distanceSquared(planet));
+		float distanceSquared = distanceSquaredTo(planet);
+		// Limit the maximum force
+		if (distanceSquared < 3) {
+			distanceSquared = 3;
+		}
+		return (float) (Constants.G * this.getMass() * planet.getMass() / distanceSquared);
 	}
 	
-	/*public float getForce(Planet planet) {
-		float distance = getDistanceTo(planet);
-		return (float) (Constants.G * getMass() * planet.getMass() / distance*distance);
-	}*/
-	
-	
-	public float distanceSquared(Planet planet) {
+	private float distanceSquaredTo(Planet planet) {
 		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = planet.getPosition();
 		Vector3f vecToPlanet = new Vector3f(pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z);
@@ -96,7 +95,7 @@ public class Planet extends Entity {
 	}
 	
 	public float distance(Planet planet) {
-		return distanceSquared(planet);
+		return (float) Math.sqrt(distanceSquaredTo(planet));
 	}
 	
 	

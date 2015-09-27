@@ -12,6 +12,7 @@ import math.Vector3f;
 import model.Model;
 import model.Models;
 import render.Renderer;
+import util.MathUtils;
 
 public class Tester5 extends Prototyper {
 	
@@ -19,9 +20,13 @@ public class Tester5 extends Prototyper {
 		new Tester5().run();
 	}
 
+	private boolean fastToggle = false;
+	
 	@Override
 	public void onKeyPressed(int keyCode) {
-		
+		if (keyCode == GLFW_KEY_SPACE) {
+			fastToggle = !fastToggle;
+		}
 	}
 
 	@Override
@@ -34,12 +39,12 @@ public class Tester5 extends Prototyper {
 	
 	// Output
 	private static final float FRAMERATE_REPORT_INTERVAL = 1;
-	
 	// Camera movement
 	private static final float NORMAL_MOVEMENT_SPEED = 50;
 	private static final float FAST_MOVEMENT_SPEED = 150;
 	private static final float ROTATION_MOVEMENT_SPEED = 30; // Degrees per second
-	
+	// Entities
+	private static final int PLANET_COUNT = 500;
 	
 	
 	Camera camera = new Camera();
@@ -52,37 +57,40 @@ public class Tester5 extends Prototyper {
 		
 		Model sphereModel = Models.getUVsphereModel();
 		
-		int planetCount = 300;
-		
-		for (int i = 0; i < planetCount; i++) {
-			//Vector3f pos = getPlanetPosition();
-			Vector3f pos = new Vector3f();
-			int xOffset = 25; // Offset to avoid overlapping the sun
-			pos.x = i + xOffset; // Each planet has unique x;
+		for (int i = 0; i < PLANET_COUNT; i++) {
 			
-			// Now just override what I put and put the planet randomly
-			pos.x = xOffset + (float) (Math.random() * 200);
-			pos.z = (float) (Math.random() * 200);
+			Vector3f pos = new Vector3f();
+			
+			pos.x = (float) MathUtils.randRange(-1000, 1000);
+			pos.z = (float) MathUtils.randRange(-1000, 1000);
+			
+			// Make sure the sun isn't too crowded
+			if (Math.abs(pos.x) < 250 && Math.abs(pos.z) < 250) {
+				pos.scale(10);
+			}
 			
 			//float orbitalRadius = calculateOrbitalRadius(pos);
 			// Look at Kepler's third law here
 			//float timePeriod = (float) (Math.sqrt(pos.x*pos.x*pos.x)/100); // Base the orbital time period on x^2
 			
+			Vector3f velocity = new Vector3f(
+					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
+					(float) MathUtils.randRange(-1, 1), 
+					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
-			// Randomly set the initial angle of the planet
-			planets.add(new Planet(sphereModel, pos, new Vector3f(0.005f, (float) (-0.00005 + Math.random() * 0.0008), 0.009f)));
+			planets.add(new Planet(sphereModel, pos, velocity));
 		}
 		
 	}
 	
-	private float calculateOrbitalRadius(Vector3f pos) {
-		return (float) Math.sqrt(pos.x*pos.x + pos.z*pos.z);
-	}
+	//private float calculateOrbitalRadius(Vector3f pos) {
+	//	return (float) Math.sqrt(pos.x*pos.x + pos.z*pos.z);
+	//}
 	
 	
 	public Tester5() {
 		// Place the camera up and back from the origin
-		Vector3f initialCameraPos = new Vector3f(0, 250, 280);
+		Vector3f initialCameraPos = new Vector3f(0, 1000, 1000);
 		camera.setPosition(initialCameraPos);
 		camera.setPitch(45); // Point camera downwards
 		
@@ -90,14 +98,17 @@ public class Tester5 extends Prototyper {
 		
 		// Give each planet a random mass
 		for (Planet planet : planets) {
-			planet.setMass((float) (Math.random() * 1000));
+			planet.setMass(3);
 		}
 		
 		
 		// The new "sun"
 		Planet p0 = planets.get(0);
-		p0.setMass(10000000);
-		p0.setScale(5);
+		p0.setMass(1E6f);
+		p0.setScale(109); // Sun radius = 109x earth
+		p0.setVelocity(new Vector3f());
+		p0.setPosition(new Vector3f());
+		
 	}
 	
 	
@@ -105,35 +116,28 @@ public class Tester5 extends Prototyper {
 	protected void logic(float deltaTime) {
 		
 		displayFramerate(deltaTime);
+		
+		if (fastToggle) {
+			deltaTime *= 5;
+		}
+		
 		moveCamera(deltaTime);
 		
-		//for (Planet planet : planets) {
-		//	planet.setPositionFromTime(getTime());
-		//}
-		
-		//Planet p0 = planets.get(0);
-		//Planet p1 = planets.get(1);
-		
-		//p0.tick(p0.getAccelerationVectorToPlanet(p1), deltaTime);
-		
-		//System.out.println(p0.getPosition());
-		
 		for (Planet planet1 : planets) {
+			
+			Vector3f resultantAcceleration = new Vector3f();
+			
 			for (Planet planet2 : planets) {
 				if (planet1 == planet2) {
 					continue;
 				}
 				
-				//Vector3f resultantForce = 
-				
-				planet1.tick(planet1.getAccelerationVectorToPlanet(planet2), deltaTime);
-				//System.out.println(planet1.getPosition());
+				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
 			
-			
-			
-			
+			planet1.tick(resultantAcceleration, deltaTime);
 		}
+		
 		
 	}
 	
@@ -204,8 +208,6 @@ public class Tester5 extends Prototyper {
 		
 		
 	}
-	
-	
 	
 	
 	
