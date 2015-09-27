@@ -14,8 +14,8 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 	
 	private static final float FOV = 70; // Field of view in degrees
-	private static final float NEAR_PLANE = 0.1f; // Near plane distance
-	private static final float FAR_PLANE = 1000; // Far plane distance
+	private static final float NEAR_PLANE = 0.001f; // Near plane distance
+	private static final float FAR_PLANE = 100000; // Far plane distance
 	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
