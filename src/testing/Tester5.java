@@ -61,13 +61,16 @@ public class Tester5 extends Prototyper {
 			
 			Vector3f pos = new Vector3f();
 			
-			pos.x = (float) MathUtils.randRange(-1000, 1000);
-			pos.z = (float) MathUtils.randRange(-1000, 1000);
+			//pos.x = (float) MathUtils.randRange(-1000, 1000);
+			//pos.z = (float) MathUtils.randRange(-1000, 1000);
+			
+			pos.x = (float) MathUtils.randRange(-100, 100);
+			pos.z = (float) MathUtils.randRange(-100, 100);
 			
 			// Make sure the sun isn't too crowded
-			if (Math.abs(pos.x) < 250 && Math.abs(pos.z) < 250) {
-				pos.scale(10);
-			}
+			//if (Math.abs(pos.x) < 250 && Math.abs(pos.z) < 250) {
+			//	pos.scale(10);
+			//}
 			
 			//float orbitalRadius = calculateOrbitalRadius(pos);
 			// Look at Kepler's third law here
@@ -105,9 +108,18 @@ public class Tester5 extends Prototyper {
 		// The new "sun"
 		Planet p0 = planets.get(0);
 		p0.setMass(1E6f);
-		p0.setScale(109); // Sun radius = 109x earth
+		//p0.setScale(109); // Sun radius = 109x earth
+		p0.setScale(10);
 		p0.setVelocity(new Vector3f());
 		p0.setPosition(new Vector3f());
+		
+		
+		Planet p1 = planets.get(1);
+		p1.setMass(4E5f);
+		//p1.setScale(109); // Sun radius = 109x earth
+		p1.setScale(7);
+		p1.setVelocity(new Vector3f(30f, 0, -0.03f));
+		p1.setPosition(new Vector3f(-100, 0, 100));
 		
 	}
 	
@@ -116,6 +128,8 @@ public class Tester5 extends Prototyper {
 	protected void logic(float deltaTime) {
 		
 		displayFramerate(deltaTime);
+		
+		//deltaTime /= 100;
 		
 		if (fastToggle) {
 			deltaTime *= 5;
@@ -137,6 +151,9 @@ public class Tester5 extends Prototyper {
 			
 			planet1.tick(resultantAcceleration, deltaTime);
 		}
+		
+		//Planet p0 = planets.get(0);
+		//p0.setVelocity(new Vector3f());
 		
 		
 	}
