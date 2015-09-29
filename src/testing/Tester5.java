@@ -109,23 +109,27 @@ public class Tester5 extends Prototyper {
 		Planet p0 = planets.get(0);
 		p0.setMass(1E6f);
 		//p0.setScale(109); // Sun radius = 109x earth
-		p0.setScale(10);
-		p0.setVelocity(new Vector3f());
-		p0.setPosition(new Vector3f());
+		p0.setScale(7);
+		p0.setVelocity(new Vector3f(0, 0, 22f));
+		p0.setPosition(new Vector3f(-50, 0, 0));
 		
 		
 		Planet p1 = planets.get(1);
-		p1.setMass(4E5f);
+		p1.setMass(1E6f);
 		//p1.setScale(109); // Sun radius = 109x earth
 		p1.setScale(7);
-		p1.setVelocity(new Vector3f(30f, 0, -0.03f));
-		p1.setPosition(new Vector3f(-100, 0, 100));
+		p1.setVelocity(new Vector3f(0, 0, -22f));
+		p1.setPosition(new Vector3f(50, 0, 0));
 		
 	}
 	
 	
 	@Override
 	protected void logic(float deltaTime) {
+		
+		//Planet p0 = planets.get(0);
+		//p0.setPosition(new Vector3f());
+		
 		
 		displayFramerate(deltaTime);
 		
@@ -141,19 +145,20 @@ public class Tester5 extends Prototyper {
 			
 			Vector3f resultantAcceleration = new Vector3f();
 			
+			// Avoid comparing a planet to itself
 			for (Planet planet2 : planets) {
 				if (planet1 == planet2) {
 					continue;
 				}
 				
+				// Adding vectors gives a resultant vector
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
 			
 			planet1.tick(resultantAcceleration, deltaTime);
 		}
 		
-		//Planet p0 = planets.get(0);
-		//p0.setVelocity(new Vector3f());
+		//p0.setPosition(new Vector3f());
 		
 		
 	}
