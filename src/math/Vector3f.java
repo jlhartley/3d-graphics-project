@@ -5,8 +5,31 @@ public class Vector3f {
 	// TODO: Have a base vector class / interface that is independent of dimension
 	// TODO: Have a bunch of static factory methods for the basis vectors
 	
-	// TODO: Have a set magnitude method
+	// TODO: Review performance of the setMagnitude method
+	
+	
+	// TODO: Make a VectorUtils class
+	
+	public static Vector3f add(Vector3f vec1, Vector3f vec2) {
+		Vector3f vec = new Vector3f();
+		vec.x = vec1.x + vec2.x;
+		vec.y = vec1.y + vec2.y;
+		vec.z = vec1.z + vec2.z;
+		return vec;
+	}
+	
+	public static Vector3f sub(Vector3f vec1, Vector3f vec2) {
+		Vector3f vec = new Vector3f();
+		vec.x = vec1.x - vec2.x;
+		vec.y = vec1.y - vec2.y;
+		vec.z = vec1.z - vec2.z;
+		return vec;
+	}
+	
+	
 
+	
+	
 	public float x, y, z;
 
 	// Empty constructor for default (0, 0, 0)
@@ -80,6 +103,11 @@ public class Vector3f {
 		set(x / mag, y / mag, z / mag);
 		// Alternative
 		//scale(1 / mag);
+	}
+	
+	public void setMagnitude(float mag) {
+		normalise();
+		scale(mag);
 	}
 
 	// Get the dot product of this vector and another vector

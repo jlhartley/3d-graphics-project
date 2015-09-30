@@ -12,16 +12,10 @@ public class Planet extends Entity {
 	// Mass in kilogrammes
 	private float mass;
 	
-	// Distance from the sun
-	//private float orbitalRadius;
-	
-	// Time taken for one complete orbit
-	//private float timePeriod;
-	
-	// Starting angle in the planets orbit
-	//private float initialAngle;
-	
+	// Velocity in m/s
 	private Vector3f velocity;
+	
+	
 	
 	// Constructors
 	public Planet(Model model, Vector3f position) {
@@ -34,27 +28,16 @@ public class Planet extends Entity {
 	}
 	
 	
-	// Calculate the position in the orbital circle based on the time
-	// OLD
-	/*
-	public void setPositionFromTime(float time) {
-		
-		Vector3f pos = getPosition();
-		
-		float numberOfOrbits = time/timePeriod;
-		
-		pos.x = (float) (orbitalRadius * Math.sin(Math.toRadians(numberOfOrbits * 360 + initialAngle)));
-		pos.z = (float) (orbitalRadius * Math.cos(Math.toRadians(numberOfOrbits * 360 + initialAngle)));
-		
-	}*/
 	
-	
-	public void tick(Vector3f acceleration, float deltaTime) {
+	public void updateVelocity(Vector3f acceleration, float deltaTime) {
 		
 		velocity.x += acceleration.x * deltaTime;
 		velocity.y += acceleration.y * deltaTime;
 		velocity.z += acceleration.z * deltaTime;
-		
+	}
+	
+	
+	public void updatePosition(float deltaTime) {
 		Vector3f position = getPosition();
 		position.x += velocity.x * deltaTime;
 		position.y += velocity.y * deltaTime;
@@ -63,19 +46,30 @@ public class Planet extends Entity {
 	
 	
 	
+	
+	
 	// Mutable Vector verses static Vector issue
 	public Vector3f accelerationVectorTo(Planet planet) {
 		
-		Vector3f pos1 = getPosition();
+		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = planet.getPosition();
 		
-		Vector3f vecToPlanet = new Vector3f(pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z);
+		// Take away position1 from position2 to find the vector between the positions
+		Vector3f vecToPlanet = Vector3f.sub(pos2, pos1);
 		
 		vecToPlanet.normalise();
-		vecToPlanet.scale(getForce(planet) / mass); // F = ma, a = F / m
+		
+		
+		 // F = m*a, a = F / m
+		float acceleration = getForce(planet) / mass;
+		
+		vecToPlanet.scale(acceleration);
 		
 		return vecToPlanet;
 	}
+	
+	
+	
 	
 	// Newton's law of universal gravitation
 	public float getForce(Planet planet) {

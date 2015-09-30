@@ -51,8 +51,6 @@ public class Tester5 extends Prototyper {
 	
 	List<Planet> planets = new ArrayList<>();
 	
-	//Entity sun = new Entity(Models.getUVsphereModel(), new Vector3f(), new Vector3f(), 5);
-	
 	private void addPlanets() {
 		
 		Model sphereModel = Models.getUVsphereModel();
@@ -60,9 +58,6 @@ public class Tester5 extends Prototyper {
 		for (int i = 0; i < PLANET_COUNT; i++) {
 			
 			Vector3f pos = new Vector3f();
-			
-			//pos.x = (float) MathUtils.randRange(-1000, 1000);
-			//pos.z = (float) MathUtils.randRange(-1000, 1000);
 			
 			pos.x = (float) MathUtils.randRange(-100, 100);
 			pos.z = (float) MathUtils.randRange(-100, 100);
@@ -72,9 +67,6 @@ public class Tester5 extends Prototyper {
 			//	pos.scale(10);
 			//}
 			
-			//float orbitalRadius = calculateOrbitalRadius(pos);
-			// Look at Kepler's third law here
-			//float timePeriod = (float) (Math.sqrt(pos.x*pos.x*pos.x)/100); // Base the orbital time period on x^2
 			
 			Vector3f velocity = new Vector3f(
 					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
@@ -85,10 +77,6 @@ public class Tester5 extends Prototyper {
 		}
 		
 	}
-	
-	//private float calculateOrbitalRadius(Vector3f pos) {
-	//	return (float) Math.sqrt(pos.x*pos.x + pos.z*pos.z);
-	//}
 	
 	
 	public Tester5() {
@@ -110,15 +98,15 @@ public class Tester5 extends Prototyper {
 		p0.setMass(1E6f);
 		//p0.setScale(109); // Sun radius = 109x earth
 		p0.setScale(7);
-		p0.setVelocity(new Vector3f(0, 0, 22f));
+		p0.setVelocity(new Vector3f(0, 0, 21.5f));
 		p0.setPosition(new Vector3f(-50, 0, 0));
 		
-		
+		// The second sun
 		Planet p1 = planets.get(1);
 		p1.setMass(1E6f);
 		//p1.setScale(109); // Sun radius = 109x earth
 		p1.setScale(7);
-		p1.setVelocity(new Vector3f(0, 0, -22f));
+		p1.setVelocity(new Vector3f(0, 0, -21.5f));
 		p1.setPosition(new Vector3f(50, 0, 0));
 		
 	}
@@ -127,13 +115,9 @@ public class Tester5 extends Prototyper {
 	@Override
 	protected void logic(float deltaTime) {
 		
-		//Planet p0 = planets.get(0);
-		//p0.setPosition(new Vector3f());
-		
 		
 		displayFramerate(deltaTime);
 		
-		//deltaTime /= 100;
 		
 		if (fastToggle) {
 			deltaTime *= 5;
@@ -155,10 +139,15 @@ public class Tester5 extends Prototyper {
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
 			
-			planet1.tick(resultantAcceleration, deltaTime);
+			planet1.updateVelocity(resultantAcceleration, deltaTime);
+			//planet1.updatePosition(deltaTime);
 		}
 		
-		//p0.setPosition(new Vector3f());
+		// Update planet positions after all the acceleration vectors have been calculated
+		for (Planet planet : planets) {
+			planet.updatePosition(deltaTime);
+		}
+		
 		
 		
 	}
