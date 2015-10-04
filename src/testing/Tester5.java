@@ -89,7 +89,7 @@ public class Tester5 extends Prototyper {
 		
 		// Give each planet a random mass
 		for (Planet planet : planets) {
-			planet.setMass(3);
+			planet.setMass((float) MathUtils.randRange(1, 10));
 		}
 		
 		
@@ -125,6 +125,8 @@ public class Tester5 extends Prototyper {
 		
 		moveCamera(deltaTime);
 		
+		//ArrayList<Planet> planetsToRemove = new ArrayList<>();
+		
 		for (Planet planet1 : planets) {
 			
 			Vector3f resultantAcceleration = new Vector3f();
@@ -135,6 +137,17 @@ public class Tester5 extends Prototyper {
 					continue;
 				}
 				
+				/*if (checkCollision(planet1, planet2)) {
+					if (planet1.getMass() > planet2.getMass()) {
+						planet1.setMass(planet1.getMass() + planet2.getMass());
+						planetsToRemove.add(planet2);
+					} else {
+						planet2.setMass(planet2.getMass() + planet1.getMass());
+						planetsToRemove.add(planet1);
+					}
+				}*/
+				
+				
 				// Adding vectors gives a resultant vector
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
@@ -143,16 +156,26 @@ public class Tester5 extends Prototyper {
 			//planet1.updatePosition(deltaTime);
 		}
 		
+		//planets.removeAll(planetsToRemove);
+		
 		// Update planet positions after all the acceleration vectors have been calculated
 		for (Planet planet : planets) {
 			planet.updatePosition(deltaTime);
+			//planet.setScale((float) Math.log10(planet.getMass()));
 		}
 		
 		
 		
 	}
 	
-	
+	/*private boolean checkCollision(Planet p1, Planet p2) {
+		if (Math.abs(p1.getPosition().z - p2.getPosition().z) < 10
+				&& Math.abs(p1.getPosition().x - p2.getPosition().x) < 10
+				&& Math.abs(p1.getPosition().y - p2.getPosition().y) < 10) {
+			return true;
+		}
+		return false;
+	}*/
 	
 	
 	
