@@ -20,12 +20,12 @@ public class Tester5 extends Prototyper {
 		new Tester5().run();
 	}
 
-	private boolean fastToggle = false;
+	private int speedMultiplier = 1;
 	
 	@Override
 	public void onKeyPressed(int keyCode) {
 		if (keyCode == GLFW_KEY_SPACE) {
-			fastToggle = !fastToggle;
+			speedMultiplier = (speedMultiplier % 6) + 1;
 		}
 	}
 
@@ -38,7 +38,7 @@ public class Tester5 extends Prototyper {
 	// Constants
 	
 	// Output
-	private static final float FRAMERATE_REPORT_INTERVAL = 1;
+	private static final float FRAMERATE_REPORT_INTERVAL = 5;
 	// Camera movement
 	private static final float NORMAL_MOVEMENT_SPEED = 50;
 	private static final float FAST_MOVEMENT_SPEED = 150;
@@ -81,7 +81,7 @@ public class Tester5 extends Prototyper {
 	
 	public Tester5() {
 		// Place the camera up and back from the origin
-		Vector3f initialCameraPos = new Vector3f(0, 1000, 1000);
+		Vector3f initialCameraPos = new Vector3f(0, 500, 500);
 		camera.setPosition(initialCameraPos);
 		camera.setPitch(45); // Point camera downwards
 		
@@ -89,7 +89,7 @@ public class Tester5 extends Prototyper {
 		
 		// Give each planet a random mass
 		for (Planet planet : planets) {
-			planet.setMass((float) MathUtils.randRange(1, 10));
+			planet.setMass((float) MathUtils.randRange(2, 7));
 		}
 		
 		
@@ -118,10 +118,7 @@ public class Tester5 extends Prototyper {
 		
 		displayFramerate(deltaTime);
 		
-		
-		if (fastToggle) {
-			deltaTime *= 5;
-		}
+		deltaTime *= speedMultiplier;
 		
 		moveCamera(deltaTime);
 		
