@@ -18,14 +18,13 @@ public class Matrix4f {
 	
 	
 	
-	
 
 	public static final int SIZE = 4 * 4;
 	public float[] elements;
 
-	
 	public Matrix4f() {
-		setToIdentity(); // By default a matrix is created with the identity matrix set
+		// By default a matrix is created with the identity matrix set
+		setToIdentity();
 	}
 	
 	
@@ -40,7 +39,8 @@ public class Matrix4f {
 		// [ 0 , 0 , 1 , 0 ]
 		// [ 0 , 0 , 0 , 1 ]
 		
-		// [col 0 + row 0 * 4] = 1.0f etc..
+		// Using a flattened array
+		// [column 0 + row 0 * 4] = 1.0f etc...
 		
 		elements[0 + 0 * 4] = 1.0f;
 		elements[1 + 1 * 4] = 1.0f;
@@ -55,8 +55,8 @@ public class Matrix4f {
 		elements[3 + 3 * 4] += elements[0 + 3 * 4] * vec.x + elements[1 + 3 * 4] * vec.y + elements[2 + 3 * 4] * vec.z;
 	}
 	
+	// Axis must be a unit vector
 	public void rotate(float angle, Vector3f axis) {
-
 		float c = (float) Math.cos(angle);
 		float s = (float) Math.sin(angle);
 		float oneminusc = 1.0f - c;
@@ -101,12 +101,9 @@ public class Matrix4f {
 		elements[1 + 1 * 4] = t11;
 		elements[1 + 2 * 4] = t12;
 		elements[1 + 3 * 4] = t13;
-		
 	}
 	
-	
 	public void scale(Vector3f vec) {
-		
 		elements[0 + 0 * 4] = elements[0 + 0 * 4] * vec.x;
 		elements[0 + 1 * 4] = elements[0 + 1 * 4] * vec.x;
 		elements[0 + 2 * 4] = elements[0 + 2 * 4] * vec.x;
@@ -119,7 +116,6 @@ public class Matrix4f {
 		elements[2 + 1 * 4] = elements[2 + 1 * 4] * vec.z;
 		elements[2 + 2 * 4] = elements[2 + 2 * 4] * vec.z;
 		elements[2 + 3 * 4] = elements[2 + 3 * 4] * vec.z;
-		
 	}
 	
 
