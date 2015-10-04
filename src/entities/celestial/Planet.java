@@ -30,7 +30,6 @@ public class Planet extends Entity {
 	
 	
 	public void updateVelocity(Vector3f acceleration, float deltaTime) {
-		
 		velocity.x += acceleration.x * deltaTime;
 		velocity.y += acceleration.y * deltaTime;
 		velocity.z += acceleration.z * deltaTime;
@@ -48,33 +47,28 @@ public class Planet extends Entity {
 	
 	
 	
-	// Mutable Vector verses static Vector issue
 	public Vector3f accelerationVectorTo(Planet planet) {
+		
+		 // F = m * a,  a = F / m
+		float accelerationMagnitude = getForceScalar(planet) / mass;
 		
 		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = planet.getPosition();
 		
-		// Take away position1 from position2 to find the vector between the positions
-		Vector3f vecToPlanet = Vector3f.sub(pos2, pos1);
+		// Subtract position1 from position2 to get the vector between the positions
+		Vector3f acceleration = Vector3f.sub(pos2, pos1)
+				.setMagnitude(accelerationMagnitude); // Scale the vector
 		
-		vecToPlanet.normalise();
-		
-		
-		 // F = m*a, a = F / m
-		float acceleration = getForce(planet) / mass;
-		
-		vecToPlanet.scale(acceleration);
-		
-		return vecToPlanet;
+		return acceleration;
 	}
 	
 	
 	
 	
 	// Newton's law of universal gravitation
-	public float getForce(Planet planet) {
+	public float getForceScalar(Planet planet) {
 		float distanceSquared = distanceSquaredTo(planet);
-		// Limit the maximum force
+		// Limit the maximum force by limiting the minimum distance
 		if (distanceSquared < 3) {
 			distanceSquared = 3;
 		}
@@ -84,7 +78,7 @@ public class Planet extends Entity {
 	private float distanceSquaredTo(Planet planet) {
 		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = planet.getPosition();
-		Vector3f vecToPlanet = new Vector3f(pos2.x - pos1.x, pos2.y - pos1.y, pos2.z - pos1.z);
+		Vector3f vecToPlanet = Vector3f.sub(pos2, pos1);;
 		return vecToPlanet.magnitudeSquared();
 	}
 	

@@ -10,6 +10,8 @@ public class Vector3f {
 	
 	// TODO: Make a VectorUtils class
 	
+	// Note that the mutator methods use a fluid interface
+	
 	public static Vector3f add(Vector3f vec1, Vector3f vec2) {
 		Vector3f vec = new Vector3f();
 		vec.x = vec1.x + vec2.x;
@@ -48,43 +50,49 @@ public class Vector3f {
 	}
 	
 	// Set vector components
-	public void set(float x, float y, float z) {
+	public Vector3f set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
 	}
 	
+	
 	// Translate by a vector by adding the components
-	public void translate(Vector3f vec) {
-		add(vec);
+	public Vector3f translate(Vector3f vec) {
+		return add(vec);
 	}
 	
 	// Add a vector to this vector
-	public void add(Vector3f vec) {
+	public Vector3f add(Vector3f vec) {
 		this.x += vec.x;
 		this.y += vec.y;
 		this.z += vec.z;
+		return this;
 	}
 	
 	// Subtract a vector from this vector
-	public void sub(Vector3f vec) {
+	public Vector3f sub(Vector3f vec) {
 		this.x -= vec.x;
 		this.y -= vec.y;
 		this.z -= vec.z;
+		return this;
 	}
 	
 	// Multiply by a scalar
-	public void scale(float scale) {
+	public Vector3f scale(float scale) {
 		x *= scale;
 		y *= scale;
 		z *= scale;
+		return this;
 	}
 	
 	// Make each component negative
-	public void negate() {
+	public Vector3f negate() {
 		x = -x;
 		y = -y;
 		z = -z;
+		return this;
 	}
 	
 	// For efficiency - sometimes this is required
@@ -97,17 +105,19 @@ public class Vector3f {
 		return (float) Math.sqrt(magnitudeSquared());
 	}
 	
-	// Normalise the vector - divide each component by the magnitude
-	public void normalise() {
+	// Normalise the vector - make its magnitude 1
+	public Vector3f normalise() {
 		float mag = magnitude();
 		set(x / mag, y / mag, z / mag);
 		// Alternative
 		//scale(1 / mag);
+		return this;
 	}
 	
-	public void setMagnitude(float mag) {
+	public Vector3f setMagnitude(float mag) {
 		normalise();
 		scale(mag);
+		return this;
 	}
 
 	// Get the dot product of this vector and another vector
