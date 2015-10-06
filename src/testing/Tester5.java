@@ -20,12 +20,13 @@ public class Tester5 extends Prototyper {
 		new Tester5().run();
 	}
 
-	private int speedMultiplier = 1;
+	private int speedMultiplier = 0;
 	
 	@Override
 	public void onKeyPressed(int keyCode) {
 		if (keyCode == GLFW_KEY_SPACE) {
-			speedMultiplier = (speedMultiplier % 6) + 1;
+			//speedMultiplier = (speedMultiplier % 6) + 1;
+			speedMultiplier = ((speedMultiplier + 1) % 6);
 		}
 	}
 
@@ -98,7 +99,7 @@ public class Tester5 extends Prototyper {
 		p0.setMass(1E6f);
 		//p0.setScale(109); // Sun radius = 109x earth
 		p0.setScale(7);
-		p0.setVelocity(new Vector3f(0, 0, 21.5f));
+		p0.setVelocity(new Vector3f(0, 0, 21.5f)); // 21.5
 		p0.setPosition(new Vector3f(-50, 0, 0));
 		
 		// The second sun
@@ -106,7 +107,7 @@ public class Tester5 extends Prototyper {
 		p1.setMass(1E6f);
 		//p1.setScale(109); // Sun radius = 109x earth
 		p1.setScale(7);
-		p1.setVelocity(new Vector3f(0, 0, -21.5f));
+		p1.setVelocity(new Vector3f(0, 0, -21.5f)); // 21.5
 		p1.setPosition(new Vector3f(50, 0, 0));
 		
 	}
@@ -123,6 +124,8 @@ public class Tester5 extends Prototyper {
 		moveCamera(deltaTime);
 		
 		//ArrayList<Planet> planetsToRemove = new ArrayList<>();
+		
+		ArrayList<Vector3f> newPositions = new ArrayList<>();
 		
 		for (Planet planet1 : planets) {
 			
@@ -149,6 +152,13 @@ public class Tester5 extends Prototyper {
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
 			
+			Vector3f newPosition = new Vector3f(planet1.getPosition());
+			Vector3f velocity = planet1.getVelocity();
+			newPosition.x += (deltaTime * velocity.x) + (0.5 * resultantAcceleration.x * deltaTime * deltaTime);
+			newPosition.y += (deltaTime * velocity.y) + (0.5 * resultantAcceleration.y * deltaTime * deltaTime);
+			newPosition.z += (deltaTime * velocity.z) + (0.5 * resultantAcceleration.z * deltaTime * deltaTime);
+			newPositions.add(newPosition);
+			
 			planet1.updateVelocity(resultantAcceleration, deltaTime);
 			//planet1.updatePosition(deltaTime);
 		}
@@ -156,8 +166,10 @@ public class Tester5 extends Prototyper {
 		//planets.removeAll(planetsToRemove);
 		
 		// Update planet positions after all the acceleration vectors have been calculated
+		int i = 0;
 		for (Planet planet : planets) {
-			planet.updatePosition(deltaTime);
+			//planet.updatePosition(deltaTime);
+			planet.setPosition(newPositions.get(i++));
 			//planet.setScale((float) Math.log10(planet.getMass()));
 		}
 		
