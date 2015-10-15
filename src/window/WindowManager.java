@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWvidmode;
-import org.lwjgl.opengl.GLContext;
+import org.lwjgl.opengl.GL;
 
 public class WindowManager {
 	
@@ -56,7 +56,7 @@ public class WindowManager {
 	private void initGL() {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
-		GLContext.createFromCurrent();
+		GL.createCapabilities();
 		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
 	}
 	
