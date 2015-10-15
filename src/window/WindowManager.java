@@ -27,30 +27,37 @@ public class WindowManager {
 	
 	private long window;
 	
-	private GLFWKeyCallback keyCallback;
+	// Callbacks require strong references because they are called from native code
 	private GLFWErrorCallback errorCallback;
+	private GLFWKeyCallback keyCallback;
 	private GLFWFramebufferSizeCallback framebufferSizeCallback;
 	
 	
 	private void initWindow(int width, int height, String title) {
+		// Set an error callback so that errors get written to System.err
 		errorCallback = errorCallbackPrint();
 		glfwSetErrorCallback(errorCallback);
+		// Initialise GLFW
 		int initSuccess = glfwInit();
 		if (initSuccess == GL_FALSE) {
 			System.err.println("Could not initialise GLFW!");
 			close();
-			System.exit(1); // Indicate abnormal termination with the nonzero status code
+			System.exit(1); // Exiting with non-zero status code indicates abnormal termination
 		}
 		System.out.println("GLFW Version: " + glfwGetVersionString());
-		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
-		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
-		glfwWindowHint(GLFW_SAMPLES, 16); // Added 16x anti-aliasing
+		initWindowHints();
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create window!");
 			close();
 			System.exit(1);
 		}
+	}
+	
+	private void initWindowHints() {
+		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
+		glfwWindowHint(GLFW_SAMPLES, 16); // Added 16x anti-aliasing
 	}
 	
 	private void initGL() {
@@ -146,6 +153,7 @@ public class WindowManager {
 		if (window != NULL) {
 			glfwDestroyWindow(window);
 		}
+		// Callbacks need to be released because they use native resources
 		if (keyCallback != null) {
 			keyCallback.release();
 		}
