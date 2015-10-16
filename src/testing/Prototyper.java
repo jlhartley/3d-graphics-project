@@ -14,8 +14,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	
 	private static final String TITLE = "Test Title";
 	
-	private static final String VERTEX_SHADER_PATH = "src/shaders/vertexShader.txt";
-	private static final String FRAGMENT_SHADER_PATH = "src/shaders/fragmentShader.txt";
+	private static final String VERTEX_SHADER_PATH = "src/shaders/vertexShader.glsl";
+	private static final String FRAGMENT_SHADER_PATH = "src/shaders/fragmentShader.glsl";
 	
 	
 	private WindowManager windowManager;
