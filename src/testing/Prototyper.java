@@ -49,7 +49,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	}
 	
 	protected void closeWindow() {
-		windowManager.setWindowShouldClose(true);
+		windowManager.setShouldClose(true);
 	}
 	
 	
@@ -74,7 +74,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 		
 		double oldTime = 0;
 		
-		while (!windowManager.windowShouldClose()) {
+		while (!windowManager.shouldClose()) {
 			
 			// Calculate delta time
 			double deltaTime = glfwGetTime() - oldTime;

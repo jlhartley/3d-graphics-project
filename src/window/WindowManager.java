@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL;
 
 public class WindowManager {
 	
+	// TODO: separate out into input callbacks and other callbacks
 	public interface Callbacks {
 		public void onKeyPressed(int keyCode);
 		public void onKeyReleased(int keyCode);
@@ -34,15 +35,19 @@ public class WindowManager {
 	
 	
 	private void initWindow(int width, int height, String title) {
-		// Set an error callback so that errors get written to System.err
+		// Set an error callback so that a human-readable description of
+		// any errors related to GLFW are output
+		// Print any errors to the standard error stream (System.err)
 		errorCallback = errorCallbackPrint();
 		glfwSetErrorCallback(errorCallback);
-		// Initialise GLFW
+		// Initialise GLFW - this is required before most GLFW functions
+		// can be called
 		int initSuccess = glfwInit();
 		if (initSuccess == GL_FALSE) {
 			System.err.println("Could not initialise GLFW!");
 			close();
-			System.exit(1); // Exiting with non-zero status code indicates abnormal termination
+			// Exiting with non-zero status code indicates abnormal termination
+			System.exit(1);
 		}
 		System.out.println("GLFW Version: " + glfwGetVersionString());
 		initWindowHints();
@@ -89,7 +94,7 @@ public class WindowManager {
         };
         glfwSetKeyCallback(window, keyCallback);
         
-		// When the window is resized just call through to our own callback
+		// When the framebuffer is resized just call through to our own callback
 		framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
@@ -110,7 +115,6 @@ public class WindowManager {
 	
 	// Place the window at the centre of the screen
 	public void centreWindow() {
-		
 		// Get the width and height of the primary monitor in screen coordinates
 		long primaryMonitor = glfwGetPrimaryMonitor();
 		ByteBuffer videoMode = glfwGetVideoMode(primaryMonitor);
@@ -127,10 +131,9 @@ public class WindowManager {
 		glfwSetWindowPos(window,
 				(screenWidth - windowWidth) / 2,
 				(screenHeight - windowHeight) / 2);
-		
 	}
 	
-	// Swap buffers and poll for events
+	// Swap the front and back buffers and poll for events
 	public void update() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -140,11 +143,11 @@ public class WindowManager {
 		return glfwGetKey(window, key) == GLFW_PRESS;
 	}
 	
-	public void setWindowShouldClose(boolean value) {
+	public void setShouldClose(boolean value) {
 		glfwSetWindowShouldClose(window, value ? GL_TRUE : GL_FALSE);
 	}
 	
-	public boolean windowShouldClose() {
+	public boolean shouldClose() {
 		return glfwWindowShouldClose(window) == GL_TRUE;
 	}
 	
