@@ -17,10 +17,12 @@ import org.lwjgl.opengl.GL;
 
 public class WindowManager {
 	
-	// TODO: separate out into input callbacks and other callbacks
-	public interface Callbacks {
+	public interface InputCallbacks {
 		public void onKeyPressed(int keyCode);
 		public void onKeyReleased(int keyCode);
+	}
+	
+	public interface WindowCallbacks {
 		public void onFramebufferResized(int width, int height);
 	}
 	
@@ -35,26 +37,33 @@ public class WindowManager {
 	
 	
 	private void initWindow(int width, int height, String title) {
-		// Set an error callback so that a human-readable description of
-		// any errors related to GLFW are output
+		// Set an error callback so that a human-readable description of any
+		// errors relating to GLFW are output
 		// Print any errors to the standard error stream (System.err)
 		errorCallback = errorCallbackPrint();
 		glfwSetErrorCallback(errorCallback);
+		
 		// Initialise GLFW - this is required before most GLFW functions
 		// can be called
 		int initSuccess = glfwInit();
 		if (initSuccess == GL_FALSE) {
 			System.err.println("Could not initialise GLFW!");
-			close();
+			cleanup();
 			// Exiting with non-zero status code indicates abnormal termination
 			System.exit(1);
 		}
+		// Display version for debugging purposes if initialisation was successful
 		System.out.println("GLFW Version: " + glfwGetVersionString());
+		
+		// Set our window  hints
 		initWindowHints();
+		
+		// Create the window, not in fullscreen mode and 
+		// without sharing any resources with another window
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create window!");
-			close();
+			cleanup();
 			System.exit(1);
 		}
 	}
@@ -62,13 +71,14 @@ public class WindowManager {
 	private void initWindowHints() {
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
-		glfwWindowHint(GLFW_SAMPLES, 16); // Added 16x anti-aliasing
+		glfwWindowHint(GLFW_SAMPLES, 16); // Enable 16x anti-aliasing
 	}
 	
 	private void initGL() {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
 		GL.createCapabilities();
+		// If OpenGL initialisation was successful, display the version
 		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
 	}
 	
@@ -79,26 +89,28 @@ public class WindowManager {
 	}
 	
 	
-	public void setCallbacks(final Callbacks callbacks) {
+	public void setInputCallbacks(final InputCallbacks inputCallbacks) {
 		// Key callback just calls through to our own interface
 		keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-            	// Here repeat does not count as a key press
-                if (action == GLFW_PRESS) {
-                	callbacks.onKeyPressed(key);
-                } else if (action == GLFW_RELEASE) {
-                	callbacks.onKeyReleased(key);
-                }
-            }
-        };
-        glfwSetKeyCallback(window, keyCallback);
-        
+			@Override
+			public void invoke(long window, int key, int scancode, int action, int mods) {
+				// Here repeat does not count as a key press
+				if (action == GLFW_PRESS) {
+					inputCallbacks.onKeyPressed(key);
+				} else if (action == GLFW_RELEASE) {
+					inputCallbacks.onKeyReleased(key);
+				}
+			}
+		};
+		glfwSetKeyCallback(window, keyCallback);
+	}
+	
+	public void setWindowCallbacks(final WindowCallbacks windowCallbacks) {
 		// When the framebuffer is resized just call through to our own callback
 		framebufferSizeCallback = new GLFWFramebufferSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
-				callbacks.onFramebufferResized(width, height);
+				windowCallbacks.onFramebufferResized(width, height);
 			}
 		};
 		glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -152,7 +164,7 @@ public class WindowManager {
 	}
 	
 	// Handles GLFW cleanup and exit
-	public void close() {
+	public void cleanup() {
 		if (window != NULL) {
 			glfwDestroyWindow(window);
 		}

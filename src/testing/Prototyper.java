@@ -5,7 +5,7 @@ import util.ModelUtils;
 import window.WindowManager;
 import static org.lwjgl.glfw.GLFW.*;
 
-public abstract class Prototyper implements WindowManager.Callbacks {
+public abstract class Prototyper implements WindowManager.InputCallbacks, WindowManager.WindowCallbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -58,7 +58,8 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 		// Create window and OpenGL context
 		// It is important this is the first setup stage
 		windowManager = new WindowManager(WIDTH, HEIGHT, TITLE);
-		windowManager.setCallbacks(this); // Callbacks for keyboard and framebuffer resize
+		windowManager.setInputCallbacks(this); // Callbacks for keyboard
+		windowManager.setWindowCallbacks(this); // Callbacks for framebuffer resize
 		
 		// Set up the renderer
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
@@ -96,7 +97,7 @@ public abstract class Prototyper implements WindowManager.Callbacks {
 	private void cleanUp() {
 		renderer.cleanUp();
 		ModelUtils.cleanUp();
-		windowManager.close();
+		windowManager.cleanup();
 	}
 	
 }
