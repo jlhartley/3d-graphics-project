@@ -28,7 +28,13 @@ public class Vector3f {
 		return vec;
 	}
 	
-	
+	// A static method for getting the cross product of two vectors
+	public static Vector3f cross(Vector3f vec1, Vector3f vec2) {
+		float x = vec1.y * vec2.z - vec1.z * vec2.y;
+		float y = vec1.z * vec2.x - vec1.x * vec2.z;
+		float z = vec1.x * vec2.y - vec1.y * vec2.x;
+		return new Vector3f(x, y, z);
+	}
 
 	
 	
@@ -126,15 +132,35 @@ public class Vector3f {
 	}
 	
 	
-	// A static method for getting the cross product of two vectors
-	public static Vector3f cross(Vector3f vec1, Vector3f vec2) {
-		float x = vec1.y * vec2.z - vec1.z * vec2.y;
-		float y = vec1.z * vec2.x - vec1.x * vec2.z;
-		float z = vec1.x * vec2.y - vec1.y * vec2.x;
-		return new Vector3f(x, y, z);
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		result = prime * result + Float.floatToIntBits(z);
+		return result;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vector3f other = (Vector3f) obj;
+		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+			return false;
+		if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+			return false;
+		if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "{x: " + x + ", y: " + y + ", z: " + z + "}"; 
