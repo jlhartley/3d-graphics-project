@@ -34,6 +34,11 @@ public abstract class Prototyper implements WindowManager.InputCallbacks, Window
 	
 	
 	public void run() {
+		// Show the window just before the main loop
+		// This ensures it is only displayed after all other
+		// resources have finished loading
+		windowManager.showWindow();
+		
 		loop(); // The main game loop
 		cleanUp();
 	}
@@ -54,7 +59,6 @@ public abstract class Prototyper implements WindowManager.InputCallbacks, Window
 	
 	
 	private void setUp() {
-
 		// Create window and OpenGL context
 		// It is important this is the first setup stage
 		windowManager = new WindowManager(WIDTH, HEIGHT, TITLE);
@@ -65,10 +69,8 @@ public abstract class Prototyper implements WindowManager.InputCallbacks, Window
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
-		// Centre window and make it visible
+		// Centre window
 		windowManager.centreWindow();
-		windowManager.showWindow();
-
 	}
 	
 	private void loop() {
