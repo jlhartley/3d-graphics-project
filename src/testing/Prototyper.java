@@ -75,6 +75,8 @@ public abstract class Prototyper implements WindowManager.InputCallbacks, Window
 	
 	private void loop() {
 		
+		// Zero the timer
+		glfwSetTime(0);
 		double oldTime = 0;
 		
 		while (!windowManager.shouldClose()) {
