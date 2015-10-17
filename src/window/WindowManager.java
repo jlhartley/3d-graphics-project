@@ -6,14 +6,15 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.libffi.Closure;
 
 public class WindowManager {
 	
@@ -27,14 +28,20 @@ public class WindowManager {
 	}
 	
 	
-	
+	// The pointer that this class wraps
 	private long window;
+	
+	// Keep track of the window width and height, even after resizing
+	private int width;
+	private int height;
 	
 	// Callbacks require strong references because they are called from native code
 	private GLFWErrorCallback errorCallback;
 	private GLFWKeyCallback keyCallback;
 	private GLFWFramebufferSizeCallback framebufferSizeCallback;
+	private GLFWWindowSizeCallback windowSizeCallback;
 	
+	private Closure debugMessageCallback;
 	
 	private void initWindow(int width, int height, String title) {
 		// Set an error callback so that a human-readable description of any
@@ -66,9 +73,25 @@ public class WindowManager {
 			cleanup();
 			System.exit(1);
 		}
+		
+		// Make sure that width and height get updated
+		// Note that virtual screen coordinates do not necessarily correspond
+		// to pixels - imagine dragging a window from a higher resolution monitor
+		// to a lower resolution one - the window size stays the same
+		windowSizeCallback = new GLFWWindowSizeCallback() {
+			@Override
+			public void invoke(long window, int width, int height) {
+				WindowManager.this.width = width;
+				WindowManager.this.height = height;
+				System.out.println("Window Width: " + width + ", Height: " + height);
+			}
+		};
+		glfwSetWindowSizeCallback(window, windowSizeCallback);
+		
 	}
 	
 	private void initWindowHints() {
+		glfwDefaultWindowHints(); // Start from default hints
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Initially the window is hidden
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // It is also resizable
 		glfwWindowHint(GLFW_SAMPLES, 16); // Enable 16x anti-aliasing
@@ -78,12 +101,15 @@ public class WindowManager {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
 		GL.createCapabilities();
+		debugMessageCallback = GLUtil.setupDebugMessageCallback();
 		// If OpenGL initialisation was successful, display the version
 		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
 	}
 	
 	
 	public WindowManager(int width, int height, String title) {
+		this.width = width;
+		this.height = height;
 		initWindow(width, height, title);
 		initGL();
 	}
@@ -133,22 +159,23 @@ public class WindowManager {
 		int screenWidth = GLFWvidmode.width(videoMode);
 		int screenHeight = GLFWvidmode.height(videoMode);
 		
-		// Get the width and height of the window in screen coordinates
-		IntBuffer windowWidthBuffer = BufferUtils.createIntBuffer(1);
-		IntBuffer windowHeightBuffer = BufferUtils.createIntBuffer(1);
-		glfwGetWindowSize(window, windowWidthBuffer, windowHeightBuffer);
-		int windowWidth = windowWidthBuffer.get();
-		int windowHeight = windowHeightBuffer.get();
-		
 		glfwSetWindowPos(window,
-				(screenWidth - windowWidth) / 2,
-				(screenHeight - windowHeight) / 2);
+				(screenWidth - this.width) / 2,
+				(screenHeight - this.height) / 2);
 	}
 	
 	// Swap the front and back buffers and poll for events
 	public void update() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 	
 	public boolean isKeyPressed(int key) {
@@ -163,8 +190,11 @@ public class WindowManager {
 		return glfwWindowShouldClose(window) == GL_TRUE;
 	}
 	
-	// Handles GLFW cleanup and exit
+	// Handles GLFW and GL cleanup and exit
 	public void cleanup() {
+		if (debugMessageCallback != null) {
+			debugMessageCallback.release();
+		}
 		if (window != NULL) {
 			glfwDestroyWindow(window);
 		}
