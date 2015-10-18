@@ -5,12 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import math.Vector3f;
 import model.Model;
 
 public class OBJParser2 {
+	
+	// TODO: A lot of optimisation
 	
 	private static final String EXTENSION = ".obj";
 	private static final String PATH = "res/models/";
@@ -89,20 +93,55 @@ public class OBJParser2 {
 			processIndexData(vertexPositionIndex, vertexNormalIndex);
 			
 		}
+		
+		// 3 vertices per face, so increment by 3 since we just processed a face
+		totalVertexCount+=3;
 	}
 	
 	private void processIndexData(int vertexPositionIndex, int vertexNormalIndex) {
-		
 		// Grab the data out of the correct place and simply append it to the respective list
 		unindexedPositions.add(positionsIn.get(vertexPositionIndex));
 		unindexedNormals.add(normalsIn.get(vertexNormalIndex));
-		
-		totalVertexCount++;
-		
 	}
 	
-	
-	
+	// Used solely for duplicate finding
+	private static class Vertex {
+		Vector3f pos;
+		Vector3f norm;
+		public Vertex(Vector3f pos, Vector3f norm) {
+			this.pos = pos;
+			this.norm = norm;
+		}
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((norm == null) ? 0 : norm.hashCode());
+			result = prime * result + ((pos == null) ? 0 : pos.hashCode());
+			return result;
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Vertex other = (Vertex) obj;
+			if (norm == null) {
+				if (other.norm != null)
+					return false;
+			} else if (!norm.equals(other.norm))
+				return false;
+			if (pos == null) {
+				if (other.pos != null)
+					return false;
+			} else if (!pos.equals(other.pos))
+				return false;
+			return true;
+		}
+	}
 	
 	private void indexVertices() {
 		
@@ -110,14 +149,20 @@ public class OBJParser2 {
 		// declared in the unindexed lists
 		indices = new int[totalVertexCount];
 		
+		Map<Vertex, Integer> vertexIndexMap = new HashMap<>();
+		
 		for (int i = 0; i < totalVertexCount; i++) {
 			
 			Vector3f unindexedPos = unindexedPositions.get(i);
 			Vector3f unindexedNorm = unindexedNormals.get(i);
 			
-			int duplicateVertexIndex = getDuplicateVertexIndex(unindexedPos, unindexedNorm);
+			Vertex unindexedVertex = new Vertex(unindexedPos, unindexedNorm);
 			
-			if (duplicateVertexIndex != -1) {
+			Integer duplicateVertexIndex = vertexIndexMap.get(unindexedVertex);
+			
+			//int duplicateVertexIndex = getDuplicateVertexIndex(unindexedPos, unindexedNorm);
+			
+			if (duplicateVertexIndex != null) {
 				// Add the index of the duplicate vertex, instead of adding the same vertex data twice
 				indices[i] = duplicateVertexIndex;
 			} else {
@@ -126,6 +171,7 @@ public class OBJParser2 {
 				indexedNormals.add(unindexedNorm);
 				// Use the current unique vertex count to determine the next index
 				indices[i] = uniqueVertexCount;
+				vertexIndexMap.put(unindexedVertex, uniqueVertexCount);
 				uniqueVertexCount++;
 			}
 			
@@ -133,7 +179,7 @@ public class OBJParser2 {
 		
 	}
 	
-	private int getDuplicateVertexIndex(Vector3f unindexedPos, Vector3f unindexedNorm) {
+	/*private int getDuplicateVertexIndex(Vector3f unindexedPos, Vector3f unindexedNorm) {
 		// Basic linear search
 		for (int i = 0; i < indexedPositions.size(); i++) {
 			
@@ -149,7 +195,7 @@ public class OBJParser2 {
 		
 		// Returns -1 if there was no duplicate
 		return -1;
-	}
+	}*/
 	
 	
 	

@@ -347,7 +347,7 @@ public class Models {
 	
 	public static Model getDragonModel() {
 		if (dragonModel == null) {
-			OBJParser parser = new OBJParser(DRAGON_MODEL_FILENAME);
+			OBJParser2 parser = new OBJParser2(DRAGON_MODEL_FILENAME);
 			dragonModel = parser.getModel();
 		}
 		return dragonModel;
