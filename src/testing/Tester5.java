@@ -74,6 +74,7 @@ public class Tester5 extends Prototyper {
 					(float) MathUtils.randRange(-1, 1), 
 					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
+			
 			planets.add(new Planet(sphereModel, pos, velocity));
 		}
 		
@@ -99,9 +100,10 @@ public class Tester5 extends Prototyper {
 		p0.setMass(1E6f);
 		//p0.setScale(109); // Sun radius = 109x earth
 		p0.setScale(7);
-		p0.setVelocity(new Vector3f(0, 0, 21.5f)); // 21.5
-		p0.setPosition(new Vector3f(-50, 0, 0));
+		p0.setVelocity(new Vector3f(0, 0, 0)); // 21.5
+		p0.setPosition(new Vector3f(0, 0, 0));
 		
+		/*
 		// The second sun
 		Planet p1 = planets.get(1);
 		p1.setMass(1E6f);
@@ -109,6 +111,7 @@ public class Tester5 extends Prototyper {
 		p1.setScale(7);
 		p1.setVelocity(new Vector3f(0, 0, -21.5f)); // 21.5
 		p1.setPosition(new Vector3f(50, 0, 0));
+		*/
 		
 	}
 	
