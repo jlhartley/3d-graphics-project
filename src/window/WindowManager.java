@@ -7,6 +7,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -35,11 +36,15 @@ public class WindowManager {
 	private int width;
 	private int height;
 	
+	private double mouseX;
+	private double mouseY;
+	
 	// Callbacks require strong references because they are called from native code
 	private GLFWErrorCallback errorCallback;
 	private GLFWKeyCallback keyCallback;
 	private GLFWFramebufferSizeCallback framebufferSizeCallback;
 	private GLFWWindowSizeCallback windowSizeCallback;
+	private GLFWCursorPosCallback cursorPosCollback;
 	
 	private Closure debugMessageCallback;
 	
@@ -74,6 +79,7 @@ public class WindowManager {
 			System.exit(1);
 		}
 		
+		
 		// Make sure that width and height get updated
 		// Note that virtual screen coordinates do not necessarily correspond
 		// to pixels - imagine dragging a window from a higher resolution monitor
@@ -88,6 +94,17 @@ public class WindowManager {
 		};
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
 		
+		// Set up the cursor position callback so we can grab the current cursor position
+		// at any time
+		cursorPosCollback = new GLFWCursorPosCallback() {
+			@Override
+			public void invoke(long window, double xpos, double ypos) {
+				WindowManager.this.mouseX = xpos;
+				WindowManager.this.mouseY = ypos;
+				//System.out.println("Mouse Position X: " + xpos + ", Y: " + ypos);
+			}
+		};
+		glfwSetCursorPosCallback(window, cursorPosCollback);
 	}
 	
 	private void initWindowHints() {
@@ -170,14 +187,6 @@ public class WindowManager {
 		glfwPollEvents();
 	}
 	
-	public int getWidth() {
-		return width;
-	}
-	
-	public int getHeight() {
-		return height;
-	}
-	
 	public boolean isKeyPressed(int key) {
 		return glfwGetKey(window, key) == GLFW_PRESS;
 	}
@@ -189,6 +198,25 @@ public class WindowManager {
 	public boolean shouldClose() {
 		return glfwWindowShouldClose(window) == GL_TRUE;
 	}
+	
+	
+	// Basic getters and setters
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public double getMouseX() {
+		return mouseX;
+	}
+	
+	public double getMouseY() {
+		return mouseY;
+	}
+	
 	
 	// Handles GLFW and GL cleanup and exit
 	public void cleanup() {
@@ -204,6 +232,12 @@ public class WindowManager {
 		}
 		if (framebufferSizeCallback != null) {
 			framebufferSizeCallback.release();
+		}
+		if (windowSizeCallback != null) {
+			windowSizeCallback.release();
+		}
+		if (cursorPosCollback != null) {
+			cursorPosCollback.release();
 		}
 		glfwTerminate();
 		errorCallback.release();
