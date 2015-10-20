@@ -17,6 +17,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
+import math.Vector2f;
+
 public class Window {
 	
 	public interface InputCallbacks {
@@ -32,12 +34,18 @@ public class Window {
 	// The pointer that this class wraps
 	private long window;
 	
-	// Keep track of the window width and height, even after resizing
+	// Keep track of the window width and height in screen coordinates
 	private int width;
 	private int height;
 	
+	// The centre point of the window, in screen coordinates
+	// relative to the client area origin
+	private Vector2f centre = new Vector2f();
+	
 	private double mouseX;
 	private double mouseY;
+	
+	private Vector2f mousePosition = new Vector2f();
 	
 	// Callbacks require strong references because they are called from native code
 	private GLFWErrorCallback errorCallback;
@@ -67,7 +75,7 @@ public class Window {
 		// Display version for debugging purposes if initialisation was successful
 		System.out.println("GLFW Version: " + glfwGetVersionString());
 		
-		// Set our window  hints
+		// Set our window hints
 		initWindowHints();
 		
 		// Create the window, not in fullscreen mode and 
@@ -89,6 +97,8 @@ public class Window {
 			public void invoke(long window, int width, int height) {
 				Window.this.width = width;
 				Window.this.height = height;
+				centre.x = width / 2;
+				centre.y = height / 2;
 				System.out.println("Window Width: " + width + ", Height: " + height);
 			}
 		};
@@ -99,8 +109,8 @@ public class Window {
 		cursorPosCollback = new GLFWCursorPosCallback() {
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
-				Window.this.mouseX = xpos;
-				Window.this.mouseY = ypos;
+				mousePosition.x = (float) xpos;
+				mousePosition.y = (float) ypos;
 				//System.out.println("Mouse Position X: " + xpos + ", Y: " + ypos);
 			}
 		};
@@ -125,8 +135,11 @@ public class Window {
 	
 	
 	public Window(int width, int height, String title) {
+		// Set some initial fields
 		this.width = width;
 		this.height = height;
+		centre.x = width / 2;
+		centre.y = height / 2;
 		initWindow(width, height, title);
 		initGL();
 	}
@@ -207,6 +220,10 @@ public class Window {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	private Vector2f getCentre() {
+		return centre;
 	}
 	
 	public double getMouseX() {
