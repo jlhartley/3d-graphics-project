@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
-public class WindowManager {
+public class Window {
 	
 	public interface InputCallbacks {
 		public void onKeyPressed(int keyCode);
@@ -87,8 +87,8 @@ public class WindowManager {
 		windowSizeCallback = new GLFWWindowSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
-				WindowManager.this.width = width;
-				WindowManager.this.height = height;
+				Window.this.width = width;
+				Window.this.height = height;
 				System.out.println("Window Width: " + width + ", Height: " + height);
 			}
 		};
@@ -99,8 +99,8 @@ public class WindowManager {
 		cursorPosCollback = new GLFWCursorPosCallback() {
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
-				WindowManager.this.mouseX = xpos;
-				WindowManager.this.mouseY = ypos;
+				Window.this.mouseX = xpos;
+				Window.this.mouseY = ypos;
 				//System.out.println("Mouse Position X: " + xpos + ", Y: " + ypos);
 			}
 		};
@@ -124,7 +124,7 @@ public class WindowManager {
 	}
 	
 	
-	public WindowManager(int width, int height, String title) {
+	public Window(int width, int height, String title) {
 		this.width = width;
 		this.height = height;
 		initWindow(width, height, title);
