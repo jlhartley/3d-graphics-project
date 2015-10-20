@@ -42,9 +42,7 @@ public class Window {
 	// relative to the client area origin
 	private Vector2f centre = new Vector2f();
 	
-	private double mouseX;
-	private double mouseY;
-	
+	// Mouse position, relative the the client area centre
 	private Vector2f mousePosition = new Vector2f();
 	
 	// Callbacks require strong references because they are called from native code
@@ -109,9 +107,22 @@ public class Window {
 		cursorPosCollback = new GLFWCursorPosCallback() {
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
+				// Translate our cursor coordinates so that they are relative to the centre
+				//mousePosition.x = (float) (xpos - centre.x);
+				//mousePosition.y = (float) (ypos - centre.y);
+				
+				//mousePosition.negate();
+				
 				mousePosition.x = (float) xpos;
 				mousePosition.y = (float) ypos;
-				//System.out.println("Mouse Position X: " + xpos + ", Y: " + ypos);
+				
+				// Flip the coordinate system
+				mousePosition.negate();
+				
+				// Translate to the centre
+				mousePosition.translate(centre);
+				
+				System.out.println("Mouse Position X: " + mousePosition.x + ", Y: " + mousePosition.y);
 			}
 		};
 		glfwSetCursorPosCallback(window, cursorPosCollback);
@@ -222,16 +233,8 @@ public class Window {
 		return height;
 	}
 	
-	private Vector2f getCentre() {
-		return centre;
-	}
-	
-	public double getMouseX() {
-		return mouseX;
-	}
-	
-	public double getMouseY() {
-		return mouseY;
+	public Vector2f getMousePosition() {
+		return mousePosition;
 	}
 	
 	

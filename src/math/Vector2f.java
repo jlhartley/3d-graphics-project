@@ -66,5 +66,12 @@ public class Vector2f {
 		y *= scale;
 		return this;
 	}
+	
+	// Make each component negative
+	public Vector2f negate() {
+		x = -x;
+		y = -y;
+		return this;
+	}
 
 }
