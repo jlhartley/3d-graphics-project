@@ -160,16 +160,16 @@ public class Window {
 	}
 	
 	
-	public void showWindow() {
+	public void show() {
         glfwShowWindow(window);
 	}
 	
-	public void hideWindow() {
+	public void hide() {
 		glfwHideWindow(window);
 	}
 	
 	// Place the window at the centre of the screen
-	public void centreWindow() {
+	public void centre() {
 		// Get the width and height of the primary monitor in screen coordinates
 		long primaryMonitor = glfwGetPrimaryMonitor();
 		ByteBuffer videoMode = glfwGetVideoMode(primaryMonitor);

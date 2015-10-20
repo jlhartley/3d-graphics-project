@@ -37,7 +37,7 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 		// Show the window just before the main loop
 		// This ensures it is only displayed after all other
 		// resources have finished loading
-		window.showWindow();
+		window.show();
 		
 		loop(); // The main game loop
 		cleanUp();
@@ -70,7 +70,7 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
 		// Centre window
-		window.centreWindow();
+		window.centre();
 	}
 	
 	private void loop() {
