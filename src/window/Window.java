@@ -54,6 +54,15 @@ public class Window {
 	
 	private Closure debugMessageCallback;
 	
+	// Method to call whenever the size of the window changes
+	// Updates our instance variables
+	private void updateSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		centre.x = (float)width / 2;
+		centre.y = (float)height / 2;
+	}
+	
 	private void initWindow(int width, int height, String title) {
 		// Set an error callback so that a human-readable description of any
 		// errors relating to GLFW are output
@@ -93,10 +102,7 @@ public class Window {
 		windowSizeCallback = new GLFWWindowSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
-				Window.this.width = width;
-				Window.this.height = height;
-				centre.x = width / 2;
-				centre.y = height / 2;
+				updateSize(width, height);
 				System.out.println("Window Width: " + width + ", Height: " + height);
 			}
 		};
@@ -108,19 +114,9 @@ public class Window {
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
 				// Translate our cursor coordinates so that they are relative to the centre
-				//mousePosition.x = (float) (xpos - centre.x);
-				//mousePosition.y = (float) (ypos - centre.y);
-				
-				//mousePosition.negate();
-				
-				mousePosition.x = (float) xpos;
-				mousePosition.y = (float) ypos;
-				
-				// Flip the coordinate system
-				mousePosition.negate();
-				
-				// Translate to the centre
-				mousePosition.translate(centre);
+				// Also flip the y sign so that y increases when going up instead of down
+				mousePosition.x = (float) (xpos - centre.x);
+				mousePosition.y = -(float) (ypos - centre.y);
 				
 				System.out.println("Mouse Position X: " + mousePosition.x + ", Y: " + mousePosition.y);
 			}
@@ -146,11 +142,7 @@ public class Window {
 	
 	
 	public Window(int width, int height, String title) {
-		// Set some initial fields
-		this.width = width;
-		this.height = height;
-		centre.x = width / 2;
-		centre.y = height / 2;
+		updateSize(width, height);
 		initWindow(width, height, title);
 		initGL();
 	}
