@@ -24,7 +24,7 @@ public class Vector2f {
 	}
 	
 	// Constructor for a copy of an existing vector
-	public Vector2f(Vector3f vec) {
+	public Vector2f(Vector2f vec) {
 		set(vec.x, vec.y);
 	}
 
@@ -73,5 +73,12 @@ public class Vector2f {
 		y = -y;
 		return this;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "{x: " + x + ", y: " + y + "}"; 
+	}
+	
 
 }

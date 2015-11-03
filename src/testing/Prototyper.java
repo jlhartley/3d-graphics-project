@@ -6,6 +6,7 @@ import window.Window;
 import static org.lwjgl.glfw.GLFW.*;
 
 import logging.Logger;
+import math.Vector2f;
 
 public abstract class Prototyper implements Window.InputCallbacks, Window.WindowCallbacks {
 	
@@ -49,6 +50,10 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	// Mostly a set of convenience methods
 	protected boolean isKeyPressed(int key) {
 		return window.isKeyPressed(key);
+	}
+	
+	protected Vector2f getMousePosition() {
+		return window.getMousePosition();
 	}
 	
 	protected float getTime() {

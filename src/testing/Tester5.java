@@ -8,6 +8,7 @@ import java.util.List;
 import entities.Camera;
 import entities.Entity;
 import entities.celestial.Planet;
+import math.Vector2f;
 import math.Vector3f;
 import model.Model;
 import model.Models;
@@ -21,6 +22,8 @@ public class Tester5 extends Prototyper {
 	}
 	
 	
+	
+	// Handle keyboard input
 	
 	private int timeMultiplier = 1;
 	
@@ -38,6 +41,48 @@ public class Tester5 extends Prototyper {
 	@Override
 	public void onKeyReleased(int keyCode) {
 		
+	}
+	
+	
+	// Handle mouse input
+	
+	// Save out the mouse position while the mouse is held down
+	Vector2f mouseDownPosition = new Vector2f();
+	
+	Vector2f mouseDownCameraRotation = new Vector2f();
+	
+	boolean mouseDown = false;
+	
+	@Override
+	public void onMouseDown(int buttonCode) {
+		
+		if (buttonCode == GLFW_MOUSE_BUTTON_LEFT) {
+			
+			System.out.println("Left mouse down");
+			
+			
+			
+		} else if (buttonCode == GLFW_MOUSE_BUTTON_RIGHT) {
+			
+			System.out.println("Right mouse down");
+			
+			// Make a copy of the mouse position at the instant the mouse is pressed down
+			mouseDownPosition = new Vector2f(getMousePosition());
+			
+			// Make a copy of the camera rotation too
+			mouseDownCameraRotation = new Vector2f(camera.getYaw(), camera.getPitch());
+			
+			mouseDown = true;
+			System.out.println("Mouse Down Position: " + mouseDownPosition);
+			
+		}
+		
+	}
+
+	@Override
+	public void onMouseUp(int buttonCode) {
+		mouseDown = false;
+		System.out.println("Mouse Up");
 	}
 	
 	
@@ -96,12 +141,6 @@ public class Tester5 extends Prototyper {
 		
 		addPlanets();
 		
-		// Give each planet a random mass
-		for (Planet planet : planets) {
-			planet.setMass((float) MathUtils.randRange(2, 7));
-		}
-		
-		
 		// The new "sun"
 		Planet p0 = planets.get(0);
 		p0.setMass(1E6f);
@@ -121,15 +160,45 @@ public class Tester5 extends Prototyper {
 		moveCamera(deltaTime);
 		
 		
-		ArrayList<Vector3f> newPositions = new ArrayList<>();
+		Vector2f mousePosition = getMousePosition();
+		
+		if (mouseDown) {
+			
+			// Find the mouse movement vector
+			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
+			
+			//camera.setYaw(mouseDelta.x * deltaTime);
+			
+			
+			
+			//camera.increaseYaw(-mouseDelta.x / 10, deltaTime);
+			//camera.increasePitch(mouseDelta.y / 10, deltaTime);
+			
+			camera.setYaw(mouseDownCameraRotation.x + mouseDelta.x * 10 * deltaTime);
+			camera.setPitch(mouseDownCameraRotation.y + mouseDelta.y * 10 * deltaTime);
+		}
+		
+		// Find the mouse movement vector
+		//Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
+		
+		//camera.setYaw(mouseDelta.x * deltaTime);
+		
+
+		//camera.setPitch(mouseDelta.y * deltaTime);
+		
+		//camera.increaseYaw(mouseDelta.x, deltaTime);
+		
+		
+		
+		//ArrayList<Vector3f> newPositions = new ArrayList<>();
 		
 		for (Planet planet1 : planets) {
 			
 			Vector3f resultantAcceleration = new Vector3f();
 			
-			// Avoid comparing a planet to itself
 			for (Planet planet2 : planets) {
 				
+				// Avoid comparing a planet to itself
 				if (planet1 == planet2) {
 					continue;
 				}
@@ -138,23 +207,36 @@ public class Tester5 extends Prototyper {
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
 			
+			/*
 			Vector3f newPosition = new Vector3f(planet1.getPosition());
 			Vector3f velocity = planet1.getVelocity();
 			newPosition.x += (deltaTime * velocity.x) + (0.5 * resultantAcceleration.x * deltaTime * deltaTime);
 			newPosition.y += (deltaTime * velocity.y) + (0.5 * resultantAcceleration.y * deltaTime * deltaTime);
 			newPosition.z += (deltaTime * velocity.z) + (0.5 * resultantAcceleration.z * deltaTime * deltaTime);
 			newPositions.add(newPosition);
+			*/
 			
 			planet1.updateVelocity(resultantAcceleration, deltaTime);
+			
+			// Wait until all planet velocity values have been updated
+			
 			//planet1.updatePosition(deltaTime);
 		}
 		
+		// For basic Euler integration
+		for (Planet planet : planets) {
+			planet.updatePosition(deltaTime);
+		}
+		
+		/*
+		// Possible better SUVAT based integration
 		// Update planet positions after all the acceleration vectors have been calculated
 		int i = 0;
 		for (Planet planet : planets) {
 			planet.setPosition(newPositions.get(i++));
+			//planet.setRotY(getTime() * planet.getVelocity().magnitude());
 		}
-		
+		*/
 		
 		
 	}

@@ -33,6 +33,18 @@ public class Tester3 extends Prototyper {
 	}
 	
 	
+	@Override
+	public void onMouseDown(int buttonCode) {
+		
+	}
+
+	@Override
+	public void onMouseUp(int buttonCode) {
+		
+	}
+	
+	
+	
 	private static final int XY_LIMIT = 200;
 	
 	private static final int MAX_DISTANCE = 3000;

@@ -36,6 +36,19 @@ public class Tester4 extends Prototyper {
 	}
 	
 	
+	@Override
+	public void onMouseDown(int buttonCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMouseUp(int buttonCode) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	// Constants
 	
 	// Output

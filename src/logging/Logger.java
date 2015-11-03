@@ -2,7 +2,7 @@ package logging;
 
 public class Logger {
 	
-	private static final int REPORT_INTERVAL = 1;
+	private static final int REPORT_INTERVAL = 5;
 	
 	private int frameCount = 0;
 	private double lastReportTime = 0;
@@ -19,7 +19,7 @@ public class Logger {
 			
 			double frameRate = frameCount / elapsedTime;
 			
-			System.out.println("Framerate: " + frameRate + " FPS");
+			//System.out.println("Framerate: " + frameRate + " FPS");
 			System.out.println("Frame time: " + 1000 / frameRate + " ms");
 			
 			lastReportTime = currentTime;

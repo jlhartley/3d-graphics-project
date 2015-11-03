@@ -11,6 +11,7 @@ import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL;
@@ -24,6 +25,9 @@ public class Window {
 	public interface InputCallbacks {
 		public void onKeyPressed(int keyCode);
 		public void onKeyReleased(int keyCode);
+		public void onMouseDown(int buttonCode);
+		public void onMouseUp(int buttonCode);
+		//public void onMousePositionChanged(Vector2f mousePosition);
 	}
 	
 	public interface WindowCallbacks {
@@ -48,6 +52,7 @@ public class Window {
 	// Callbacks require strong references because they are called from native code
 	private GLFWErrorCallback errorCallback;
 	private GLFWKeyCallback keyCallback;
+	private GLFWMouseButtonCallback mouseButtonCallback;
 	private GLFWFramebufferSizeCallback framebufferSizeCallback;
 	private GLFWWindowSizeCallback windowSizeCallback;
 	private GLFWCursorPosCallback cursorPosCollback;
@@ -82,7 +87,7 @@ public class Window {
 		// Display version for debugging purposes if initialisation was successful
 		System.out.println("GLFW Version: " + glfwGetVersionString());
 		
-		// Set our window hints
+		// Set window hints
 		initWindowHints();
 		
 		// Create the window, not in fullscreen mode and 
@@ -118,10 +123,12 @@ public class Window {
 				mousePosition.x = (float) (xpos - centre.x);
 				mousePosition.y = -(float) (ypos - centre.y);
 				
-				System.out.println("Mouse Position X: " + mousePosition.x + ", Y: " + mousePosition.y);
+				//System.out.println("Mouse X: " + mousePosition.x + ", Mouse Y: " + mousePosition.y);
 			}
 		};
 		glfwSetCursorPosCallback(window, cursorPosCollback);
+		
+		
 	}
 	
 	private void initWindowHints() {
@@ -135,6 +142,7 @@ public class Window {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
 		GL.createCapabilities();
+		// Setup debugging output
 		debugMessageCallback = GLUtil.setupDebugMessageCallback();
 		// If OpenGL initialisation was successful, display the version
 		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
@@ -149,8 +157,11 @@ public class Window {
 	
 	
 	public void setInputCallbacks(final InputCallbacks inputCallbacks) {
-		// Key callback just calls through to our own interface
+		
+		// Callbacks just call through to our own interface
+		
 		keyCallback = new GLFWKeyCallback() {
+			
 			@Override
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				// Here repeat does not count as a key press
@@ -162,6 +173,21 @@ public class Window {
 			}
 		};
 		glfwSetKeyCallback(window, keyCallback);
+		
+		mouseButtonCallback = new GLFWMouseButtonCallback() {
+			
+			@Override
+			public void invoke(long window, int button, int action, int mods) {
+				// Mouse button repeat does not count as a press
+				if (action == GLFW_PRESS) {
+					inputCallbacks.onMouseDown(button);
+				} else if (action == GLFW_RELEASE) {
+					inputCallbacks.onMouseUp(button);
+				}
+			}
+		};
+		glfwSetMouseButtonCallback(window, mouseButtonCallback);
+		
 	}
 	
 	public void setWindowCallbacks(final WindowCallbacks windowCallbacks) {
@@ -225,6 +251,8 @@ public class Window {
 		return height;
 	}
 	
+	// Currently accessing mouse position using the callback
+	// to set an instance variable
 	public Vector2f getMousePosition() {
 		return mousePosition;
 	}
