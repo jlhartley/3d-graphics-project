@@ -19,17 +19,22 @@ public class Tester5 extends Prototyper {
 	public static void main(String[] args) {
 		new Tester5().run();
 	}
-
-	private int speedMultiplier = 0;
+	
+	
+	
+	private int timeMultiplier = 1;
 	
 	@Override
 	public void onKeyPressed(int keyCode) {
+		
 		if (keyCode == GLFW_KEY_SPACE) {
-			//speedMultiplier = (speedMultiplier % 6) + 1;
-			speedMultiplier = ((speedMultiplier + 1) % 6);
+			// Cycle through values for timeMultiplier,
+			// from 1 to MAX_TIME_MULTIPLIER
+			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
 		}
+		
 	}
-
+	
 	@Override
 	public void onKeyReleased(int keyCode) {
 		
@@ -38,14 +43,16 @@ public class Tester5 extends Prototyper {
 	
 	// Constants
 	
-	// Output
-	private static final float FRAMERATE_REPORT_INTERVAL = 5;
 	// Camera movement
 	private static final float NORMAL_MOVEMENT_SPEED = 50;
 	private static final float FAST_MOVEMENT_SPEED = 150;
 	private static final float ROTATION_MOVEMENT_SPEED = 30; // Degrees per second
+	
 	// Entities
 	private static final int PLANET_COUNT = 500;
+	
+	// Time
+	private static final int MAX_TIME_MULTIPLIER = 5;
 	
 	
 	Camera camera = new Camera();
@@ -60,22 +67,22 @@ public class Tester5 extends Prototyper {
 			
 			Vector3f pos = new Vector3f();
 			
+			// Random position
 			pos.x = (float) MathUtils.randRange(-100, 100);
 			pos.z = (float) MathUtils.randRange(-100, 100);
 			
-			// Make sure the sun isn't too crowded
-			//if (Math.abs(pos.x) < 250 && Math.abs(pos.z) < 250) {
-			//	pos.scale(10);
-			//}
-			
-			
+			// Generate a random velocity based on position
 			Vector3f velocity = new Vector3f(
 					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
-					(float) MathUtils.randRange(-1, 1), 
+					(float) MathUtils.randRange(-1, 1), // Small variation in y velocity
 					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
+			Planet planet = new Planet(sphereModel, pos, velocity);
 			
-			planets.add(new Planet(sphereModel, pos, velocity));
+			// Give each planet a random mass
+			planet.setMass((float) MathUtils.randRange(2, 7));
+			
+			planets.add(planet);
 		}
 		
 	}
@@ -103,30 +110,16 @@ public class Tester5 extends Prototyper {
 		p0.setVelocity(new Vector3f(0, 0, 0)); // 21.5
 		p0.setPosition(new Vector3f(0, 0, 0));
 		
-		/*
-		// The second sun
-		Planet p1 = planets.get(1);
-		p1.setMass(1E6f);
-		//p1.setScale(109); // Sun radius = 109x earth
-		p1.setScale(7);
-		p1.setVelocity(new Vector3f(0, 0, -21.5f)); // 21.5
-		p1.setPosition(new Vector3f(50, 0, 0));
-		*/
-		
 	}
 	
 	
 	@Override
 	protected void logic(float deltaTime) {
 		
-		
-		displayFramerate(deltaTime);
-		
-		deltaTime *= speedMultiplier;
+		deltaTime *= timeMultiplier;
 		
 		moveCamera(deltaTime);
 		
-		//ArrayList<Planet> planetsToRemove = new ArrayList<>();
 		
 		ArrayList<Vector3f> newPositions = new ArrayList<>();
 		
@@ -136,20 +129,10 @@ public class Tester5 extends Prototyper {
 			
 			// Avoid comparing a planet to itself
 			for (Planet planet2 : planets) {
+				
 				if (planet1 == planet2) {
 					continue;
 				}
-				
-				/*if (checkCollision(planet1, planet2)) {
-					if (planet1.getMass() > planet2.getMass()) {
-						planet1.setMass(planet1.getMass() + planet2.getMass());
-						planetsToRemove.add(planet2);
-					} else {
-						planet2.setMass(planet2.getMass() + planet1.getMass());
-						planetsToRemove.add(planet1);
-					}
-				}*/
-				
 				
 				// Adding vectors gives a resultant vector
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
@@ -166,43 +149,16 @@ public class Tester5 extends Prototyper {
 			//planet1.updatePosition(deltaTime);
 		}
 		
-		//planets.removeAll(planetsToRemove);
-		
 		// Update planet positions after all the acceleration vectors have been calculated
 		int i = 0;
 		for (Planet planet : planets) {
-			//planet.updatePosition(deltaTime);
 			planet.setPosition(newPositions.get(i++));
-			//planet.setScale((float) Math.log10(planet.getMass()));
 		}
 		
 		
 		
 	}
 	
-	/*private boolean checkCollision(Planet p1, Planet p2) {
-		if (Math.abs(p1.getPosition().z - p2.getPosition().z) < 10
-				&& Math.abs(p1.getPosition().x - p2.getPosition().x) < 10
-				&& Math.abs(p1.getPosition().y - p2.getPosition().y) < 10) {
-			return true;
-		}
-		return false;
-	}*/
-	
-	
-	
-	private float lastFramerateReportTime;
-	private void displayFramerate(float deltaTime) {
-		
-		if (lastFramerateReportTime > FRAMERATE_REPORT_INTERVAL) {
-			float frameRate = 1/deltaTime;
-
-			System.out.println("Framerate: " + frameRate + " FPS");
-			lastFramerateReportTime = 0;
-		} else {
-			lastFramerateReportTime += deltaTime;
-		}
-	}
 	
 	
 	private void moveCamera(float deltaTime) {

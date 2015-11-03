@@ -5,6 +5,8 @@ import util.ModelUtils;
 import window.Window;
 import static org.lwjgl.glfw.GLFW.*;
 
+import logging.Logger;
+
 public abstract class Prototyper implements Window.InputCallbacks, Window.WindowCallbacks {
 	
 	// Constants
@@ -75,21 +77,33 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	
 	private void loop() {
 		
+		Logger logger = new Logger();
+		
 		// Zero the timer
 		glfwSetTime(0);
 		double oldTime = 0;
 		
+		// On the first run deltaTime will approximately = 0,
+		// so nothing will happen and the first run is like a trial 
+		// run to find the deltaTime
+		
 		while (!window.shouldClose()) {
 			
-			// Calculate delta time
-			double deltaTime = glfwGetTime() - oldTime;
-			oldTime = glfwGetTime();
+			double currentTime = glfwGetTime();
 			
-			logic((float) deltaTime); // Game logic goes here
+			// Output data at regular intervals
+			logger.onFrame(currentTime);
+			
+			// Calculate delta time
+			double deltaTime = currentTime - oldTime;
+			oldTime = currentTime;
+			
+			logic((float) deltaTime); // Logic goes here
 			renderer.clear();
 			render(renderer); // Rendering entities goes here
 			
 			window.update(); // Swap buffers and poll for events
+			
 		}
 		
 	}
