@@ -56,6 +56,14 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 		return window.getMousePosition();
 	}
 	
+	protected void disableCursor() {
+		window.disableCursor();
+	}
+	
+	protected void enableCursor() {
+		window.enableCursor();
+	}
+	
 	protected float getTime() {
 		return (float) glfwGetTime();
 	}

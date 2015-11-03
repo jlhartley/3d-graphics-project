@@ -233,6 +233,14 @@ public class Window {
 		return glfwGetKey(window, key) == GLFW_PRESS;
 	}
 	
+	public void disableCursor() {
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	
+	public void enableCursor() {
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	
 	public void setShouldClose(boolean value) {
 		glfwSetWindowShouldClose(window, value ? GL_TRUE : GL_FALSE);
 	}

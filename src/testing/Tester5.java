@@ -49,7 +49,10 @@ public class Tester5 extends Prototyper {
 	// Save out the mouse position while the mouse is held down
 	Vector2f mouseDownPosition = new Vector2f();
 	
-	Vector2f mouseDownCameraRotation = new Vector2f();
+	float mouseDownYaw = 0;
+	float mouseDownPitch = 0;
+	
+	//Vector2f mouseDownCameraRotation = new Vector2f();
 	
 	boolean mouseDown = false;
 	
@@ -58,21 +61,23 @@ public class Tester5 extends Prototyper {
 		
 		if (buttonCode == GLFW_MOUSE_BUTTON_LEFT) {
 			
-			System.out.println("Left mouse down");
-			
 			
 			
 		} else if (buttonCode == GLFW_MOUSE_BUTTON_RIGHT) {
 			
-			System.out.println("Right mouse down");
+			mouseDown = true;
+			
+			System.out.println("Mouse Down");
+			
+			disableCursor();
 			
 			// Make a copy of the mouse position at the instant the mouse is pressed down
 			mouseDownPosition = new Vector2f(getMousePosition());
 			
 			// Make a copy of the camera rotation too
-			mouseDownCameraRotation = new Vector2f(camera.getYaw(), camera.getPitch());
+			mouseDownYaw = camera.getYaw();
+			mouseDownPitch = camera.getPitch();
 			
-			mouseDown = true;
 			System.out.println("Mouse Down Position: " + mouseDownPosition);
 			
 		}
@@ -82,6 +87,7 @@ public class Tester5 extends Prototyper {
 	@Override
 	public void onMouseUp(int buttonCode) {
 		mouseDown = false;
+		enableCursor();
 		System.out.println("Mouse Up");
 	}
 	
@@ -159,10 +165,9 @@ public class Tester5 extends Prototyper {
 		
 		moveCamera(deltaTime);
 		
-		
-		Vector2f mousePosition = getMousePosition();
-		
 		if (mouseDown) {
+			
+			Vector2f mousePosition = getMousePosition();
 			
 			// Find the mouse movement vector
 			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
@@ -170,12 +175,14 @@ public class Tester5 extends Prototyper {
 			//camera.setYaw(mouseDelta.x * deltaTime);
 			
 			
-			
 			//camera.increaseYaw(-mouseDelta.x / 10, deltaTime);
 			//camera.increasePitch(mouseDelta.y / 10, deltaTime);
 			
-			camera.setYaw(mouseDownCameraRotation.x + mouseDelta.x * 10 * deltaTime);
-			camera.setPitch(mouseDownCameraRotation.y + mouseDelta.y * 10 * deltaTime);
+			
+			// Adjust the camera rotation when the mouse was pressed 
+			// by an amount proportional to the mouseDelta vector 
+			camera.setYaw(mouseDownYaw - mouseDelta.x / 10);
+			camera.setPitch(mouseDownPitch + mouseDelta.y / 10);
 		}
 		
 		// Find the mouse movement vector
