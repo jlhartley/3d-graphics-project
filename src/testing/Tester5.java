@@ -24,23 +24,17 @@ public class Tester5 extends Prototyper {
 	
 	
 	
-	// Handle keyboard input
-	
-	private int timeMultiplier = 1;
+	// Keyboard input
 	
 	@Override
 	public void onKeyPressed(int keyCode) {
 		
 		if (keyCode == GLFW_KEY_SPACE) {
-			
 			// Cycle through values for timeMultiplier,
 			// from 1 to MAX_TIME_MULTIPLIER
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
-			
 		} else if (keyCode == GLFW_KEY_R) {
-			
 			resetCamera();
-			
 		}
 		
 	}
@@ -51,52 +45,54 @@ public class Tester5 extends Prototyper {
 	}
 	
 	
-	// Handle mouse input
-	
-	// Save out the mouse position while the mouse is held down
-	Vector2f mouseDownPosition = new Vector2f();
-	
-	// Save out the relevant camera rotation
-	float mouseDownYaw = 0;
-	float mouseDownPitch = 0;
-	
-	//Vector2f mouseDownCameraRotation = new Vector2f();
-	
-	boolean mouseDown = false;
+	// Mouse input
 	
 	@Override
 	public void onMouseDown(MouseButton mouseButton) {
 		
-		if (mouseButton == MouseButton.LEFT) {
+		switch (mouseButton) {
+		case LEFT:
+			log("Left mouse button down");
+			break;
+		case RIGHT:
+			log("Right mouse button down");
+			rightMouseDown = true;
 			
-			
-			
-		} else if (mouseButton == MouseButton.RIGHT) {
-			
-			mouseDown = true;
-			System.out.println("Mouse Down");
-			
-			// Allow endless mouse movement
+			// Allow endless cursor movement
 			disableCursor();
 			
-			// Make a copy of the mouse position at the instant the mouse is pressed down
+			// Record the mouse position
 			mouseDownPosition = new Vector2f(getMousePosition());
-			
-			// Make a copy of the camera rotation too
+			// Record the camera rotation
 			mouseDownYaw = camera.getYaw();
 			mouseDownPitch = camera.getPitch();
 			
-			System.out.println("Mouse Down Position: " + mouseDownPosition);
-			
+			log("Mouse Down Position: " + mouseDownPosition);
+			break;
+		case MIDDLE:
+			log("Middle mouse button down");
+			break;
 		}
 		
 	}
 
 	@Override
 	public void onMouseUp(MouseButton mouseButton) {
-		mouseDown = false;
-		System.out.println("Mouse Up");
-		enableCursor();
+		
+		switch (mouseButton) {
+		case LEFT:
+			log("Left mouse button up");
+			break;
+		case RIGHT:
+			log("Right mouse button up");
+			rightMouseDown = false;
+			enableCursor();
+			break;
+		case MIDDLE:
+			log("Middle mouse button up");
+			break;
+		}
+		
 	}
 	
 	
@@ -111,12 +107,26 @@ public class Tester5 extends Prototyper {
 	private static final float ROTATION_SPEED = 30;
 	private static final float ROTATION_SPEED_FAST = 90;
 	
+	private static final int MOUSE_MOVEMENT_SCALE = 20;
 	
 	// Entities
 	private static final int PLANET_COUNT = 500;
 	
 	// Time
 	private static final int MAX_TIME_MULTIPLIER = 5;
+	
+	
+	// State
+	
+	private int timeMultiplier = 1;
+	
+	// Save out the mouse position while the mouse is held down
+	Vector2f mouseDownPosition = new Vector2f();
+	// Save out the camera rotation
+	float mouseDownYaw = 0;
+	float mouseDownPitch = 0;
+	
+	boolean rightMouseDown = false;
 	
 	
 	Camera camera = new Camera();
@@ -145,8 +155,8 @@ public class Tester5 extends Prototyper {
 			// Generate a random mass
 			float mass = (float) MathUtils.randRange(2, 7);
 			
-			// Base scale on mass
-			float scale = 0.7f + mass / 10;
+			// Base scale on cube root of mass
+			float scale = (float) Math.cbrt(mass*2 - 3);
 			
 			Planet planet = new Planet(sphereModel, pos, velocity);
 			
@@ -181,16 +191,11 @@ public class Tester5 extends Prototyper {
 	}
 	
 	public Tester5() {
-		
 		resetCamera();
-		
 		addPlanets();
-		
 		addSun();
-		
 	}
-	
-	private static final int MOUSE_MOVEMENT_SCALE = 10;
+
 	
 	@Override
 	protected void logic(float deltaTime) {
@@ -199,7 +204,7 @@ public class Tester5 extends Prototyper {
 		
 		moveCamera(deltaTime);
 		
-		if (mouseDown) {
+		if (rightMouseDown) {
 			
 			Vector2f mousePosition = getMousePosition();
 			

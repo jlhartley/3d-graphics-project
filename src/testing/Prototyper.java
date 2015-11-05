@@ -24,6 +24,8 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	private Window window;
 	private Renderer renderer;
 	
+	private Logger logger;
+	
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		System.out.println("Framebuffer Width: " + width + ", Height: " + height);
@@ -68,12 +70,19 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 		return (float) glfwGetTime();
 	}
 	
+	protected void log(String message) {
+		logger.log(message);
+	}
+	
 	protected void closeWindow() {
 		window.setShouldClose(true);
 	}
 	
 	
 	private void setUp() {
+		// Instantiate logger
+		logger = new Logger();
+		
 		// Create window and OpenGL context
 		// It is important this is the first setup stage
 		window = new Window(WIDTH, HEIGHT, TITLE);
@@ -89,8 +98,6 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	}
 	
 	private void loop() {
-		
-		Logger logger = new Logger();
 		
 		// Zero the timer
 		glfwSetTime(0);

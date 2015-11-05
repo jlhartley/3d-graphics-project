@@ -61,8 +61,8 @@ public class Window {
 	private Closure debugMessageCallback;
 	
 	// Method to call whenever the size of the window changes
-	// Updates our instance variables
 	private void updateSize(int width, int height) {
+		// Updates our instance variables
 		this.width = width;
 		this.height = height;
 		centre.x = (float)width / 2;
