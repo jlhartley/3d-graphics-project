@@ -13,6 +13,7 @@ import model.ModelBuilder;
 import model.Models;
 import render.Renderer;
 import util.MathUtils;
+import window.MouseButton;
 
 public class Tester4 extends Prototyper {
 	
@@ -37,14 +38,12 @@ public class Tester4 extends Prototyper {
 	
 	
 	@Override
-	public void onMouseDown(int buttonCode) {
-		// TODO Auto-generated method stub
+	public void onMouseDown(MouseButton mouseButton) {
 		
 	}
 
 	@Override
-	public void onMouseUp(int buttonCode) {
-		// TODO Auto-generated method stub
+	public void onMouseUp(MouseButton mouseButton) {
 		
 	}
 	

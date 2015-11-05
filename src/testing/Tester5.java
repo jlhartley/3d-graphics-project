@@ -14,6 +14,7 @@ import model.Model;
 import model.Models;
 import render.Renderer;
 import util.MathUtils;
+import window.MouseButton;
 
 public class Tester5 extends Prototyper {
 	
@@ -31,9 +32,15 @@ public class Tester5 extends Prototyper {
 	public void onKeyPressed(int keyCode) {
 		
 		if (keyCode == GLFW_KEY_SPACE) {
+			
 			// Cycle through values for timeMultiplier,
 			// from 1 to MAX_TIME_MULTIPLIER
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
+			
+		} else if (keyCode == GLFW_KEY_R) {
+			
+			resetCamera();
+			
 		}
 		
 	}
@@ -49,6 +56,7 @@ public class Tester5 extends Prototyper {
 	// Save out the mouse position while the mouse is held down
 	Vector2f mouseDownPosition = new Vector2f();
 	
+	// Save out the relevant camera rotation
 	float mouseDownYaw = 0;
 	float mouseDownPitch = 0;
 	
@@ -57,18 +65,18 @@ public class Tester5 extends Prototyper {
 	boolean mouseDown = false;
 	
 	@Override
-	public void onMouseDown(int buttonCode) {
+	public void onMouseDown(MouseButton mouseButton) {
 		
-		if (buttonCode == GLFW_MOUSE_BUTTON_LEFT) {
+		if (mouseButton == MouseButton.LEFT) {
 			
 			
 			
-		} else if (buttonCode == GLFW_MOUSE_BUTTON_RIGHT) {
+		} else if (mouseButton == MouseButton.RIGHT) {
 			
 			mouseDown = true;
-			
 			System.out.println("Mouse Down");
 			
+			// Allow endless mouse movement
 			disableCursor();
 			
 			// Make a copy of the mouse position at the instant the mouse is pressed down
@@ -85,19 +93,24 @@ public class Tester5 extends Prototyper {
 	}
 
 	@Override
-	public void onMouseUp(int buttonCode) {
+	public void onMouseUp(MouseButton mouseButton) {
 		mouseDown = false;
-		enableCursor();
 		System.out.println("Mouse Up");
+		enableCursor();
 	}
 	
 	
 	// Constants
 	
 	// Camera movement
-	private static final float NORMAL_MOVEMENT_SPEED = 50;
-	private static final float FAST_MOVEMENT_SPEED = 150;
-	private static final float ROTATION_MOVEMENT_SPEED = 30; // Degrees per second
+	// Positional movement
+	private static final float MOVEMENT_SPEED = 50;
+	private static final float MOVEMENT_SPEED_FAST = 150;
+	
+	// Rotational movement
+	private static final float ROTATION_SPEED = 30;
+	private static final float ROTATION_SPEED_FAST = 90;
+	
 	
 	// Entities
 	private static final int PLANET_COUNT = 500;
@@ -110,6 +123,7 @@ public class Tester5 extends Prototyper {
 	
 	List<Planet> planets = new ArrayList<>();
 	
+	
 	private void addPlanets() {
 		
 		Model sphereModel = Models.getUVsphereModel();
@@ -118,34 +132,33 @@ public class Tester5 extends Prototyper {
 			
 			Vector3f pos = new Vector3f();
 			
-			// Random position
+			// Generate random position
 			pos.x = (float) MathUtils.randRange(-100, 100);
 			pos.z = (float) MathUtils.randRange(-100, 100);
 			
-			// Generate a random velocity based on position
+			// Generate random velocity, in a range based on position
 			Vector3f velocity = new Vector3f(
 					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
 					(float) MathUtils.randRange(-1, 1), // Small variation in y velocity
 					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
+			// Generate a random mass
+			float mass = (float) MathUtils.randRange(2, 7);
+			
+			// Base scale on mass
+			float scale = 0.7f + mass / 10;
+			
 			Planet planet = new Planet(sphereModel, pos, velocity);
 			
-			// Give each planet a random mass
-			planet.setMass((float) MathUtils.randRange(2, 7));
+			planet.setMass(mass);
+			planet.setScale(scale);
 			
 			planets.add(planet);
 		}
 		
 	}
 	
-	
-	public Tester5() {
-		// Place the camera up and back from the origin
-		Vector3f initialCameraPos = new Vector3f(0, 500, 500);
-		camera.setPosition(initialCameraPos);
-		camera.setPitch(45); // Point camera downwards
-		
-		addPlanets();
+	private void addSun() {
 		
 		// The new "sun"
 		Planet p0 = planets.get(0);
@@ -157,6 +170,27 @@ public class Tester5 extends Prototyper {
 		
 	}
 	
+	private void resetCamera() {
+		// Place the camera up and back from the origin
+		Vector3f position = new Vector3f(0, 500, 500);
+		camera.setPosition(position);
+		// Point camera downwards at 45 degrees
+		camera.setPitch(45);
+		camera.setYaw(0);
+		camera.setYaw(0);
+	}
+	
+	public Tester5() {
+		
+		resetCamera();
+		
+		addPlanets();
+		
+		addSun();
+		
+	}
+	
+	private static final int MOUSE_MOVEMENT_SCALE = 10;
 	
 	@Override
 	protected void logic(float deltaTime) {
@@ -172,28 +206,11 @@ public class Tester5 extends Prototyper {
 			// Find the mouse movement vector
 			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
 			
-			//camera.setYaw(mouseDelta.x * deltaTime);
-			
-			
-			//camera.increaseYaw(-mouseDelta.x / 10, deltaTime);
-			//camera.increasePitch(mouseDelta.y / 10, deltaTime);
-			
-			
 			// Adjust the camera rotation when the mouse was pressed 
 			// by an amount proportional to the mouseDelta vector 
-			camera.setYaw(mouseDownYaw - mouseDelta.x / 10);
-			camera.setPitch(mouseDownPitch + mouseDelta.y / 10);
+			camera.setYaw(mouseDownYaw - mouseDelta.x / MOUSE_MOVEMENT_SCALE);
+			camera.setPitch(mouseDownPitch + mouseDelta.y / MOUSE_MOVEMENT_SCALE);
 		}
-		
-		// Find the mouse movement vector
-		//Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
-		
-		//camera.setYaw(mouseDelta.x * deltaTime);
-		
-
-		//camera.setPitch(mouseDelta.y * deltaTime);
-		
-		//camera.increaseYaw(mouseDelta.x, deltaTime);
 		
 		
 		
@@ -253,24 +270,28 @@ public class Tester5 extends Prototyper {
 	private void moveCamera(float deltaTime) {
 		
 		float movementSpeed;
+		float rotationSpeed;
+		
 		if (isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			movementSpeed = FAST_MOVEMENT_SPEED;
+			movementSpeed = MOVEMENT_SPEED_FAST;
+			rotationSpeed = ROTATION_SPEED_FAST;
 		} else {
-			movementSpeed = NORMAL_MOVEMENT_SPEED;
+			movementSpeed = MOVEMENT_SPEED;
+			rotationSpeed = ROTATION_SPEED;
 		}
 		
 		// Positional controls
 		// Forward and back
-		if (isKeyPressed(GLFW_KEY_UP)) {
+		if (isKeyPressed(GLFW_KEY_W)) {
 			camera.moveForward(movementSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_DOWN)) {
+		} else if (isKeyPressed(GLFW_KEY_S)) {
 			camera.moveBack(movementSpeed, deltaTime);
 		}
 		
 		// Right and left
-		if (isKeyPressed(GLFW_KEY_RIGHT)) {
+		if (isKeyPressed(GLFW_KEY_D)) {
 			camera.moveRight(movementSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_LEFT)) {
+		} else if (isKeyPressed(GLFW_KEY_A)) {
 			camera.moveLeft(movementSpeed, deltaTime);
 		}
 		
@@ -284,17 +305,17 @@ public class Tester5 extends Prototyper {
 		
 		// Rotational controls
 		// Pitch
-		if (isKeyPressed(GLFW_KEY_S)) {
-			camera.increasePitch(ROTATION_MOVEMENT_SPEED, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_W)) {
-			camera.decreasePitch(ROTATION_MOVEMENT_SPEED, deltaTime);
+		if (isKeyPressed(GLFW_KEY_DOWN)) {
+			camera.increasePitch(rotationSpeed, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_UP)) {
+			camera.decreasePitch(rotationSpeed, deltaTime);
 		}
 		
 		// Yaw
-		if (isKeyPressed(GLFW_KEY_D)) {
-			camera.increaseYaw(ROTATION_MOVEMENT_SPEED, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_A)) {
-			camera.decreaseYaw(ROTATION_MOVEMENT_SPEED, deltaTime);
+		if (isKeyPressed(GLFW_KEY_RIGHT)) {
+			camera.increaseYaw(rotationSpeed, deltaTime);
+		} else if (isKeyPressed(GLFW_KEY_LEFT)) {
+			camera.decreaseYaw(rotationSpeed, deltaTime);
 		}
 		
 		

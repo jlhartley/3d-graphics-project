@@ -25,14 +25,15 @@ public class Window {
 	public interface InputCallbacks {
 		public void onKeyPressed(int keyCode);
 		public void onKeyReleased(int keyCode);
-		public void onMouseDown(int buttonCode);
-		public void onMouseUp(int buttonCode);
+		public void onMouseDown(MouseButton mouseButton);
+		public void onMouseUp(MouseButton mouseButton);
 		//public void onMousePositionChanged(Vector2f mousePosition);
 	}
 	
 	public interface WindowCallbacks {
 		public void onFramebufferResized(int width, int height);
 	}
+	
 	
 	
 	// The pointer that this class wraps
@@ -122,8 +123,6 @@ public class Window {
 				// Also flip the y sign so that y increases when going up instead of down
 				mousePosition.x = (float) (xpos - centre.x);
 				mousePosition.y = -(float) (ypos - centre.y);
-				
-				//System.out.println("Mouse X: " + mousePosition.x + ", Mouse Y: " + mousePosition.y);
 			}
 		};
 		glfwSetCursorPosCallback(window, cursorPosCollback);
@@ -178,11 +177,23 @@ public class Window {
 			
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
+				
+				// Select the correct enum values
+				MouseButton mouseButton = null;
+				
+				if (button == GLFW_MOUSE_BUTTON_LEFT) {
+					mouseButton = MouseButton.LEFT;
+				} else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+					mouseButton = MouseButton.RIGHT;
+				} else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+					mouseButton = MouseButton.MIDDLE;
+				}
+				
 				// Mouse button repeat does not count as a press
 				if (action == GLFW_PRESS) {
-					inputCallbacks.onMouseDown(button);
-				} else if (action == GLFW_RELEASE) {
-					inputCallbacks.onMouseUp(button);
+					inputCallbacks.onMouseDown(mouseButton);
+				} else if (action == GLFW_RELEASE) { // TODO: Replace with else
+					inputCallbacks.onMouseUp(mouseButton);
 				}
 			}
 		};
@@ -251,6 +262,7 @@ public class Window {
 	
 	
 	// Basic getters and setters
+	
 	public int getWidth() {
 		return width;
 	}

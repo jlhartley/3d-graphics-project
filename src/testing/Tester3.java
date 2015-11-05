@@ -13,6 +13,7 @@ import model.ModelBuilder;
 import model.Models;
 import render.Renderer;
 import util.MathUtils;
+import window.MouseButton;
 
 public class Tester3 extends Prototyper {
 	
@@ -34,12 +35,12 @@ public class Tester3 extends Prototyper {
 	
 	
 	@Override
-	public void onMouseDown(int buttonCode) {
+	public void onMouseDown(MouseButton mouseButton) {
 		
 	}
 
 	@Override
-	public void onMouseUp(int buttonCode) {
+	public void onMouseUp(MouseButton mouseButton) {
 		
 	}
 	
