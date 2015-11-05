@@ -1,4 +1,4 @@
-package entities.celestial;
+package physics;
 
 public class Constants {
 	
