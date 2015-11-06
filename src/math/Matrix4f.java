@@ -18,8 +18,12 @@ public class Matrix4f {
 	
 	
 	
-
-	public static final int SIZE = 4 * 4;
+	public static final int ROW_COUNT = 4;
+	public static final int COLUMN_COUNT = 4;
+	
+	public static final int SIZE = ROW_COUNT * COLUMN_COUNT;
+	
+	
 	public float[] elements;
 
 	public Matrix4f() {
@@ -117,6 +121,25 @@ public class Matrix4f {
 		elements[2 + 2 * 4] = elements[2 + 2 * 4] * vec.z;
 		elements[2 + 3 * 4] = elements[2 + 3 * 4] * vec.z;
 	}
+	
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for (int row = 0; row < ROW_COUNT; row++) {
+			sb.append("[ ");
+			for (int column = 0; column < COLUMN_COUNT; column++) {
+				float element = elements[column + row * 4];
+				sb.append(element + " ");
+			}
+			sb.append("]\n");
+		}
+		return sb.toString();
+	}
+	
+	
 	
 
 }
