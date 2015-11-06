@@ -11,11 +11,15 @@ public class Logger {
 		
 	}
 	
+	public void log(String message) {
+		System.out.println(message);
+	}
+	
 	public void onFrame(double currentTime) {
 		
 		double elapsedTime = currentTime - lastReportTime;
 		
-		if (elapsedTime > REPORT_INTERVAL) {
+		if (elapsedTime >= REPORT_INTERVAL) {
 			
 			double frameRate = frameCount / elapsedTime;
 			

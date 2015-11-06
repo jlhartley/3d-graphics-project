@@ -3,6 +3,7 @@ package entities.celestial;
 import entities.Entity;
 import math.Vector3f;
 import model.Model;
+import physics.Constants;
 
 // TODO: Have a base class from which planet and star both inherit
 // TODO: Should do something about MoveableEntity
