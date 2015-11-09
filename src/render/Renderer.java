@@ -2,7 +2,7 @@ package render;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import entities.Camera;
+import camera.Camera;
 import entities.Entity;
 import math.Matrix4f;
 import model.Model;

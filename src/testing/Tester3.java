@@ -5,7 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import entities.Camera;
+import camera.Camera;
 import entities.Entity;
 import math.Vector3f;
 import model.Model;

@@ -1,4 +1,4 @@
-package entities;
+package camera;
 
 import util.MathUtils;
 import math.Matrix4f;

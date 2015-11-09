@@ -5,7 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import entities.Camera;
+import camera.Camera;
 import entities.Entity;
 import entities.celestial.Planet;
 import math.Vector2f;
