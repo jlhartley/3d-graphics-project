@@ -10,7 +10,7 @@ const float ratio = width / height;
 
 // Near and far planes
 const float far = 1000;
-const float near = 0.01;
+const float near = 0.001;
 
 // Vertex data
 in vec3 position;
@@ -42,8 +42,8 @@ void main()
     
     //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
     
-    mat4 orthographic = mat4(vec4(0.001, 0, 0, 0),
-    				 		 vec4(0, 0.001, 0, 0),
+    mat4 orthographic = mat4(vec4(1/ratio * 0.005, 0, 0, 0),
+    				 		 vec4(0, 0.005, 0, 0),
     				 		 vec4(0, 0, -2/(far-near), -(far+near)/(far-near)),
     				 		 vec4(0, 0, 0, 1));
     
