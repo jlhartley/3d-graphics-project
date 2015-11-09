@@ -182,10 +182,10 @@ public class Tester5 extends Prototyper {
 	
 	private void resetCamera() {
 		// Place the camera up and back from the origin
-		Vector3f position = new Vector3f(0, 500, 500);
+		Vector3f position = new Vector3f(0, 500, 0);
 		camera.setPosition(position);
 		// Point camera downwards at 45 degrees
-		camera.setPitch(45);
+		camera.setPitch(90);
 		camera.setYaw(0);
 		camera.setYaw(0);
 	}

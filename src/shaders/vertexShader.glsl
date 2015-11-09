@@ -3,6 +3,15 @@
 // Constants
 const float PI = 3.14159;
 
+const float width = 1280;
+const float height = 720;
+
+const float ratio = width / height;
+
+// Near and far planes
+const float far = 1000;
+const float near = 0.01;
+
 // Vertex data
 in vec3 position;
 in vec3 normal;
@@ -14,7 +23,7 @@ out vec3 pass_colour;
 uniform mat4 model_matrix;
 uniform mat4 view_matrix;
 uniform mat4 projection_matrix;
-
+ 
 //uniform vec3 colour;
 
 uniform float time;
@@ -22,7 +31,7 @@ uniform float time;
 void main()
 {   
 	pass_colour = colour;
-
+	
     //pass_colour = vec3(1,1,1);
     
     //pass_colour = (vec4(normal, 0) * model_matrix).xyz;
@@ -33,5 +42,10 @@ void main()
     
     //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
     
-    gl_Position = vec4(position, 1.0) * model_matrix * view_matrix * projection_matrix;
+    mat4 orthographic = mat4(vec4(0.001, 0, 0, 0),
+    				 		 vec4(0, 0.001, 0, 0),
+    				 		 vec4(0, 0, -2/(far-near), -(far+near)/(far-near)),
+    				 		 vec4(0, 0, 0, 1));
+    
+    gl_Position = vec4(position, 1) * model_matrix * view_matrix * orthographic;
 }
