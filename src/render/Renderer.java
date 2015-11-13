@@ -14,8 +14,13 @@ public class Renderer {
 	private ShaderProgram shaderProgram;
 	
 	private static final float FOV = 70; // Field of view in degrees
-	private static final float NEAR_PLANE = 0.001f; // Near plane distance
-	private static final float FAR_PLANE = 100000; // Far plane distance
+	private static final float NEAR_PLANE = 0.01f; // Near plane distance
+	private static final float FAR_PLANE = 10000; // Far plane distance
+	
+	public enum ProjectionType {
+		PERSPECTIVE,
+		ORTHOGRAPHIC
+	}
 	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
@@ -37,11 +42,23 @@ public class Renderer {
 	}
 	
 	// Should be called whenever the framebuffer changes size
-	public void updateFramebufferSize(int width, int height) {
+	public void updateFramebufferSize(int width, int height, ProjectionType type) {
 		// Update the viewport
 		glViewport(0, 0, width, height);
 		// Recalculate the projection matrix
-		Matrix4f projectionMatrix = MathUtils.createProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+		updateProjection(width, height, type);
+	}
+	
+	public void updateProjection(int width, int height, ProjectionType type) {
+		Matrix4f projectionMatrix;
+		if (type == ProjectionType.ORTHOGRAPHIC) {
+			System.out.println("Orthographic");
+			projectionMatrix = MathUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
+		} else {
+			System.out.println("Perspective");
+			projectionMatrix = MathUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+		}
+		System.out.println(projectionMatrix);
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	

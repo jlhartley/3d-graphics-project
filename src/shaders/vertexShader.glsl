@@ -42,10 +42,12 @@ void main()
     
     //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
     
+    /*
     mat4 orthographic = mat4(vec4(1/ratio * 0.005, 0, 0, 0),
     				 		 vec4(0, 0.005, 0, 0),
     				 		 vec4(0, 0, -2/(far-near), -(far+near)/(far-near)),
     				 		 vec4(0, 0, 0, 1));
+    */
     
-    gl_Position = vec4(position, 1) * model_matrix * view_matrix * orthographic;
+    gl_Position = vec4(position, 1) * model_matrix * view_matrix * projection_matrix;
 }

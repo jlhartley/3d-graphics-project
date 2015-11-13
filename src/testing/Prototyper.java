@@ -1,6 +1,7 @@
 package testing;
 
 import render.Renderer;
+import render.Renderer.ProjectionType;
 import util.ModelUtils;
 import window.Window;
 import static org.lwjgl.glfw.GLFW.*;
@@ -26,10 +27,18 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	
 	private Logger logger;
 	
+	// Default projection matrix is perspective
+	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
+	
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		System.out.println("Framebuffer Width: " + width + ", Height: " + height);
-		renderer.updateFramebufferSize(width, height);
+		renderer.updateFramebufferSize(width, height, projectionType);
+	}
+	
+	protected void switchProjection(ProjectionType type) {
+		this.projectionType = type;
+		renderer.updateProjection(window.getWidth(), window.getHeight(), type);
 	}
 
 

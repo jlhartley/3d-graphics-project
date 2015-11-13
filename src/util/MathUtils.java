@@ -33,7 +33,7 @@ public class MathUtils {
 	}
 	
 	// Perspective projection matrix
-	public static Matrix4f createProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
+	public static Matrix4f perspectiveProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
 		float ratio = (float) width / (float) height;
 		float y_scale = (float) (1 / Math.tan(Math.toRadians(fov / 2)) * ratio);
 		float x_scale = y_scale / ratio;
@@ -46,6 +46,38 @@ public class MathUtils {
 		matrix.elements[2 + 3 * 4] = -1;
 		matrix.elements[3 + 2 * 4] = -((2 * nearplane * farplane) / frustrum_length);
 		matrix.elements[3 + 3 * 4] = 0;
+		
+		return matrix;
+	}
+	
+	public static Matrix4f orthographicProjectionMatrix(int width, int height, float nearplane, float farplane) {
+		
+		float ratio = (float) width / (float) height;
+		
+		float xScale = 1 / ratio;
+		float yScale = ratio;
+		
+		//float xScale = 1/(width / 2);
+		//float yScale = 1/(width / 2);
+		
+		float scale = 0.005f;
+		
+		// The length of the viewing volume
+		float cuboidLength = farplane - nearplane;
+		
+		Matrix4f matrix = Matrix4f.identity();
+		// Correct for aspect ratio
+		matrix.elements[0 + 0 * 4] = xScale;
+		
+		//matrix.elements[1 + 1 * 4] = yScale;
+		
+		// Scale everything in Z so it fits from -1 to 1
+		matrix.elements[2 + 2 * 4] = -2 / cuboidLength;
+		
+		// Translate to the centre of the cuboid in Z
+		matrix.elements[0 + 2 * 4] = -(farplane + nearplane) / cuboidLength;
+		
+		matrix.scale(new Vector3f(scale, scale, 1));
 		
 		return matrix;
 	}

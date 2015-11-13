@@ -35,6 +35,10 @@ public class Tester5 extends Prototyper {
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
 		} else if (keyCode == GLFW_KEY_R) {
 			resetCamera();
+		} else if (keyCode == GLFW_KEY_O) {
+			switchProjection(Renderer.ProjectionType.ORTHOGRAPHIC);
+		} else if (keyCode == GLFW_KEY_P) {
+			switchProjection(Renderer.ProjectionType.PERSPECTIVE);
 		}
 		
 	}
