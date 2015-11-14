@@ -11,25 +11,32 @@ import util.MathUtils;
 
 public class Renderer {
 	
+	// Currently supporting just one shader program
+	// TODO: Support multiple shader programs
 	private ShaderProgram shaderProgram;
 	
 	private static final float FOV = 70; // Field of view in degrees
 	private static final float NEAR_PLANE = 0.01f; // Near plane distance
 	private static final float FAR_PLANE = 10000; // Far plane distance
 	
-	public enum ProjectionType {
-		PERSPECTIVE,
-		ORTHOGRAPHIC
-	}
-	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
+		
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
 		shaderProgram.useProgram();
 		
 		glEnable(GL_DEPTH_TEST);
 		
-		//glFrontFace(GL_CCW);
+		// Implies glFrontFace(GL_CCW)
+		// This is because by default front faces have
+		// a counter-clockwise winding order
+		
 		glEnable(GL_CULL_FACE);
+		
+		// Cull back faces
+		// This is so the fragment shader won't need to
+		// run for back faces, providing a performance gain.
+		// Obscured pixels would normally be discarded by more
+		// expensive depth-testing
 		glCullFace(GL_BACK);
 	}
 	
@@ -42,16 +49,16 @@ public class Renderer {
 	}
 	
 	// Should be called whenever the framebuffer changes size
-	public void updateFramebufferSize(int width, int height, ProjectionType type) {
+	public void onFramebufferResized(int width, int height, ProjectionType type) {
 		// Update the viewport
 		glViewport(0, 0, width, height);
 		// Recalculate the projection matrix
 		updateProjection(width, height, type);
 	}
 	
-	public void updateProjection(int width, int height, ProjectionType type) {
+	public void updateProjection(int width, int height, ProjectionType projectionType) {
 		Matrix4f projectionMatrix;
-		if (type == ProjectionType.ORTHOGRAPHIC) {
+		if (projectionType == ProjectionType.ORTHOGRAPHIC) {
 			System.out.println("Orthographic");
 			projectionMatrix = MathUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
 		} else {

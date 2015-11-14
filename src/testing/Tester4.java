@@ -11,6 +11,7 @@ import math.Vector3f;
 import model.Model;
 import model.ModelBuilder;
 import model.Models;
+import render.ProjectionType;
 import render.Renderer;
 import util.MathUtils;
 import window.MouseButton;
@@ -28,6 +29,10 @@ public class Tester4 extends Prototyper {
 	public void onKeyPressed(int keyCode) {
 		if (keyCode == GLFW_KEY_SPACE) {
 			reset();
+		} if (keyCode == GLFW_KEY_O) {
+			switchProjection(ProjectionType.ORTHOGRAPHIC);
+		} else if (keyCode == GLFW_KEY_P) {
+			switchProjection(ProjectionType.PERSPECTIVE);
 		}
 	}
 

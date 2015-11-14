@@ -12,6 +12,7 @@ import math.Vector2f;
 import math.Vector3f;
 import model.Model;
 import model.Models;
+import render.ProjectionType;
 import render.Renderer;
 import util.MathUtils;
 import window.MouseButton;
@@ -36,9 +37,9 @@ public class Tester5 extends Prototyper {
 		} else if (keyCode == GLFW_KEY_R) {
 			resetCamera();
 		} else if (keyCode == GLFW_KEY_O) {
-			switchProjection(Renderer.ProjectionType.ORTHOGRAPHIC);
+			switchProjection(ProjectionType.ORTHOGRAPHIC);
 		} else if (keyCode == GLFW_KEY_P) {
-			switchProjection(Renderer.ProjectionType.PERSPECTIVE);
+			switchProjection(ProjectionType.PERSPECTIVE);
 		}
 		
 	}

@@ -10,10 +10,10 @@ public class Models {
 	// SQUARE
 	
 	private static final float[] squareVertexPositions = { 
-			-0.5f, 0.5f, 0, // V0 - top left
-			-0.5f, -0.5f, 0, // V1 - bottom left
-			0.5f, -0.5f, 0, // V2 - bottom right
-			0.5f, 0.5f, 0 // V3 - top right
+			-1, 1, 0, // V0 - top left
+			-1, -1, 0, // V1 - bottom left
+			1, -1, 0, // V2 - bottom right
+			1, 1, 0 // V3 - top right
 	};
 	
 	private static final float[] squareVertexNormals = {
@@ -180,10 +180,10 @@ public class Models {
 			1,0,0,
 			
 			// Left
-			-1,-0,0,
-			-1,-0,0,
-			-1,-0,0,
-			-1,-0,0,
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
 			
 			// Top
 			0,1,0,

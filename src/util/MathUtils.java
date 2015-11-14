@@ -33,51 +33,57 @@ public class MathUtils {
 	}
 	
 	// Perspective projection matrix
-	public static Matrix4f perspectiveProjectionMatrix(int width, int height, float fov, float nearplane, float farplane) {
+	public static Matrix4f perspectiveProjectionMatrix(int width, int height, float fov, float nearPlane, float farPlane) {
+		
+		// Aspect ratio
 		float ratio = (float) width / (float) height;
-		float y_scale = (float) (1 / Math.tan(Math.toRadians(fov / 2)) * ratio);
-		float x_scale = y_scale / ratio;
-		float frustrum_length = farplane - nearplane;
+		
+		float yScale = (float) (1 / Math.tan(Math.toRadians(fov / 2)) * ratio);
+		float xScale = yScale / ratio;
+		
+		// Length of the viewing volume
+		float frustrumLength = farPlane - nearPlane;
 		
 		Matrix4f matrix = Matrix4f.identity();
-		matrix.elements[0 + 0 * 4] = x_scale;
-		matrix.elements[1 + 1 * 4] = y_scale;
-		matrix.elements[2 + 2 * 4] = -((farplane + nearplane) / frustrum_length);
+		matrix.elements[0 + 0 * 4] = xScale;
+		matrix.elements[1 + 1 * 4] = yScale;
+		matrix.elements[2 + 2 * 4] = -((farPlane + nearPlane) / frustrumLength);
 		matrix.elements[2 + 3 * 4] = -1;
-		matrix.elements[3 + 2 * 4] = -((2 * nearplane * farplane) / frustrum_length);
+		matrix.elements[3 + 2 * 4] = -((2 * nearPlane * farPlane) / frustrumLength);
 		matrix.elements[3 + 3 * 4] = 0;
 		
 		return matrix;
 	}
 	
-	public static Matrix4f orthographicProjectionMatrix(int width, int height, float nearplane, float farplane) {
+	public static Matrix4f orthographicProjectionMatrix(int width, int height, float nearPlane, float farPlane) {
 		
+		// Aspect ratio
 		float ratio = (float) width / (float) height;
 		
-		float xScale = 1 / ratio;
+		// Correcting for aspect ratio
+		//float xScale = 1 / ratio;
 		float yScale = ratio;
 		
-		//float xScale = 1/(width / 2);
-		//float yScale = 1/(width / 2);
-		
-		float scale = 0.005f;
+		// A uniform scale for x and y
+		float scale = 0.003f;
 		
 		// The length of the viewing volume
-		float cuboidLength = farplane - nearplane;
+		float cuboidLength = farPlane - nearPlane;
 		
 		Matrix4f matrix = Matrix4f.identity();
-		// Correct for aspect ratio
-		matrix.elements[0 + 0 * 4] = xScale;
 		
-		//matrix.elements[1 + 1 * 4] = yScale;
+		// Scale in y for aspect ratio and apply uniform x/y scale
+		matrix.elements[0 + 0 * 4] = scale;
+		matrix.elements[1 + 1 * 4] = yScale * scale;
+		
+		// Uniform scale equivalent to
+		//matrix.scale(new Vector3f(scale, scale, 1));
 		
 		// Scale everything in Z so it fits from -1 to 1
 		matrix.elements[2 + 2 * 4] = -2 / cuboidLength;
 		
 		// Translate to the centre of the cuboid in Z
-		matrix.elements[0 + 2 * 4] = -(farplane + nearplane) / cuboidLength;
-		
-		matrix.scale(new Vector3f(scale, scale, 1));
+		matrix.elements[3 + 2 * 4] = -((farPlane + nearPlane) / cuboidLength);
 		
 		return matrix;
 	}

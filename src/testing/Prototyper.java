@@ -1,7 +1,7 @@
 package testing;
 
 import render.Renderer;
-import render.Renderer.ProjectionType;
+import render.ProjectionType;
 import util.ModelUtils;
 import window.Window;
 import static org.lwjgl.glfw.GLFW.*;
@@ -33,7 +33,7 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		System.out.println("Framebuffer Width: " + width + ", Height: " + height);
-		renderer.updateFramebufferSize(width, height, projectionType);
+		renderer.onFramebufferResized(width, height, projectionType);
 	}
 	
 	protected void switchProjection(ProjectionType type) {
