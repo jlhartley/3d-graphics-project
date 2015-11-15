@@ -2,7 +2,8 @@ package testing;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import camera.Camera;
@@ -90,13 +91,14 @@ public class Tester3 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	List<Entity> cubes = new LinkedList<>();
+	List<Entity> cubes = new ArrayList<>();
 	
 	Entity cubeField;
 	
 	private static final int CUBE_COUNT = 300000;
 	
 	public void generateCubes(Model cubeModel) {
+		
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
 			Vector3f randomRotation = getRandomRotation();
@@ -104,6 +106,27 @@ public class Tester3 extends Prototyper {
 			//float randomScale = getRandomScale();
 			cubes.add(new Entity(cubeModel, randomPosition, randomRotation));
 		}
+		
+		// Sort front-to-back for early depth testing optimisation
+		// Could sort back-to-front and disable depth testing as 
+		// an additional optimisation (painter's algorithm)
+		cubes.sort(new Comparator<Entity>() {
+
+			@Override
+			public int compare(Entity entity1, Entity entity2) {
+				
+				if (entity1.getPosition().z < entity2.getPosition().z) {
+					// If entity1 is further away, it should be drawn later
+					return 1;
+				} else {
+					return -1;
+				}
+				
+				// Very unlikely that two random z value will be exactly the same
+				//return 0;
+			}
+		});
+		
 	}
 	
 	public Tester3() {
