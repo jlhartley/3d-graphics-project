@@ -1,5 +1,7 @@
 package math;
 
+import java.text.DecimalFormat;
+
 public class Matrix4f {
 	
 	// Factory methods
@@ -14,7 +16,7 @@ public class Matrix4f {
 	}
 	
 	
-	
+	// Constants
 	public static final int ROW_COUNT = 4;
 	public static final int COLUMN_COUNT = 4;
 	public static final int SIZE = COLUMN_COUNT * ROW_COUNT;
@@ -68,10 +70,18 @@ public class Matrix4f {
 		elements[3][3] += elements[0][3] * vec.x + elements[1][3] * vec.y + elements[2][3] * vec.z;
 	}
 	
+	public void setTranslation(Vector3f vector) {
+		elements[3][0] = vector.x;
+		elements[3][1] = vector.y;
+		elements[3][2] = vector.z;
+	}
 	
 	
 	// Axis must be a unit vector
 	public void rotate(float angle, Vector3f axis) {
+		
+		// Only operates on the 3x3 portion
+		
 		float c = (float) Math.cos(angle);
 		float s = (float) Math.sin(angle);
 		float oneminusc = 1.0f - c;
@@ -133,22 +143,29 @@ public class Matrix4f {
 		elements[2][3] = elements[2][3] * vec.z;
 	}
 	
-	
-	@Override
-	public String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		
+	public void setScale(Vector3f vec) {
+		elements[0][0] = vec.x;
+		elements[1][1] = vec.y;
+		elements[2][2] = vec.z;
+	}
+
+
+    public String toString() {
+    	String spacing = "  ";
+        DecimalFormat formatter = new DecimalFormat(spacing + "0.000E0; -");
+        StringBuilder sb = new StringBuilder();
+        
 		for (int row = 0; row < ROW_COUNT; row++) {
-			sb.append("[ ");
+			sb.append("[");
 			for (int column = 0; column < COLUMN_COUNT; column++) {
 				float element = elements[column][row];
-				sb.append(element + " ");
+				sb.append(formatter.format(element));
 			}
-			sb.append("]\n");
+			sb.append(spacing + "]\n");
 		}
-		return sb.toString();
-	}
+		
+		return sb.toString().replaceAll("E(\\d+)", "E+$1");
+    }
 	
 	
 	

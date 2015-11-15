@@ -27,7 +27,7 @@ public class MathUtils {
 		matrix.rotate((float) Math.toRadians(pitch), X_AXIS);
 		matrix.rotate((float) Math.toRadians(yaw), Y_AXIS);
 		matrix.rotate((float) Math.toRadians(roll), Z_AXIS);
-		Vector3f negativeTranslation = new Vector3f(-translation.x, -translation.y, -translation.z);
+		Vector3f negativeTranslation = new Vector3f(translation).negate();
 		matrix.translate(negativeTranslation);
 		return matrix;
 	}
