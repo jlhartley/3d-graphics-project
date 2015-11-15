@@ -5,9 +5,9 @@ import static org.lwjgl.opengl.GL11.*;
 import camera.Camera;
 import entities.Entity;
 import math.geometry.Matrix4f;
+import math.geometry.MatrixUtils;
 import model.Model;
 import shaders.ShaderProgram;
-import math.MathUtils;
 
 public class Renderer {
 	
@@ -60,10 +60,10 @@ public class Renderer {
 		Matrix4f projectionMatrix;
 		if (projectionType == ProjectionType.ORTHOGRAPHIC) {
 			System.out.println("Orthographic");
-			projectionMatrix = MathUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
+			projectionMatrix = MatrixUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
 		} else {
 			System.out.println("Perspective");
-			projectionMatrix = MathUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+			projectionMatrix = MatrixUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
 		}
 		System.out.println(projectionMatrix);
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
