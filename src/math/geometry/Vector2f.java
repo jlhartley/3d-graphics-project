@@ -1,4 +1,4 @@
-package math;
+package math.geometry;
 
 public class Vector2f {
 	
@@ -77,7 +77,7 @@ public class Vector2f {
 	
 	@Override
 	public String toString() {
-		return "{x: " + x + ", y: " + y + "}"; 
+		return "[x: " + x + ", y: " + y + "]"; 
 	}
 	
 

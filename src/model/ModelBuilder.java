@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
-import math.Matrix4f;
-import math.Vector3f;
-import math.Vector4f;
+import math.geometry.Matrix4f;
+import math.geometry.Vector3f;
+import math.geometry.Vector4f;
 
 public class ModelBuilder {
 	

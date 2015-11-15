@@ -33,5 +33,5 @@ void main()
     
     //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
     
-    gl_Position = vec4(position, 1) * model_matrix * view_matrix * projection_matrix;
+    gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
 }

@@ -1,7 +1,7 @@
 package entities.celestial;
 
 import entities.Entity;
-import math.Vector3f;
+import math.geometry.Vector3f;
 import model.Model;
 import physics.Constants;
 

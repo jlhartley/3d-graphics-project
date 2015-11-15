@@ -1,8 +1,8 @@
 package entities;
 
-import util.MathUtils;
-import math.Matrix4f;
-import math.Vector3f;
+import math.geometry.Matrix4f;
+import math.geometry.MatrixUtils;
+import math.geometry.Vector3f;
 import model.Model;
 
 public class Entity {
@@ -78,7 +78,7 @@ public class Entity {
 	
 	// For rendering
 	public Matrix4f getModelMatrix() {
-		return MathUtils.createModelMatrix(position, rotation.x, rotation.y, rotation.z, scale);
+		return MatrixUtils.modelMatrix(position, rotation.x, rotation.y, rotation.z, scale);
 	}
 	
 	// Getters and setters

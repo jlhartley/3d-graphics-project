@@ -7,13 +7,13 @@ import java.util.LinkedList;
 import camera.Camera;
 import entities.Entity;
 import entities.MovableEntity;
-import math.Vector3f;
+import math.geometry.Vector3f;
 import model.Model;
 import model.ModelBuilder;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
-import util.MathUtils;
+import math.MathUtils;
 import window.MouseButton;
 
 public class Tester4 extends Prototyper {

@@ -1,8 +1,8 @@
 package camera;
 
-import util.MathUtils;
-import math.Matrix4f;
-import math.Vector3f;
+import math.geometry.Matrix4f;
+import math.geometry.MatrixUtils;
+import math.geometry.Vector3f;
 
 public class Camera {
 	
@@ -101,7 +101,7 @@ public class Camera {
 	
 	// For rendering
 	public Matrix4f getViewMatrix() {
-		return MathUtils.createViewMatrix(position, pitch, yaw, roll);
+		return MatrixUtils.viewMatrix(position, pitch, yaw, roll);
 	}
 	
 	

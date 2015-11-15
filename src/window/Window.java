@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
-import math.Vector2f;
+import math.geometry.Vector2f;
 
 public class Window {
 	

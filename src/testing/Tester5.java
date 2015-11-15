@@ -8,13 +8,13 @@ import java.util.List;
 import camera.Camera;
 import entities.Entity;
 import entities.celestial.Planet;
-import math.Vector2f;
-import math.Vector3f;
+import math.geometry.Vector2f;
+import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
-import util.MathUtils;
+import math.MathUtils;
 import window.MouseButton;
 
 public class Tester5 extends Prototyper {

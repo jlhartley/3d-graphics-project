@@ -1,6 +1,6 @@
 package entities;
 
-import math.Vector3f;
+import math.geometry.Vector3f;
 import model.Model;
 
 public class MovableEntity extends Entity {
