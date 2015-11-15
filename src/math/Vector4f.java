@@ -34,11 +34,11 @@ public class Vector4f {
 	
 	// Perform matrix multiplication on this vector
 	public void multiply(Matrix4f matrix) {
-		float[] elements = matrix.elements;
-		float xnew = x * elements[0 + 0 * 4] + y * elements[1 + 0 * 4] + z * elements[2 + 0 * 4] + w * elements[3 + 0 * 4];
-		float ynew = x * elements[0 + 1 * 4] + y * elements[1 + 1 * 4] + z * elements[2 + 1 * 4] + w * elements[3 + 1 * 4];
-		float znew = x * elements[0 + 2 * 4] + y * elements[1 + 2 * 4] + z * elements[2 + 2 * 4] + w * elements[3 + 2 * 4];
-		float wnew = x * elements[0 + 3 * 4] + y * elements[1 + 3 * 4] + z * elements[2 + 3 * 4] + w * elements[3 + 3 * 4];
+		float[][] elements = matrix.elements;
+		float xnew = x * elements[0][0] + y * elements[1][0] + z * elements[2][0] + w * elements[3][0];
+		float ynew = x * elements[0][1] + y * elements[1][1] + z * elements[2][1] + w * elements[3][1];
+		float znew = x * elements[0][2] + y * elements[1][2] + z * elements[2][2] + w * elements[3][2];
+		float wnew = x * elements[0][3] + y * elements[1][3] + z * elements[2][3] + w * elements[3][3];
 		set(xnew, ynew, znew, wnew);
 	}
 	

@@ -12,7 +12,7 @@ public class MathUtils {
 	
 	// Model matrix
 	public static Matrix4f createModelMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
-		Matrix4f matrix = Matrix4f.identity();
+		Matrix4f matrix = new Matrix4f();
 		matrix.translate(translation);
 		matrix.rotate((float) Math.toRadians(rx), X_AXIS);
 		matrix.rotate((float) Math.toRadians(ry), Y_AXIS);
@@ -23,7 +23,7 @@ public class MathUtils {
 	
 	// View matrix
 	public static Matrix4f createViewMatrix(Vector3f translation, float pitch, float yaw, float roll) {
-		Matrix4f matrix = Matrix4f.identity();
+		Matrix4f matrix = new Matrix4f();
 		matrix.rotate((float) Math.toRadians(pitch), X_AXIS);
 		matrix.rotate((float) Math.toRadians(yaw), Y_AXIS);
 		matrix.rotate((float) Math.toRadians(roll), Z_AXIS);
@@ -44,13 +44,13 @@ public class MathUtils {
 		// Length of the viewing volume
 		float frustrumLength = farPlane - nearPlane;
 		
-		Matrix4f matrix = Matrix4f.identity();
-		matrix.elements[0 + 0 * 4] = xScale;
-		matrix.elements[1 + 1 * 4] = yScale;
-		matrix.elements[2 + 2 * 4] = -((farPlane + nearPlane) / frustrumLength);
-		matrix.elements[2 + 3 * 4] = -1;
-		matrix.elements[3 + 2 * 4] = -((2 * nearPlane * farPlane) / frustrumLength);
-		matrix.elements[3 + 3 * 4] = 0;
+		Matrix4f matrix = new Matrix4f();
+		matrix.elements[0][0] = xScale;
+		matrix.elements[1][1] = yScale;
+		matrix.elements[2][2] = -((farPlane + nearPlane) / frustrumLength);
+		matrix.elements[2][3] = -1;
+		matrix.elements[3][2] = -((2 * nearPlane * farPlane) / frustrumLength);
+		matrix.elements[3][3] = 0;
 		
 		return matrix;
 	}
@@ -70,20 +70,20 @@ public class MathUtils {
 		// The length of the viewing volume
 		float cuboidLength = farPlane - nearPlane;
 		
-		Matrix4f matrix = Matrix4f.identity();
+		Matrix4f matrix = new Matrix4f();
 		
 		// Scale in y for aspect ratio and apply uniform x/y scale
-		matrix.elements[0 + 0 * 4] = scale;
-		matrix.elements[1 + 1 * 4] = yScale * scale;
+		matrix.elements[0][0] = scale;
+		matrix.elements[1][1] = yScale * scale;
 		
 		// Uniform scale equivalent to
 		//matrix.scale(new Vector3f(scale, scale, 1));
 		
 		// Scale everything in Z so it fits from -1 to 1
-		matrix.elements[2 + 2 * 4] = -2 / cuboidLength;
+		matrix.elements[2][2] = -2 / cuboidLength;
 		
 		// Translate to the centre of the cuboid in Z
-		matrix.elements[3 + 2 * 4] = -((farPlane + nearPlane) / cuboidLength);
+		matrix.elements[3][2] = -((farPlane + nearPlane) / cuboidLength);
 		
 		return matrix;
 	}

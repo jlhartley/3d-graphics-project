@@ -85,7 +85,10 @@ public class ShaderProgram {
 	FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(Matrix4f.SIZE);
 	
 	public void setUniformValue(String name, Matrix4f matrix) {
-		matrixBuffer.put(matrix.elements);
+		matrixBuffer.put(matrix.elements[0]);
+		matrixBuffer.put(matrix.elements[1]);
+		matrixBuffer.put(matrix.elements[2]);
+		matrixBuffer.put(matrix.elements[3]);
 		matrixBuffer.flip();
 		glUniformMatrix4fv(getUniformLocation(name), false, matrixBuffer);
 	}
