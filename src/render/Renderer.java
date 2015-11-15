@@ -4,10 +4,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 import camera.Camera;
 import entities.Entity;
-import math.Matrix4f;
+import math.geometry.Matrix4f;
 import model.Model;
 import shaders.ShaderProgram;
-import util.MathUtils;
+import math.MathUtils;
 
 public class Renderer {
 	

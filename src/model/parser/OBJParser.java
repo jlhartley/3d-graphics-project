@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import math.Vector3f;
+import math.geometry.Vector3f;
 import model.Model;
 
 public class OBJParser {

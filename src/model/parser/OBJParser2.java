@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import math.Vector3f;
+import math.geometry.Vector3f;
 import model.Model;
 
 public class OBJParser2 {

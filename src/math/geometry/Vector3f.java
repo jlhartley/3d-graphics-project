@@ -1,4 +1,4 @@
-package math;
+package math.geometry;
 
 public class Vector3f {
 	

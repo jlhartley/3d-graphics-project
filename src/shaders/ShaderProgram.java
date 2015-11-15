@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 import org.lwjgl.BufferUtils;
 
-import math.Matrix4f;
-import math.Vector3f;
+import math.geometry.Matrix4f;
+import math.geometry.Vector3f;
 import util.FileUtils;
 
 

@@ -7,7 +7,7 @@ import window.Window;
 import static org.lwjgl.glfw.GLFW.*;
 
 import logging.Logger;
-import math.Vector2f;
+import math.geometry.Vector2f;
 
 public abstract class Prototyper implements Window.InputCallbacks, Window.WindowCallbacks {
 	

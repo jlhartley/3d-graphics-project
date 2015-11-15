@@ -1,4 +1,4 @@
-package math;
+package math.geometry;
 
 import java.text.DecimalFormat;
 

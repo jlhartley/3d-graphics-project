@@ -1,8 +1,8 @@
 package entities;
 
-import util.MathUtils;
-import math.Matrix4f;
-import math.Vector3f;
+import math.MathUtils;
+import math.geometry.Matrix4f;
+import math.geometry.Vector3f;
 import model.Model;
 
 public class Entity {

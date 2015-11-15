@@ -1,7 +1,7 @@
-package util;
+package math;
 
-import math.Matrix4f;
-import math.Vector3f;
+import math.geometry.Matrix4f;
+import math.geometry.Vector3f;
 
 public class MathUtils {
 	
