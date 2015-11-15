@@ -278,7 +278,7 @@ public class Models {
 			Model squareModel = getSquareModel();
 			ModelBuilder explodedCubeBuilder = new ModelBuilder();
 			
-			float spacing = 0.7f; // Distance from each square to the model centre
+			float spacing = 1.2f; // Distance from each square to the model centre
 			
 			// Must be careful here with the rotation, for face culling purposes - the normals must point the right way!
 			// Important to remember that rotation is counter-clockwise for that reason
