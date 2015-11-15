@@ -163,7 +163,7 @@ public class Vector3f {
 
 	@Override
 	public String toString() {
-		return "{x: " + x + ", y: " + y + ", z: " + z + "}"; 
+		return "[x: " + x + ", y: " + y + ", z: " + z + "]"; 
 	}
 	
 }
