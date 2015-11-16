@@ -37,8 +37,10 @@ public class Tester5 extends Prototyper {
 		} else if (keyCode == GLFW_KEY_R) {
 			resetCamera();
 		} else if (keyCode == GLFW_KEY_O) {
+			System.out.println("Orthographic Projection");
 			switchProjection(ProjectionType.ORTHOGRAPHIC);
 		} else if (keyCode == GLFW_KEY_P) {
+			System.out.println("Perspective Projection");
 			switchProjection(ProjectionType.PERSPECTIVE);
 		}
 		

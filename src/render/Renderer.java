@@ -59,13 +59,10 @@ public class Renderer {
 	public void updateProjection(int width, int height, ProjectionType projectionType) {
 		Matrix4f projectionMatrix;
 		if (projectionType == ProjectionType.ORTHOGRAPHIC) {
-			System.out.println("Orthographic");
 			projectionMatrix = MatrixUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
 		} else {
-			System.out.println("Perspective");
 			projectionMatrix = MatrixUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
 		}
-		System.out.println(projectionMatrix);
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	
