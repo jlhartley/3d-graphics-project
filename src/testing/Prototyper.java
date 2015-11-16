@@ -120,12 +120,12 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 			
 			double currentTime = glfwGetTime();
 			
-			// Output data at regular intervals
-			logger.onFrame(currentTime);
-			
 			// Calculate delta time
 			double deltaTime = currentTime - oldTime;
 			oldTime = currentTime;
+			
+			// Output data at regular intervals
+			logger.onFrame(currentTime);
 			
 			logic((float) deltaTime); // Logic goes here
 			renderer.clear();
