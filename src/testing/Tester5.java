@@ -42,6 +42,13 @@ public class Tester5 extends Prototyper {
 		} else if (keyCode == GLFW_KEY_P) {
 			System.out.println("Perspective Projection");
 			switchProjection(ProjectionType.PERSPECTIVE);
+		} else if (keyCode == GLFW_KEY_U) {
+			// Place the camera directly up in y
+			Vector3f position = new Vector3f(0, 500, 0);
+			camera.setPosition(position);
+			// Point camera straight down
+			camera.setPitch(90);
+			camera.setYaw(0);
 		}
 		
 	}
@@ -56,7 +63,6 @@ public class Tester5 extends Prototyper {
 	
 	@Override
 	public void onMouseDown(MouseButton mouseButton) {
-		
 		switch (mouseButton) {
 		case LEFT:
 			log("Left mouse button down");
@@ -64,28 +70,23 @@ public class Tester5 extends Prototyper {
 		case RIGHT:
 			log("Right mouse button down");
 			rightMouseDown = true;
-			
 			// Allow endless cursor movement
 			disableCursor();
-			
 			// Record the mouse position
 			mouseDownPosition = new Vector2f(getMousePosition());
 			// Record the camera rotation
 			mouseDownYaw = camera.getYaw();
 			mouseDownPitch = camera.getPitch();
-			
 			log("Mouse Down Position: " + mouseDownPosition);
 			break;
 		case MIDDLE:
 			log("Middle mouse button down");
 			break;
 		}
-		
 	}
 
 	@Override
 	public void onMouseUp(MouseButton mouseButton) {
-		
 		switch (mouseButton) {
 		case LEFT:
 			log("Left mouse button up");
@@ -99,7 +100,6 @@ public class Tester5 extends Prototyper {
 			log("Middle mouse button up");
 			break;
 		}
-		
 	}
 	
 	
@@ -189,11 +189,10 @@ public class Tester5 extends Prototyper {
 	
 	private void resetCamera() {
 		// Place the camera up and back from the origin
-		Vector3f position = new Vector3f(0, 500, 0);
+		Vector3f position = new Vector3f(0, 500, 500);
 		camera.setPosition(position);
 		// Point camera downwards at 45 degrees
-		camera.setPitch(90);
-		camera.setYaw(0);
+		camera.setPitch(45);
 		camera.setYaw(0);
 	}
 	
