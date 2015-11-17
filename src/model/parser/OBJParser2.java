@@ -12,6 +12,8 @@ import java.util.Map;
 import math.geometry.Vector3f;
 import model.Model;
 
+import static model.parser.Utils.*;
+
 public class OBJParser2 {
 	
 	// TODO: A lot of optimisation
@@ -47,15 +49,7 @@ public class OBJParser2 {
 	}
 	
 	
-	private static Vector3f lineToVector3f(String[] lineParts) {
-		// Start at index 1 because the first part of the line is the identifier
-		// E.g "v ", "vt ", "vn " etc.
-		float x = Float.parseFloat(lineParts[1]);
-		float y = Float.parseFloat(lineParts[2]);
-		float z = Float.parseFloat(lineParts[3]);
-		return new Vector3f(x, y, z);
-	}
-	
+
 	// For a line such as:
 	// v 0.123 0.234 0.345
 	private void parseVertexLine(String line) {
@@ -102,45 +96,6 @@ public class OBJParser2 {
 		// Grab the data out of the correct place and simply append it to the respective list
 		unindexedPositions.add(positionsIn.get(vertexPositionIndex));
 		unindexedNormals.add(normalsIn.get(vertexNormalIndex));
-	}
-	
-	// Used solely for duplicate finding
-	private static class Vertex {
-		Vector3f pos;
-		Vector3f norm;
-		public Vertex(Vector3f pos, Vector3f norm) {
-			this.pos = pos;
-			this.norm = norm;
-		}
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((norm == null) ? 0 : norm.hashCode());
-			result = prime * result + ((pos == null) ? 0 : pos.hashCode());
-			return result;
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Vertex other = (Vertex) obj;
-			if (norm == null) {
-				if (other.norm != null)
-					return false;
-			} else if (!norm.equals(other.norm))
-				return false;
-			if (pos == null) {
-				if (other.pos != null)
-					return false;
-			} else if (!pos.equals(other.pos))
-				return false;
-			return true;
-		}
 	}
 	
 	private void indexVertices() {
@@ -247,14 +202,22 @@ public class OBJParser2 {
 		
 		
 		// Debugging info
-		System.out.println("Loaded model: " + fullPath);
-		System.out.println("Unique vertex count: " + uniqueVertexCount);
-		System.out.println("Total vertex count: " + totalVertexCount);
-		System.out.println("Triangle count: " + totalVertexCount / 3);
+		System.out.println("Loaded Model: " + fullPath);
+		System.out.println("Unique Vertex Count: " + uniqueVertexCount);
+		System.out.println("Total Vertex Count: " + totalVertexCount);
+		System.out.println("Triangle Count: " + totalVertexCount / 3);
 		
+		// Randomly generate colours
+		float[] colours = new float[uniqueVertexCount * 3];
+		for (int i = 0; i < uniqueVertexCount; i++) {
+			Vector3f colour = new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
+			colours[i*3] = colour.x;
+			colours[i*3 + 1] = colour.y;
+			colours[i*3 + 2] = colour.z;
+		}
 		
 		// Currently just using the normals to colour the model
-		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
+		return new Model(vertexPositions, vertexNormals, colours, indices);
 	}
 	
 	
