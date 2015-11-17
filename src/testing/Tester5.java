@@ -156,7 +156,7 @@ public class Tester5 extends Prototyper {
 			// Generate random velocity, in a range based on position
 			Vector3f velocity = new Vector3f(
 					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
-					(float) MathUtils.randRange(-1, 1), // Small variation in y velocity
+					(float) MathUtils.randRange(-10, 10), // Small variation in y velocity
 					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
 			// Generate a random mass

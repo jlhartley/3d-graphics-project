@@ -51,14 +51,16 @@ void main()
 	to_light = toLight;
 	
 	
+	// Just white
     //pass_colour = vec3(1,1,1);
     
-    pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z)));
-    
+    // World position magnitude colouring
+    pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
     
     //pass_colour = worldNormal * 3;
     
-    //pass_colour = (vec4(normalize(position), 0) * model_matrix).xyz;
+    // Colour using direction to vertex
+    //pass_colour = normalize((vec4((position), 0) * model_matrix).xyz) * 2;
     
     //vec3 timeBasedColour = vec3(sin(PI/2+time*10), sin(3*PI/2+time*10), sin(PI+time*10));
     
