@@ -4,8 +4,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 import camera.Camera;
 import entities.Entity;
+import lighting.Light;
 import math.geometry.Matrix4f;
 import math.geometry.MatrixUtils;
+import math.geometry.Vector3f;
 import model.Model;
 import shaders.ShaderProgram;
 
@@ -85,7 +87,39 @@ public class Renderer {
 		
 	}
 	
-	public void setMatrices(Entity entity, Camera camera) {
+	// For rendering with a light source
+	public void render(Entity entity, Camera camera, Light light) {
+		
+		Model model = entity.getModel();
+		
+		model.bindVAO();
+		
+		setMatrices(entity, camera, light);
+		
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		
+		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+		
+		//model.unbindVAO();
+		
+	}
+	
+	public void enableLighting() {
+		shaderProgram.setUniformValue("lighting_enabled", true);
+	}
+	
+	public void disableLighting() {
+		shaderProgram.setUniformValue("lighting_enabled", false);
+	}
+	
+	private void setMatrices(Entity entity, Camera camera, Light light) {
+		setMatrices(entity, camera);
+		
+		Vector3f lightPosition = light.getPosition();
+		shaderProgram.setUniformValue("light_position", lightPosition);
+	}
+	
+	private void setMatrices(Entity entity, Camera camera) {
 		
 		Matrix4f modelMatrix = entity.getModelMatrix();
 		shaderProgram.setUniformValue("model_matrix", modelMatrix);

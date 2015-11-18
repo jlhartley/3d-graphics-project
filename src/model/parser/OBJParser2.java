@@ -207,17 +207,8 @@ public class OBJParser2 {
 		System.out.println("Total Vertex Count: " + totalVertexCount);
 		System.out.println("Triangle Count: " + totalVertexCount / 3);
 		
-		// Randomly generate colours
-		float[] colours = new float[uniqueVertexCount * 3];
-		for (int i = 0; i < uniqueVertexCount; i++) {
-			Vector3f colour = new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
-			colours[i*3] = colour.x;
-			colours[i*3 + 1] = colour.y;
-			colours[i*3 + 2] = colour.z;
-		}
-		
 		// Currently just using the normals to colour the model
-		return new Model(vertexPositions, vertexNormals, colours, indices);
+		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
 	}
 	
 	

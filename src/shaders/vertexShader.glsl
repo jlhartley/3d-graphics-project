@@ -16,7 +16,6 @@ uniform mat4 projection_matrix;
 
 uniform vec3 light_position;
 
-
 // Output
 out vec3 pass_colour;
 out vec3 to_light;
@@ -31,7 +30,7 @@ void main()
 	vec3 worldNormal = normalize((vec4(normal, 0) * model_matrix).xyz);
 	
 	// Alternative?
-	// vec3 worldNormal = normalize(normal * mat3(model_matrix));
+	//vec3 worldNormal = normalize(normal * mat3(model_matrix));
 	
 	
 	// Calculate world space position
@@ -44,7 +43,7 @@ void main()
 	
 	
 	
-	//pass_colour = colour;
+	pass_colour = colour;
 	
 	world_normal = worldNormal;
 	
@@ -55,7 +54,7 @@ void main()
     //pass_colour = vec3(1,1,1);
     
     // World position magnitude colouring
-    pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
+    //pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
     
     //pass_colour = worldNormal * 3;
     

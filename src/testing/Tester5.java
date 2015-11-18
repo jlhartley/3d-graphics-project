@@ -8,6 +8,7 @@ import java.util.List;
 import camera.Camera;
 import entities.Entity;
 import entities.celestial.Planet;
+import lighting.Light;
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
@@ -29,7 +30,6 @@ public class Tester5 extends Prototyper {
 	
 	@Override
 	public void onKeyPressed(int keyCode) {
-		
 		if (keyCode == GLFW_KEY_SPACE) {
 			// Cycle through values for timeMultiplier,
 			// from 1 to MAX_TIME_MULTIPLIER
@@ -50,7 +50,6 @@ public class Tester5 extends Prototyper {
 			camera.setPitch(90);
 			camera.setYaw(0);
 		}
-		
 	}
 	
 	@Override
@@ -136,7 +135,14 @@ public class Tester5 extends Prototyper {
 	boolean rightMouseDown = false;
 	
 	
+	// Essential objects for rendering
+	
 	Camera camera = new Camera();
+	
+	Light light = new Light();
+	
+	// Sun is centred at 0, 0, 0 with no velocity
+	Planet sun = new Planet(Models.getUVsphereModel(), new Vector3f(0, 0, 0));
 	
 	List<Planet> planets = new ArrayList<>();
 	
@@ -152,6 +158,9 @@ public class Tester5 extends Prototyper {
 			// Generate random position
 			pos.x = (float) MathUtils.randRange(-100, 100);
 			pos.z = (float) MathUtils.randRange(-100, 100);
+			
+			// Clear space around the sun
+			pos.scale(2);
 			
 			// Generate random velocity, in a range based on position
 			Vector3f velocity = new Vector3f(
@@ -176,15 +185,15 @@ public class Tester5 extends Prototyper {
 	}
 	
 	private void addSun() {
+		Model sphereModel = Models.getUVsphereModel();
 		
-		// The new "sun"
-		Planet p0 = planets.get(0);
-		p0.setMass(1E6f);
-		//p0.setScale(109); // Sun radius = 109x earth
-		p0.setScale(7);
-		p0.setVelocity(new Vector3f(0, 0, 0)); // 21.5
-		p0.setPosition(new Vector3f(0, 0, 0));
-		
+		Vector3f pos = new Vector3f(0, 0, 0);
+		sun = new Planet(sphereModel, pos);
+		sun.setMass(1E6f);
+		//sun.setScale(109); // Sun radius = 109x earth
+		sun.setScale(7);
+		sun.setVelocity(new Vector3f(0, 0, 0)); // 21.5
+		sun.setPosition(new Vector3f(0, 0, 0));
 	}
 	
 	private void resetCamera() {
@@ -210,21 +219,6 @@ public class Tester5 extends Prototyper {
 		
 		moveCamera(deltaTime);
 		
-		if (rightMouseDown) {
-			
-			Vector2f mousePosition = getMousePosition();
-			
-			// Find the mouse movement vector
-			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
-			
-			// Adjust the camera rotation when the mouse was pressed 
-			// by an amount proportional to the mouseDelta vector 
-			camera.setYaw(mouseDownYaw - mouseDelta.x / MOUSE_MOVEMENT_SCALE);
-			camera.setPitch(mouseDownPitch + mouseDelta.y / MOUSE_MOVEMENT_SCALE);
-		}
-		
-		
-		
 		//ArrayList<Vector3f> newPositions = new ArrayList<>();
 		
 		for (Planet planet1 : planets) {
@@ -241,6 +235,9 @@ public class Tester5 extends Prototyper {
 				// Adding vectors gives a resultant vector
 				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
 			}
+			
+			// Add acceleration vector for the sun
+			resultantAcceleration.add(planet1.accelerationVectorTo(sun));
 			
 			/*
 			Vector3f newPosition = new Vector3f(planet1.getPosition());
@@ -330,6 +327,22 @@ public class Tester5 extends Prototyper {
 		}
 		
 		
+		
+		// Mouse control
+		if (rightMouseDown) {
+			
+			Vector2f mousePosition = getMousePosition();
+			
+			// Find the mouse movement vector
+			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
+			
+			// Adjust the camera rotation when the mouse was pressed 
+			// by an amount proportional to the mouseDelta vector 
+			camera.setYaw(mouseDownYaw - mouseDelta.x / MOUSE_MOVEMENT_SCALE);
+			camera.setPitch(mouseDownPitch + mouseDelta.y / MOUSE_MOVEMENT_SCALE);
+		}
+		
+		
 	}
 	
 	
@@ -341,10 +354,14 @@ public class Tester5 extends Prototyper {
 	@Override
 	protected void render(Renderer renderer) {
 		
-		//renderer.render(sun, camera);
+		renderer.disableLighting();
+		
+		renderer.render(sun, camera);
+		
+		renderer.enableLighting();
 		
 		for (Entity planet : planets) {
-			renderer.render(planet, camera);
+			renderer.render(planet, camera, light);
 		}
 		
 	}
