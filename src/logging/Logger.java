@@ -1,11 +1,16 @@
 package logging;
 
+import java.text.DecimalFormat;
+
 public class Logger {
 	
 	private static final int REPORT_INTERVAL = 5;
 	
 	private int frameCount = 0;
 	private double lastReportTime = 0;
+	
+	DecimalFormat frameRateFormatter = new DecimalFormat("00.0 FPS");
+	DecimalFormat frameTimeFormatter = new DecimalFormat("00.000 ms");
 	
 	public Logger() {
 		
@@ -22,9 +27,10 @@ public class Logger {
 		if (elapsedTime >= REPORT_INTERVAL) {
 			
 			double frameRate = frameCount / elapsedTime;
+			double frameTime = 1000 / frameRate;
 			
-			//System.out.println("Framerate: " + frameRate + " FPS");
-			System.out.println("Frame time: " + 1000 / frameRate + " ms");
+			log("Frame Rate: " + frameRateFormatter.format(frameRate) + 
+				", Frame Time: " + frameTimeFormatter.format(frameTime));
 			
 			lastReportTime = currentTime;
 			frameCount = 0;
