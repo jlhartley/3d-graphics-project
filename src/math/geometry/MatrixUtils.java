@@ -19,11 +19,11 @@ public class MatrixUtils {
 	}
 	
 	// View matrix
-	public static Matrix4f viewMatrix(Vector3f translation, float pitch, float yaw, float roll) {
+	public static Matrix4f viewMatrix(Vector3f translation, Vector3f rotation) {
 		Matrix4f matrix = new Matrix4f();
-		matrix.rotate((float) Math.toRadians(pitch), X_AXIS);
-		matrix.rotate((float) Math.toRadians(yaw), Y_AXIS);
-		matrix.rotate((float) Math.toRadians(roll), Z_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.x), X_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.y), Y_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.z), Z_AXIS);
 		Vector3f negativeTranslation = new Vector3f(translation).negate();
 		matrix.translate(negativeTranslation);
 		return matrix;
