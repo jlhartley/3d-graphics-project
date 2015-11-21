@@ -27,7 +27,7 @@ out vec3 unit_world_normal;
 void main()
 {
 	// The w component is 0 because the normal represents a direction
-	vec3 worldNormal = (vec4(normal, 0) * model_matrix).xyz;
+	vec3 worldNormal = (model_matrix * vec4(normal, 0)).xyz;
 	
 	// Alternative:
 	//vec3 worldNormal = normalize(normal * mat3(model_matrix));
@@ -59,13 +59,13 @@ void main()
 	
 	
 	// Just white
-    pass_colour = vec3(1, 1, 1);
+    //pass_colour = vec3(1, 1, 1);
     
     // World position direction colouring
     //pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
     
     // Colour using the world space normals
-    //pass_colour = unitWorldNormal;
+    pass_colour = unitWorldNormal;
     
     // Colour using direction to vertex in local object coordinates
     //pass_colour = normalize(position) * 2;
