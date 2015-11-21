@@ -42,9 +42,10 @@ public class Vector4f {
 		set(xnew, ynew, znew, wnew);
 	}
 	
+	
 	@Override
 	public String toString() {
-		return "[x: " + x + ", y: " + y + ", z: " + z + ", w: " + w + "]"; 
+		return "Vector4f [x=" + x + ", y=" + y + ", z=" + z + ", w=" + w + "]";
 	}
 	
 }

@@ -74,10 +74,15 @@ public class Vector2f {
 		return this;
 	}
 	
+	// Returns a copy using the constructor
+	public Vector2f getCopy() {
+		return new Vector2f(this);
+	}
+	
 	
 	@Override
 	public String toString() {
-		return "[x: " + x + ", y: " + y + "]"; 
+		return "Vector2f [x=" + x + ", y=" + y + "]";
 	}
 	
 

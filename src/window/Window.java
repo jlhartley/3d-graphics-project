@@ -109,7 +109,6 @@ public class Window {
 			@Override
 			public void invoke(long window, int width, int height) {
 				updateSize(width, height);
-				System.out.println("Window Width: " + width + ", Height: " + height);
 			}
 		};
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
@@ -126,7 +125,6 @@ public class Window {
 			}
 		};
 		glfwSetCursorPosCallback(window, cursorPosCollback);
-		
 		
 	}
 	
@@ -190,6 +188,7 @@ public class Window {
 				}
 				
 				// Mouse button repeat does not count as a press
+				// Actually, mouse button repeat isn't a thing
 				if (action == GLFW_PRESS) {
 					inputCallbacks.onMouseDown(mouseButton);
 				} else if (action == GLFW_RELEASE) { // TODO: Replace with else
@@ -273,6 +272,7 @@ public class Window {
 	
 	// Currently accessing mouse position using the callback
 	// to set an instance variable
+	// An alternative would be to actually call glfwGetCursorPos
 	public Vector2f getMousePosition() {
 		return mousePosition;
 	}

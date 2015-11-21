@@ -31,16 +31,15 @@ public class Tester5 extends Prototyper {
 	@Override
 	public void onKeyPressed(int keyCode) {
 		if (keyCode == GLFW_KEY_SPACE) {
-			// Cycle through values for timeMultiplier,
-			// from 1 to MAX_TIME_MULTIPLIER
+			// Cycle through values for timeMultiplier, from 1 to MAX_TIME_MULTIPLIER
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
 		} else if (keyCode == GLFW_KEY_R) {
 			resetCamera();
 		} else if (keyCode == GLFW_KEY_O) {
-			System.out.println("Orthographic Projection");
+			log("Orthographic Projection");
 			switchProjection(ProjectionType.ORTHOGRAPHIC);
 		} else if (keyCode == GLFW_KEY_P) {
-			System.out.println("Perspective Projection");
+			log("Perspective Projection");
 			switchProjection(ProjectionType.PERSPECTIVE);
 		} else if (keyCode == GLFW_KEY_U) {
 			// Place the camera directly up in y
@@ -72,10 +71,9 @@ public class Tester5 extends Prototyper {
 			// Allow endless cursor movement
 			disableCursor();
 			// Record the mouse position
-			mouseDownPosition = new Vector2f(getMousePosition());
+			mouseDownPosition = getMousePosition().getCopy();
 			// Record the camera rotation
-			mouseDownYaw = camera.getYaw();
-			mouseDownPitch = camera.getPitch();
+			mouseDownCameraRotation = camera.getRotation().getCopy();
 			log("Mouse Down Position: " + mouseDownPosition);
 			break;
 		case MIDDLE:
@@ -122,17 +120,21 @@ public class Tester5 extends Prototyper {
 	private static final int MAX_TIME_MULTIPLIER = 5;
 	
 	
+	
 	// State
 	
+	// Scales deltaTime
 	private int timeMultiplier = 1;
 	
-	// Save out the mouse position while the mouse is held down
+	// Holds the mouse position at the instant the mouse is pressed down
 	Vector2f mouseDownPosition = new Vector2f();
-	// Save out the camera rotation
-	float mouseDownYaw = 0;
-	float mouseDownPitch = 0;
 	
+	// Holds the camera rotation at the instant the mouse is pressed down
+	Vector3f mouseDownCameraRotation = new Vector3f();
+	
+	// Tracks if the right mouse button is held down or not
 	boolean rightMouseDown = false;
+	
 	
 	
 	// Essential objects for rendering
@@ -335,6 +337,9 @@ public class Tester5 extends Prototyper {
 			
 			// Find the mouse movement vector
 			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
+			
+			float mouseDownYaw = mouseDownCameraRotation.y;
+			float mouseDownPitch = mouseDownCameraRotation.x;
 			
 			// Adjust the camera rotation when the mouse was pressed 
 			// by an amount proportional to the mouseDelta vector 

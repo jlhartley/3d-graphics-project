@@ -32,7 +32,7 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	
 	@Override
 	public void onFramebufferResized(int width, int height) {
-		System.out.println("Framebuffer Width: " + width + ", Height: " + height);
+		log("Framebuffer Width: " + width + ", Height: " + height);
 		renderer.onFramebufferResized(width, height, projectionType);
 	}
 	

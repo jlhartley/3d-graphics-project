@@ -132,6 +132,11 @@ public class Vector3f {
 	}
 	
 	
+	// Returns a copy using the constructor
+	public Vector3f getCopy() {
+		return new Vector3f(this);
+	}
+	
 	
 	@Override
 	public int hashCode() {
@@ -160,10 +165,11 @@ public class Vector3f {
 			return false;
 		return true;
 	}
+	
 
 	@Override
 	public String toString() {
-		return "[x: " + x + ", y: " + y + ", z: " + z + "]"; 
+		return "Vector3f [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
 	
 }
