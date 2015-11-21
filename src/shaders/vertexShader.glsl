@@ -16,54 +16,59 @@ uniform mat4 projection_matrix;
 
 uniform vec3 light_position;
 
+
 // Output
 out vec3 pass_colour;
-out vec3 to_light;
-out vec3 world_normal;
- 
-//uniform vec3 colour;
+
+out vec3 unit_to_light;
+out vec3 unit_world_normal;
+
 
 void main()
 {
 	// The w component is 0 because the normal represents a direction
-	// Normalise so scale does not affect the dot product
-	vec3 worldNormal = normalize((vec4(normal, 0) * model_matrix).xyz);
+	vec3 worldNormal = (vec4(normal, 0) * model_matrix).xyz;
 	
-	// Alternative?
+	// Alternative:
 	//vec3 worldNormal = normalize(normal * mat3(model_matrix));
 	
+	// Normalise so scale does not affect the dot product
+	vec3 unitWorldNormal = normalize(worldNormal);
 	
-	// Calculate world space position
+	
+	
+	
+	// Calculate world space vertex position
 	vec4 worldPosition = model_matrix * vec4(position, 1);
 	
 	// Difference between light position and world vertex position
 	// gives the direction vector to the light from the vertex
+	vec3 toLight = light_position - worldPosition.xyz;
+	
 	// Also normalise so scale does not affect the dot product
-	vec3 toLight = normalize(light_position - worldPosition.xyz);
+	vec3 unitToLight = normalize(toLight);
 	
 	
 	
-	pass_colour = colour;
+	//pass_colour = colour;
 	
-	world_normal = worldNormal;
+	unit_world_normal = unitWorldNormal;
 	
-	to_light = toLight;
+	unit_to_light = unitToLight;
+	
 	
 	
 	// Just white
-    //pass_colour = vec3(1,1,1);
+    pass_colour = vec3(1, 1, 1);
     
-    // World position magnitude colouring
+    // World position direction colouring
     //pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
     
-    //pass_colour = worldNormal * 3;
+    // Colour using the world space normals
+    //pass_colour = unitWorldNormal;
     
-    // Colour using direction to vertex
-    //pass_colour = normalize((vec4((position), 0) * model_matrix).xyz) * 2;
-    
-    //vec3 timeBasedColour = vec3(sin(PI/2+time*10), sin(3*PI/2+time*10), sin(PI+time*10));
-    
-    //pass_colour = mix(colour, timeBasedColour, sin(time)/2-0.5);
+    // Colour using direction to vertex in local object coordinates
+    //pass_colour = normalize(position) * 2;
     
     
     gl_Position = projection_matrix * view_matrix * worldPosition;

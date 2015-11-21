@@ -19,6 +19,11 @@ public class Entity {
 	// Uniform scale in all axes
 	private float scale;
 	
+	
+	// Model matrix held as instance variable to avoid object creation
+	private Matrix4f modelMatrix = new Matrix4f();
+	
+	
 	// Telescoping constructors
 	public Entity(Model model, Vector3f position) {
 		this(model, position, new Vector3f());
@@ -78,8 +83,16 @@ public class Entity {
 	
 	// For rendering
 	public Matrix4f getModelMatrix() {
-		return MatrixUtils.modelMatrix(position, rotation.x, rotation.y, rotation.z, scale);
+		modelMatrix.identity();
+		modelMatrix.translate(position);
+		modelMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
+		modelMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
+		modelMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		modelMatrix.scale(new Vector3f(scale, scale, scale)); // Uniform scale in all axes
+		return modelMatrix;
 	}
+	
+	
 	
 	// Getters and setters
 	public Vector3f getPosition() {
