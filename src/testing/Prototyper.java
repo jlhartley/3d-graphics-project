@@ -22,7 +22,7 @@ public abstract class Prototyper implements Window.InputCallbacks, Window.Window
 	private static final String FRAGMENT_SHADER_PATH = "src/shaders/fragmentShader.glsl";
 	
 	
-	private Window window;
+	protected Window window;
 	private Renderer renderer;
 	
 	private Logger logger;
