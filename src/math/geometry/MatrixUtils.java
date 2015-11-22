@@ -8,12 +8,12 @@ public class MatrixUtils {
 	public static final Vector3f Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
 	
 	// Model matrix
-	public static Matrix4f modelMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
+	public static Matrix4f modelMatrix(Vector3f translation, Vector3f rotation, float scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.translate(translation);
-		matrix.rotate((float) Math.toRadians(rx), X_AXIS);
-		matrix.rotate((float) Math.toRadians(ry), Y_AXIS);
-		matrix.rotate((float) Math.toRadians(rz), Z_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.x), X_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.y), Y_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.z), Z_AXIS);
 		matrix.scale(new Vector3f(scale, scale, scale)); // Uniform scale in all axes
 		return matrix;
 	}
