@@ -42,6 +42,10 @@ public class Renderer {
 		glCullFace(GL_BACK);
 	}
 	
+	public void setClearColour(Vector3f colour) {
+		glClearColor(colour.x, colour.y, colour.z, 1);
+	}
+	
 	public void setClearColour(float r, float g, float b) {
 		glClearColor(r, g, b, 1);
 	}
