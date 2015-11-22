@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import camera.Camera;
+import camera.CameraControls;
 import entities.Entity;
 import entities.celestial.Planet;
 import lighting.Light;
-import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
@@ -33,6 +33,8 @@ public class Tester5 extends Prototyper {
 		if (keyCode == GLFW_KEY_SPACE) {
 			// Cycle through values for timeMultiplier, from 1 to MAX_TIME_MULTIPLIER
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
+		} else if (keyCode == GLFW_KEY_I) {
+			paused = !paused;
 		} else if (keyCode == GLFW_KEY_R) {
 			resetCamera();
 		} else if (keyCode == GLFW_KEY_O) {
@@ -63,21 +65,14 @@ public class Tester5 extends Prototyper {
 	public void onMouseDown(MouseButton mouseButton) {
 		switch (mouseButton) {
 		case LEFT:
-			log("Left mouse button down");
+			log("Left mouse button down.");
 			break;
 		case RIGHT:
-			log("Right mouse button down");
-			rightMouseDown = true;
-			// Allow endless cursor movement
-			disableCursor();
-			// Record the mouse position
-			mouseDownPosition = getMousePosition().getCopy();
-			// Record the camera rotation
-			mouseDownCameraRotation = camera.getRotation().getCopy();
-			log("Mouse Down Position: " + mouseDownPosition);
+			log("Right mouse button down.");
+			cameraControls.onMouseDown();
 			break;
 		case MIDDLE:
-			log("Middle mouse button down");
+			log("Middle mouse button down.");
 			break;
 		}
 	}
@@ -86,15 +81,14 @@ public class Tester5 extends Prototyper {
 	public void onMouseUp(MouseButton mouseButton) {
 		switch (mouseButton) {
 		case LEFT:
-			log("Left mouse button up");
+			log("Left mouse button up.");
 			break;
 		case RIGHT:
-			log("Right mouse button up");
-			rightMouseDown = false;
-			enableCursor();
+			log("Right mouse button up.");
+			cameraControls.onMouseUp();
 			break;
 		case MIDDLE:
-			log("Middle mouse button up");
+			log("Middle mouse button up.");
 			break;
 		}
 	}
@@ -102,19 +96,8 @@ public class Tester5 extends Prototyper {
 	
 	// Constants
 	
-	// Camera movement
-	// Positional movement
-	private static final float MOVEMENT_SPEED = 50;
-	private static final float MOVEMENT_SPEED_FAST = 150;
-	
-	// Rotational movement
-	private static final float ROTATION_SPEED = 30;
-	private static final float ROTATION_SPEED_FAST = 90;
-	
-	private static final int MOUSE_MOVEMENT_SCALE = 20;
-	
 	// Entities
-	private static final int PLANET_COUNT = 500;
+	private static final int PLANET_COUNT = 700;
 	
 	// Time
 	private static final int MAX_TIME_MULTIPLIER = 5;
@@ -126,32 +109,27 @@ public class Tester5 extends Prototyper {
 	// Scales deltaTime
 	private int timeMultiplier = 1;
 	
-	// Holds the mouse position at the instant the mouse is pressed down
-	Vector2f mouseDownPosition = new Vector2f();
-	
-	// Holds the camera rotation at the instant the mouse is pressed down
-	Vector3f mouseDownCameraRotation = new Vector3f();
-	
-	// Tracks if the right mouse button is held down or not
-	boolean rightMouseDown = false;
+	// Pause all logic other than camera movement
+	boolean paused = false;
 	
 	
-	
-	// Essential objects for rendering
+	// Main objects
 	
 	Camera camera = new Camera();
 	
+	CameraControls cameraControls = new CameraControls(camera, window);
+	
 	Light light = new Light();
 	
+	Model sphereModel = Models.getIcosphereModel();
+	
 	// Sun is centred at 0, 0, 0 with no velocity
-	Planet sun = new Planet(Models.getUVsphereModel(), new Vector3f(0, 0, 0));
+	Planet sun = new Planet(sphereModel, new Vector3f(0, 0, 0));
 	
 	List<Planet> planets = new ArrayList<>();
 	
 	
 	private void addPlanets() {
-		
-		Model sphereModel = Models.getUVsphereModel();
 		
 		for (int i = 0; i < PLANET_COUNT; i++) {
 			
@@ -161,20 +139,22 @@ public class Tester5 extends Prototyper {
 			pos.x = (float) MathUtils.randRange(-100, 100);
 			pos.z = (float) MathUtils.randRange(-100, 100);
 			
-			// Clear space around the sun
-			pos.scale(2);
+			// Clear space close to the sun
+			if (pos.magnitude() < 20) {
+				pos.scale(3);
+			}
 			
 			// Generate random velocity, in a range based on position
 			Vector3f velocity = new Vector3f(
 					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
-					(float) MathUtils.randRange(-10, 10), // Small variation in y velocity
+					(float) MathUtils.randRange(-5, 5), // Small variation in y velocity
 					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
 			
 			// Generate a random mass
 			float mass = (float) MathUtils.randRange(2, 7);
 			
 			// Base scale on cube root of mass
-			float scale = (float) Math.cbrt(mass*2 - 3);
+			float scale = (float) Math.cbrt(mass * 2 - 3);
 			
 			Planet planet = new Planet(sphereModel, pos, velocity);
 			
@@ -187,10 +167,6 @@ public class Tester5 extends Prototyper {
 	}
 	
 	private void addSun() {
-		Model sphereModel = Models.getUVsphereModel();
-		
-		Vector3f pos = new Vector3f(0, 0, 0);
-		sun = new Planet(sphereModel, pos);
 		sun.setMass(1E6f);
 		//sun.setScale(109); // Sun radius = 109x earth
 		sun.setScale(7);
@@ -219,9 +195,11 @@ public class Tester5 extends Prototyper {
 		
 		deltaTime *= timeMultiplier;
 		
-		moveCamera(deltaTime);
+		cameraControls.moveCamera(deltaTime);
 		
-		//ArrayList<Vector3f> newPositions = new ArrayList<>();
+		if (paused) {
+			return;
+		}
 		
 		for (Planet planet1 : planets) {
 			
@@ -241,118 +219,21 @@ public class Tester5 extends Prototyper {
 			// Add acceleration vector for the sun
 			resultantAcceleration.add(planet1.accelerationVectorTo(sun));
 			
-			/*
-			Vector3f newPosition = new Vector3f(planet1.getPosition());
-			Vector3f velocity = planet1.getVelocity();
-			newPosition.x += (deltaTime * velocity.x) + (0.5 * resultantAcceleration.x * deltaTime * deltaTime);
-			newPosition.y += (deltaTime * velocity.y) + (0.5 * resultantAcceleration.y * deltaTime * deltaTime);
-			newPosition.z += (deltaTime * velocity.z) + (0.5 * resultantAcceleration.z * deltaTime * deltaTime);
-			newPositions.add(newPosition);
-			*/
-			
 			planet1.updateVelocity(resultantAcceleration, deltaTime);
 			
-			// Wait until all planet velocity values have been updated
-			
-			//planet1.updatePosition(deltaTime);
 		}
+		
+		// Wait until all planet velocity values
+		// have been updated before updating the position
 		
 		// For basic Euler integration
 		for (Planet planet : planets) {
 			planet.updatePosition(deltaTime);
-		}
-		
-		/*
-		// Possible better SUVAT based integration
-		// Update planet positions after all the acceleration vectors have been calculated
-		int i = 0;
-		for (Planet planet : planets) {
-			planet.setPosition(newPositions.get(i++));
-			//planet.setRotY(getTime() * planet.getVelocity().magnitude());
-		}
-		*/
-		
-		
-	}
-	
-	
-	
-	private void moveCamera(float deltaTime) {
-		
-		float movementSpeed;
-		float rotationSpeed;
-		
-		if (isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			movementSpeed = MOVEMENT_SPEED_FAST;
-			rotationSpeed = ROTATION_SPEED_FAST;
-		} else {
-			movementSpeed = MOVEMENT_SPEED;
-			rotationSpeed = ROTATION_SPEED;
-		}
-		
-		// Positional controls
-		// Forward and back
-		if (isKeyPressed(GLFW_KEY_W)) {
-			camera.moveForward(movementSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_S)) {
-			camera.moveBack(movementSpeed, deltaTime);
-		}
-		
-		// Right and left
-		if (isKeyPressed(GLFW_KEY_D)) {
-			camera.moveRight(movementSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_A)) {
-			camera.moveLeft(movementSpeed, deltaTime);
-		}
-		
-		// Up and down
-		if (isKeyPressed(GLFW_KEY_PAGE_UP)) {
-			camera.moveUp(movementSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_PAGE_DOWN)){
-			camera.moveDown(movementSpeed, deltaTime);
-		}
-		
-		
-		// Rotational controls
-		// Pitch
-		if (isKeyPressed(GLFW_KEY_DOWN)) {
-			camera.increasePitch(rotationSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_UP)) {
-			camera.decreasePitch(rotationSpeed, deltaTime);
-		}
-		
-		// Yaw
-		if (isKeyPressed(GLFW_KEY_RIGHT)) {
-			camera.increaseYaw(rotationSpeed, deltaTime);
-		} else if (isKeyPressed(GLFW_KEY_LEFT)) {
-			camera.decreaseYaw(rotationSpeed, deltaTime);
-		}
-		
-		
-		
-		// Mouse control
-		if (rightMouseDown) {
-			
-			Vector2f mousePosition = getMousePosition();
-			
-			// Find the mouse movement vector
-			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
-			
-			float mouseDownYaw = mouseDownCameraRotation.y;
-			float mouseDownPitch = mouseDownCameraRotation.x;
-			
-			// Adjust the camera rotation when the mouse was pressed 
-			// by an amount proportional to the mouseDelta vector 
-			camera.setYaw(mouseDownYaw - mouseDelta.x / MOUSE_MOVEMENT_SCALE);
-			camera.setPitch(mouseDownPitch + mouseDelta.y / MOUSE_MOVEMENT_SCALE);
+			planet.setRotY(getTime() * 100);
 		}
 		
 		
 	}
-	
-	
-	
-	
 	
 	
 
