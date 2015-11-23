@@ -5,271 +5,38 @@ import math.geometry.Vector3f;
 import model.parser.OBJParser;
 import model.parser.OBJParser2;
 
+import static model.ModelData.*;
+
 public class Models {
 	
-	// SQUARE
-	
-	private static final float[] squareVertexPositions = { 
-			-1, 1, 0, // V0 - top left
-			-1, -1, 0, // V1 - bottom left
-			1, -1, 0, // V2 - bottom right
-			1, 1, 0 // V3 - top right
-	};
-	
-	private static final float[] squareVertexNormals = {
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
-	};
-	
-	private static final float[] squareVertexColours = {
-			0, 0, 0, // V0 - black
-			1, 0, 0, // V1 - red
-			1, 1, 1, // V2 - white
-			0, 0, 1 // V3 - blue
-	};
-	
-	// Each triangle must be specified with the vertices winding in an
-	// anti-clockwise direction for face culling purposes
-	private static final int[] squareIndices = {
-			0, 1, 3, // Triangle 1
-			3, 1, 2 // Triangle 2
-	};
-	
+	// Hard-coded models
 	
 	private static Model squareModel;
 	
 	public static Model getSquareModel() {
 		if (squareModel == null) {
-			squareModel = new Model(squareVertexPositions, squareVertexNormals, squareVertexColours, squareIndices);
+			squareModel = new Model(SQUARE_VERTEX_POSITIONS, SQUARE_VERTEX_NORMALS, SQUARE_VERTEX_COLOURS,
+					SQUARE_INDICES);
 		}
 		return squareModel;
 	}
-	
-	
-	
-	// CUBE
-	
-	/*
-	 * "Compact" cube data, without any normal data 
-	 * i.e maximum vertex sharing using indices
-	 * 
-	
-	public static final float[] cubeVertexPositions = {
-			// Face 1 - Front
-			-0.5f,0.5f,0.5f,	// V0
-			-0.5f,-0.5f,0.5f,	// V1
-			0.5f,-0.5f,0.5f,	// V2
-			0.5f,0.5f,0.5f,		// V3
-
-			// Face 2 - Back
-			-0.5f,0.5f,-0.5f,	// V4
-			-0.5f,-0.5f,-0.5f,	// V5
-			0.5f,-0.5f,-0.5f,	// V6
-			0.5f,0.5f,-0.5f,	// V7
-	};
-	
-	private static final float[] cubeVertexNormals = {
-			
-	};
-	
-	public static final float[] cubeVertexColours = {
-			// Face 1 - Front
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			// Face 2 - Back
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-	};
-	
-	// Each face is defined here by a square consisting of 2 triangles
-	public static final int[] cubeIndices = {
-			// Front face
-			0,1,3,
-			3,1,2,
-			
-			// Back face
-			7,6,4,
-			4,6,5,
-			
-			// Right face
-			3,2,7,
-			7,2,6,
-			
-			// Left face
-			4,5,0,
-			0,5,1,
-			
-			// Top face
-			4,0,7,
-			7,0,3,
-			
-			// Bottom face
-			1,5,2,
-			2,5,6
-	};
-	
-	*/
-	
-	
-	// All values painstakingly worked out for counter-clockwise
-	// winding order, for correct face culling
-	private static final float[] cubeVertexPositions = {
-			// Front
-			-0.5f,0.5f,0.5f,
-			-0.5f,-0.5f,0.5f,
-			0.5f,-0.5f,0.5f,
-			0.5f,0.5f,0.5f,
-
-			// Back = the front translated by (0,0,-1) and rotated 180 degrees around y-axis
-			0.5f,0.5f,-0.5f,
-			0.5f,-0.5f,-0.5f,
-			-0.5f,-0.5f,-0.5f,
-			-0.5f,0.5f,-0.5f,
-
-			// Right
-			0.5f,0.5f,0.5f,
-			0.5f,-0.5f,0.5f,
-			0.5f,-0.5f,-0.5f,
-			0.5f,0.5f,-0.5f,
-
-			// Left = the right translated by (-1,0,0) and rotated 180 degrees around y-axis
-			-0.5f,0.5f,-0.5f,
-			-0.5f,-0.5f,-0.5f,
-			-0.5f,-0.5f,0.5f,
-			-0.5f,0.5f,0.5f,
-
-			// Top
-			-0.5f,0.5f,-0.5f,
-			-0.5f,0.5f,0.5f,
-			0.5f,0.5f,0.5f,
-			0.5f,0.5f,-0.5f,
-
-			// Bottom = the top translated by (0,-1,0) and rotated 180 degrees around x-axis
-			-0.5f,-0.5f,0.5f,
-			-0.5f,-0.5f,-0.5f,
-			0.5f,-0.5f,-0.5f,
-			0.5f,-0.5f,0.5f
-	};
-	
-	// "Pure" rotations from face to face, no translation like position
-	// since normals are direction vectors
-	private static final float[] cubeVertexNormals = {
-			// Front
-			0,0,1,
-			0,0,1,
-			0,0,1,
-			0,0,1,
-			
-			// Back
-			0,0,-1,
-			0,0,-1,
-			0,0,-1,
-			0,0,-1,
-			
-			// Right
-			1,0,0,
-			1,0,0,
-			1,0,0,
-			1,0,0,
-			
-			// Left
-			-1,0,0,
-			-1,0,0,
-			-1,0,0,
-			-1,0,0,
-			
-			// Top
-			0,1,0,
-			0,1,0,
-			0,1,0,
-			0,1,0,
-			
-			// Bottom
-			0,-1,0,
-			0,-1,0,
-			0,-1,0,
-			0,-1,0,
-	};
-	
-	public static final float[] cubeVertexColours = {
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-			
-			1.0f, 0.0f, 0.0f,	// Red
-			0.0f, 0.0f, 1.0f,	// Blue
-			0.0f, 1.0f, 0.0f,	// Green
-			1.0f, 1.0f, 0.0f,	// Yellow
-	};
-	
-	// The indices are simplified since winding order has already been
-	// taken care of when specifying the positions.
-	public static final int[] cubeIndices = {
-			0,1,3,
-			3,1,2,
-			
-			4,5,7,
-			7,5,6,
-			
-			8,9,11,
-			11,9,10,
-			
-			12,13,15,
-			15,13,14,
-			
-			16,17,19,
-			19,17,18,
-			
-			20,21,23,
-			23,21,22
-	};
 	
 	
 	private static Model cubeModel;
 	
 	public static Model getCubeModel() {
 		if (cubeModel == null) {
-			cubeModel = new Model(cubeVertexPositions, cubeVertexNormals, cubeVertexColours, cubeIndices);
+			cubeModel = new Model(CUBE_VERTEX_POSITIONS, CUBE_VERTEX_NORMALS, CUBE_VERTEX_COLOURS,
+					CUBE_INDICES);
 		}
 		return cubeModel;
 	}
 	
 	
 	
-	
-	
-	
 	// Custom built models
 	
-	// EXPLODED CUBE
+	// Exploded Cube
 	
 	private static Model explodedCubeModel;
 	
@@ -281,7 +48,9 @@ public class Models {
 			float spacing = 1.2f; // Distance from each square to the model centre
 			
 			// Must be careful here with the rotation, for face culling purposes - the normals must point the right way!
-			// Important to remember that rotation is counter-clockwise for that reason
+			// Important to remember that rotation is counter-clockwise, for this reason. Therefore sometimes negative angles
+			// must be specified, so that the rotation is clockwise.
+			
 			// TODO: Have face culling disabled on a per model basis, for models such as this
 			
 			//Front
@@ -303,7 +72,7 @@ public class Models {
 	}
 	
 	
-	// CUBE GRID
+	// Cube Grid
 	
 	private static Model cubeGridModel;
 	
