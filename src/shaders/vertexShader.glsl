@@ -62,13 +62,13 @@ void main()
     //pass_colour = vec3(1, 1, 1);
     
     // World position direction colouring
-    pass_colour = normalize(vec3(abs(worldPosition.x), abs(worldPosition.y), abs(worldPosition.z))) * 2;
+    pass_colour = normalize(abs(worldPosition).xyz);
     
     // Colour using the world space normals
     //pass_colour = unitWorldNormal;
     
     // Colour using direction to vertex in local object coordinates
-    //pass_colour = normalize(position) * 2;
+    //pass_colour = abs(normalize(position));
     
     
     gl_Position = projection_matrix * view_matrix * worldPosition;
