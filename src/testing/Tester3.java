@@ -8,6 +8,7 @@ import java.util.List;
 
 import camera.Camera;
 import entities.Entity;
+import lighting.Light;
 import math.geometry.Vector3f;
 import model.Model;
 import model.ModelBuilder;
@@ -57,9 +58,6 @@ public class Tester3 extends Prototyper {
 	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
 	
-	//private static final double MAX_SCALE = 1.5;
-	//private static final double MIN_SCALE = 0.5;
-	
 	
 	
 	private static float getRandomXYPosition() {
@@ -78,22 +76,14 @@ public class Tester3 extends Prototyper {
 		return new Vector3f((float) (Math.random() * 360), (float) (Math.random() * 360), (float) (Math.random() * 360));
 	}
 	
-	/*
-	// Get a random scale from MIN_SCALE to MAX_SCALE
-	private static float getRandomScale() {
-		return (float) (MIN_SCALE + Math.random() * (MAX_SCALE - MIN_SCALE));
-	}
-	
-	private static Vector3f getRandomColour() {
-		return new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random());
-	}
-	*/
 	
 	Camera camera = new Camera();
 	
 	List<Entity> cubes = new ArrayList<>();
 	
 	Entity cubeField;
+	
+	Light light = new Light();
 	
 	private static final int CUBE_COUNT = 300000;
 	
@@ -102,8 +92,6 @@ public class Tester3 extends Prototyper {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
 			Vector3f randomRotation = getRandomRotation();
-			//Vector3f randomColour = getRandomColour();
-			//float randomScale = getRandomScale();
 			cubes.add(new Entity(cubeModel, randomPosition, randomRotation));
 		}
 		
@@ -144,7 +132,7 @@ public class Tester3 extends Prototyper {
 		camera.setPosition(0, 0, 0);
 	}
 	
-	// Some 'gameplay' state information
+	// State information
 	float cameraForwardSpeed;
 	boolean collided;
 	boolean won;
@@ -161,17 +149,8 @@ public class Tester3 extends Prototyper {
 	// The time interval between distance reports in seconds
 	private static final float DISTANCE_REPORT_INTERVAL = 1;
 	
-	private static final int LOW_FRAMERATE = 30;
-	
 	@Override
 	protected void logic(float deltaTime) {
-		
-		// 60fps = 16 milliseconds
-		float frameRate = 1/deltaTime;
-		
-		if (frameRate < LOW_FRAMERATE) {
-			System.out.println("Low Framerate: " + frameRate + " FPS");
-		}
 		
 		if (collided || won) {
 			return;
@@ -237,35 +216,36 @@ public class Tester3 extends Prototyper {
 				collided = true;
 			}
 			
-			// Rotate the cubes!
-			//cube.setRotX(getTime() * 100);
-			//cube.setRotY(getTime() * 100);
-			
 		}
+		
+		// Rotate the field
+		//cubeField.setRotZ(getTime() * 20);
+		
+		Vector3f lightPosition = light.getPosition();
+		lightPosition.z = (float) (-(Math.sin(getTime() / 2) + 1) * MAX_DISTANCE / 2);
 		
 		// Finally move the camera forward each frame
 		camera.moveForward(cameraForwardSpeed, deltaTime);
 		
-		
 	}
-
-	// TODO: Pass colours using some kind of Colour class
-	//private static final Vector3f WIN_COLOUR = new Vector3f((float)0/255, (float)97/255, (float)32/255);
+	
+	
+	private static final Vector3f WIN_COLOUR = new Vector3f((float)0/255, (float)97/255, (float)32/255);
+	private static final Vector3f COLLISION_COLOUR = new Vector3f(0.9f, 0.2f, 0.2f);
 	
 	@Override
 	protected void render(Renderer renderer) {
 		
+		renderer.enableLighting();
+		renderer.setLight(light);
+		
 		if (collided) {
-			renderer.setClearColour(0.9f, 0.2f, 0.2f);
+			renderer.setClearColour(COLLISION_COLOUR);
 		} else if (won) {
-			renderer.setClearColour((float)0/255, (float)97/255, (float)32/255);
+			renderer.setClearColour(WIN_COLOUR);
 		} else {
 			renderer.setClearColour(0, 0, 0);
 		}
-		
-		//for (Entity cube : cubes) {
-		//	renderer.render(cube, camera, getTime());
-		//}
 		
 		renderer.render(cubeField, camera);
 	}

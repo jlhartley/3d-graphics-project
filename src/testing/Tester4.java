@@ -3,13 +3,14 @@ package testing;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import camera.Camera;
 import entities.Entity;
 import entities.MovableEntity;
+import lighting.Light;
 import math.geometry.Vector3f;
 import model.Model;
-import model.ModelBuilder;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
@@ -57,7 +58,7 @@ public class Tester4 extends Prototyper {
 	
 	// Output
 	private static final float DISTANCE_REPORT_INTERVAL = 1;
-	private static final int LOW_FRAMERATE = 30;
+	//private static final int LOW_FRAMERATE = 30;
 	
 	// Spatial dimensions
 	private static final int XY_LIMIT = 50;
@@ -113,18 +114,20 @@ public class Tester4 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	LinkedList<Entity> cubes = new LinkedList<>();
-	LinkedList<MovableEntity> movingCubes = new LinkedList<>();
+	Light light = new Light();
+	
+	List<Entity> entities = new LinkedList<>();
+	List<MovableEntity> movingEntities = new LinkedList<>();
 	
 	Entity startSquare = new Entity(Models.getSquareModel(), new Vector3f(0, 0, -MIN_DISTANCE));
 	
 	Entity dragon = new Entity(Models.getDragonModel(), new Vector3f(0, 0, -100));
 	
-	public void generateCubes(Model cubeModel) {
+	public void generateEntities(Model model) {
 		for (int i = 0; i < CUBE_COUNT; i++) {
 			Vector3f randomPosition = getRandomPosition();
 			//Vector3f randomColour = getRandomColour();
-			cubes.add(new Entity(cubeModel, randomPosition));
+			entities.add(new Entity(model, randomPosition));
 		}
 		
 		for (int i = 0; i < MOVING_CUBE_COUNT; i++) {
@@ -132,20 +135,21 @@ public class Tester4 extends Prototyper {
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
 			Vector3f randomVelocity = getRandomVelocity();
-			movingCubes.add(new MovableEntity(cubeModel, randomPosition, randomRotation, randomVelocity));
+			movingEntities.add(new MovableEntity(model, randomPosition, randomRotation, randomVelocity));
 		}
 		
-		cubes.addAll(movingCubes);
+		entities.addAll(movingEntities);
 		
 	}
 	
 	public Tester4() {
-		
 		Model cubeModel = Models.getCubeModel();
 		Model cubeGridModel = Models.getCubeGridModel();
 		Model uvSphereModel = Models.getUVsphereModel();
 		Model torusModel = Models.getTorusModel();
 		Model explodedCubeModel = Models.getExplodedCubeModel();
+		
+		/*
 		
 		ModelBuilder modelBuilder = new ModelBuilder();
 		int modelCount = 8;
@@ -159,17 +163,19 @@ public class Tester4 extends Prototyper {
 		}
 		Model customModel = modelBuilder.build();
 		
-		generateCubes(customModel);
+		generateEntities(customModel);
 		
-		generateCubes(cubeModel);
+		*/
 		
-		generateCubes(cubeGridModel);
+		generateEntities(cubeModel);
 		
-		generateCubes(uvSphereModel);
+		generateEntities(cubeGridModel);
 		
-		generateCubes(torusModel);
+		generateEntities(uvSphereModel);
 		
-		generateCubes(explodedCubeModel);
+		generateEntities(torusModel);
+		
+		generateEntities(explodedCubeModel);
 		
 		reset();
 	}
@@ -181,7 +187,7 @@ public class Tester4 extends Prototyper {
 		camera.setPosition(0, 0, 0);
 	}
 	
-	// Some 'game play' state information
+	// State information
 	float cameraForwardSpeed;
 	boolean collided;
 	boolean won;
@@ -191,13 +197,6 @@ public class Tester4 extends Prototyper {
 	
 	@Override
 	protected void logic(float deltaTime) {
-		
-		// 60fps = 16 milliseconds
-		float frameRate = 1/deltaTime;
-		
-		if (frameRate < LOW_FRAMERATE) {
-			System.out.println("Low Framerate: " + frameRate + " FPS");
-		}
 		
 		if (collided || won) {
 			return;
@@ -254,18 +253,19 @@ public class Tester4 extends Prototyper {
 			camera.moveLeft(MOVEMENT_SPEED, deltaTime);
 		}
 		
-		for (Entity cube : cubes) {
+		for (Entity entity : entities) {
 			// Bounding box collision detection - not correctly sized / adjusted for rotation
-			if (Math.abs(camera.getPosition().z - cube.getPosition().z) < 0.5
-					&& Math.abs(camera.getPosition().x - cube.getPosition().x) < 0.5
-					&& Math.abs(camera.getPosition().y - cube.getPosition().y) < 0.5) {
+			if (Math.abs(camera.getPosition().z - entity.getPosition().z) < 0.5
+					&& Math.abs(camera.getPosition().x - entity.getPosition().x) < 0.5
+					&& Math.abs(camera.getPosition().y - entity.getPosition().y) < 0.5) {
 				collided = true;
 			}
-			cube.setRotY(getTime() * 100);
+			// Rotate entity around y
+			entity.setRotY(getTime() * 100);
 		}
 		
-		// Cubes bounce off of their container
-		for (MovableEntity movEntity : movingCubes) {
+		// Moving entities bounce off of their container
+		for (MovableEntity movEntity : movingEntities) {
 			movEntity.tick(deltaTime);
 			Vector3f position = movEntity.getPosition();
 			Vector3f velocity = movEntity.getVelocity();
@@ -283,27 +283,33 @@ public class Tester4 extends Prototyper {
 		// Rotate the dragon
 		dragon.setRotY(getTime() * 100);
 		
+		Vector3f lightPosition = light.getPosition();
+		lightPosition.z = (float) (-(Math.sin(getTime() / 2) + 1) * MAX_DISTANCE / 2);
+		
 		// Finally move the camera forward each frame
 		camera.moveForward(cameraForwardSpeed, deltaTime);
 		
 	}
 
-	// TODO: Pass colours using some kind of Colour class
-	//private static final Vector3f WIN_COLOUR = new Vector3f((float)0/255, (float)97/255, (float)32/255);
+	private static final Vector3f WIN_COLOUR = new Vector3f((float)0/255, (float)97/255, (float)32/255);
+	private static final Vector3f COLLISION_COLOUR = new Vector3f(0.9f, 0.2f, 0.2f);
 	
 	@Override
 	protected void render(Renderer renderer) {
 		
+		renderer.enableLighting();
+		renderer.setLight(light);
+		
 		if (collided) {
-			renderer.setClearColour(0.9f, 0.2f, 0.2f);
+			renderer.setClearColour(COLLISION_COLOUR);
 		} else if (won) {
-			renderer.setClearColour((float)0/255, (float)97/255, (float)32/255);
+			renderer.setClearColour(WIN_COLOUR);
 		} else {
 			renderer.setClearColour(0, 0, 0);
 		}
 		
-		for (Entity cube : cubes) {
-			renderer.render(cube, camera);
+		for (Entity entity : entities) {
+			renderer.render(entity, camera);
 		}
 		
 		renderer.render(startSquare, camera);
