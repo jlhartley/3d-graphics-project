@@ -355,8 +355,8 @@ public class Models {
 	
 	private static final String ICOSPHERE_DIRECTORY = "ico-spheres/";
 	private static final String ICOSPHERE_BASE_FILENAME = "icosphere";
-	private static final String ICOSPHERE_SHADING = "flat";
-	private static final int ICOSPHERE_SUBDIVISIONS = 1;
+	private static final String ICOSPHERE_SHADING = "smooth";
+	private static final int ICOSPHERE_SUBDIVISIONS = 4;
 	
 	private static Model icosphereModel;
 	
