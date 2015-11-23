@@ -91,23 +91,6 @@ public class Renderer {
 		
 	}
 	
-	// For rendering with a light source
-	public void render(Entity entity, Camera camera, Light light) {
-		
-		Model model = entity.getModel();
-		
-		model.bindVAO();
-		
-		setMatrices(entity, camera, light);
-		
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
-		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-		
-		//model.unbindVAO();
-		
-	}
-	
 	public void enableLighting() {
 		shaderProgram.setUniformValue("lighting_enabled", true);
 	}
@@ -116,9 +99,7 @@ public class Renderer {
 		shaderProgram.setUniformValue("lighting_enabled", false);
 	}
 	
-	private void setMatrices(Entity entity, Camera camera, Light light) {
-		setMatrices(entity, camera);
-		
+	public void setLight(Light light) {
 		Vector3f lightPosition = light.getPosition();
 		shaderProgram.setUniformValue("light_position", lightPosition);
 	}

@@ -245,9 +245,10 @@ public class Tester5 extends Prototyper {
 		renderer.render(sun, camera);
 		
 		renderer.enableLighting();
+		renderer.setLight(light);
 		
 		for (Entity planet : planets) {
-			renderer.render(planet, camera, light);
+			renderer.render(planet, camera);
 		}
 		
 	}
