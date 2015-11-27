@@ -1,19 +1,16 @@
 package window;
 
-import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
-
-import java.nio.ByteBuffer;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
@@ -73,7 +70,7 @@ public class Window {
 		// Set an error callback so that a human-readable description of any
 		// errors relating to GLFW are output
 		// Print any errors to the standard error stream (System.err)
-		errorCallback = errorCallbackPrint();
+		errorCallback = GLFWErrorCallback.createPrint();
 		glfwSetErrorCallback(errorCallback);
 		
 		// Initialise GLFW - this is required before most GLFW functions
@@ -139,7 +136,7 @@ public class Window {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
 		GL.createCapabilities();
-		// Setup debugging output
+		// Setup debugging output for OpenGL
 		debugMessageCallback = GLUtil.setupDebugMessageCallback();
 		// If OpenGL initialisation was successful, display the version
 		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
@@ -224,9 +221,9 @@ public class Window {
 	public void centre() {
 		// Get the width and height of the primary monitor in screen coordinates
 		long primaryMonitor = glfwGetPrimaryMonitor();
-		ByteBuffer videoMode = glfwGetVideoMode(primaryMonitor);
-		int screenWidth = GLFWvidmode.width(videoMode);
-		int screenHeight = GLFWvidmode.height(videoMode);
+		GLFWVidMode videoMode = glfwGetVideoMode(primaryMonitor);
+		int screenWidth = videoMode.width();
+		int screenHeight = videoMode.height();
 		
 		glfwSetWindowPos(window,
 				(screenWidth - this.width) / 2,
