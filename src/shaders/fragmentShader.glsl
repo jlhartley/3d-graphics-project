@@ -25,22 +25,30 @@ vec3 colour = pass_colour;
 void colourByNormalisationError()
 {
 		// The error that results from vertex shader interpolation
-		float toLightNormalisationError = abs(length(unit_to_light) - 1);
-		float normalNormalisationError = abs(length(unit_world_normal) - 1);
+		float toLightNormalisationError = length(unit_to_light) - 1;
+		float normalNormalisationError = length(unit_world_normal) - 1;
 		
 		// Colour based on the error
-		// Green for normal interpolation error
+		
+		// Green and red for normal interpolation error
 		if (normalNormalisationError > 0.0035) {
 			colour = vec3(0, 1, 0);
+		} else if (normalNormalisationError < -0.0035) {
+			colour = vec3(1, 0, 0);
 		}
-		// Orange for "to light" interpolation error
+		
+		
+		// Orange and blue "to light" interpolation error
 		if (toLightNormalisationError > 0.0001) {
+			colour = vec3(0, 0, 1);
+		} else if (toLightNormalisationError < -0.0001) {
 			colour = vec3(1, 1, 0);
 		}
 }
 
 void main()
 {
+	// Brightness will remain at a default of 1 if lighting is not enabled
 	float brightness = 1;
 	
 	if (lighting_enabled) {
