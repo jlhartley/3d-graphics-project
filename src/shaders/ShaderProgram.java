@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 import org.lwjgl.BufferUtils;
 
+import io.FileUtils;
 import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
-import util.FileUtils;
 
 
 public class ShaderProgram {

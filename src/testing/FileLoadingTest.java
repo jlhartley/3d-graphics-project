@@ -2,7 +2,7 @@ package testing;
 
 import java.nio.file.Paths;
 
-import util.FileUtils;
+import io.FileUtils;
 
 public class FileLoadingTest {
 	

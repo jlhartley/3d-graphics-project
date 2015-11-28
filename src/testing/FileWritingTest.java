@@ -1,6 +1,6 @@
 package testing;
 
-import util.FileUtils;
+import io.FileUtils;
 
 public class FileWritingTest {
 	
