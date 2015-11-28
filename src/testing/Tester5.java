@@ -45,8 +45,7 @@ public class Tester5 extends Prototyper {
 			switchProjection(ProjectionType.PERSPECTIVE);
 		} else if (keyCode == GLFW_KEY_U) {
 			// Place the camera directly up in y
-			Vector3f position = new Vector3f(0, 500, 0);
-			camera.setPosition(position);
+			camera.setPosition(0, 500, 0);
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
@@ -176,8 +175,7 @@ public class Tester5 extends Prototyper {
 	
 	private void resetCamera() {
 		// Place the camera up and back from the origin
-		Vector3f position = new Vector3f(0, 500, 500);
-		camera.setPosition(position);
+		camera.setPosition(0, 500, 500);
 		// Point camera downwards at 45 degrees
 		camera.setPitch(45);
 		camera.setYaw(0);
