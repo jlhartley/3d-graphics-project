@@ -9,6 +9,7 @@ import camera.Camera;
 import camera.CameraControls;
 import entities.Entity;
 import entities.celestial.Planet;
+import entities.celestial.Star;
 import lighting.Light;
 import math.geometry.Vector3f;
 import model.Model;
@@ -96,7 +97,7 @@ public class Tester5 extends Prototyper {
 	// Constants
 	
 	// Entities
-	private static final int PLANET_COUNT = 700;
+	private static final int PLANET_COUNT = 500;
 	
 	// Time
 	private static final int MAX_TIME_MULTIPLIER = 5;
@@ -123,7 +124,7 @@ public class Tester5 extends Prototyper {
 	Model sphereModel = Models.getIcosphereModel();
 	
 	// Sun is centred at 0, 0, 0 with no velocity
-	Planet sun = new Planet(sphereModel, new Vector3f(0, 0, 0));
+	Star sun = new Star(sphereModel, new Vector3f(0, 0, 0));
 	
 	List<Planet> planets = new ArrayList<>();
 	
@@ -132,22 +133,22 @@ public class Tester5 extends Prototyper {
 		
 		for (int i = 0; i < PLANET_COUNT; i++) {
 			
-			Vector3f pos = new Vector3f();
+			Vector3f position = new Vector3f();
 			
 			// Generate random position
-			pos.x = (float) MathUtils.randRange(-100, 100);
-			pos.z = (float) MathUtils.randRange(-100, 100);
+			position.x = (float) MathUtils.randRange(-100, 100);
+			position.z = (float) MathUtils.randRange(-100, 100);
 			
 			// Clear space close to the sun
-			if (pos.magnitude() < 20) {
-				pos.scale(3);
+			if (position.magnitude() < 20) {
+				position.scale(3);
 			}
 			
 			// Generate random velocity, in a range based on position
 			Vector3f velocity = new Vector3f(
-					(float) MathUtils.randRange(-2000/pos.x, 2000/pos.x), 
+					(float) MathUtils.randRange(-2000/position.x, 2000/position.x), 
 					(float) MathUtils.randRange(-5, 5), // Small variation in y velocity
-					(float) MathUtils.randRange(-2000/pos.z, 2000/pos.z));
+					(float) MathUtils.randRange(-2000/position.z, 2000/position.z));
 			
 			// Generate a random mass
 			float mass = (float) MathUtils.randRange(2, 7);
@@ -155,8 +156,7 @@ public class Tester5 extends Prototyper {
 			// Base scale on cube root of mass
 			float scale = (float) Math.cbrt(mass * 2 - 3);
 			
-			Planet planet = new Planet(sphereModel, pos, velocity);
-			
+			Planet planet = new Planet(sphereModel, position, velocity);
 			planet.setMass(mass);
 			planet.setScale(scale);
 			
@@ -169,8 +169,8 @@ public class Tester5 extends Prototyper {
 		sun.setMass(1E6f);
 		//sun.setScale(109); // Sun radius = 109x earth
 		sun.setScale(7);
-		sun.setVelocity(new Vector3f(0, 0, 0)); // 21.5
-		sun.setPosition(new Vector3f(0, 0, 0));
+		sun.setVelocity(0, 0, 0); // 21.5
+		sun.setPosition(0, 0, 0);
 	}
 	
 	private void resetCamera() {
