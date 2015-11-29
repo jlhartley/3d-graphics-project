@@ -10,7 +10,6 @@ import camera.CameraControls;
 import entities.Entity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
-import lighting.Light;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
@@ -119,8 +118,6 @@ public class Tester5 extends Prototyper {
 	
 	CameraControls cameraControls = new CameraControls(camera, window);
 	
-	Light light = new Light();
-	
 	Model sphereModel = Models.getIcosphereModel();
 	
 	// Sun is centred at 0, 0, 0 with no velocity
@@ -165,7 +162,7 @@ public class Tester5 extends Prototyper {
 		
 	}
 	
-	private void addSun() {
+	private void initSun() {
 		sun.setMass(1E6f);
 		//sun.setScale(109); // Sun radius = 109x earth
 		sun.setScale(7);
@@ -184,7 +181,7 @@ public class Tester5 extends Prototyper {
 	public Tester5() {
 		resetCamera();
 		addPlanets();
-		addSun();
+		initSun();
 	}
 
 	
@@ -246,12 +243,15 @@ public class Tester5 extends Prototyper {
 	@Override
 	protected void render(Renderer renderer) {
 		
+		// Render the sun model without lighting so that
+		// it will actually appear
 		renderer.disableLighting();
-		
 		renderer.render(sun, camera);
 		
+		// Enable lighting and set the sun as the light source so
+		// that the planets are lit by subsequent render calls
 		renderer.enableLighting();
-		renderer.setLight(light);
+		renderer.setLightSource(sun);
 		
 		for (Entity planet : planets) {
 			renderer.render(planet, camera);

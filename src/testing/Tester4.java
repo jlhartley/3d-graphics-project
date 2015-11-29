@@ -298,7 +298,7 @@ public class Tester4 extends Prototyper {
 	protected void render(Renderer renderer) {
 		
 		renderer.enableLighting();
-		renderer.setLight(light);
+		renderer.setLightSource(light);
 		
 		if (collided) {
 			renderer.setClearColour(COLLISION_COLOUR);

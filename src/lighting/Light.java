@@ -2,7 +2,7 @@ package lighting;
 
 import math.geometry.Vector3f;
 
-public class Light {
+public class Light implements LightSource {
 	
 	private Vector3f position;
 	
@@ -54,6 +54,23 @@ public class Light {
 	
 	public Vector3f getPosition() {
 		return position;
+	}
+
+	@Override
+	public Vector3f getLightPosition() {
+		return getPosition();
+	}
+
+	@Override
+	public Vector3f getLightColour() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getLightIntensity() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

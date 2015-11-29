@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import camera.Camera;
 import entities.Entity;
-import lighting.Light;
+import lighting.LightSource;
 import math.geometry.Matrix4f;
 import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
@@ -102,8 +102,8 @@ public class Renderer {
 		shaderProgram.setUniformValue("lighting_enabled", false);
 	}
 	
-	public void setLight(Light light) {
-		Vector3f lightPosition = light.getPosition();
+	public void setLightSource(LightSource lightSource) {
+		Vector3f lightPosition = lightSource.getLightPosition();
 		shaderProgram.setUniformValue("light_position", lightPosition);
 	}
 	
