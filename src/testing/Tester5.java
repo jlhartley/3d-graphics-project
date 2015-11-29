@@ -199,9 +199,12 @@ public class Tester5 extends Prototyper {
 			return;
 		}
 		
+		
+		// Euler integration
+		
 		for (Planet planet1 : planets) {
 			
-			Vector3f resultantAcceleration = new Vector3f();
+			Vector3f resultantForce = new Vector3f();
 			
 			for (Planet planet2 : planets) {
 				
@@ -210,23 +213,28 @@ public class Tester5 extends Prototyper {
 					continue;
 				}
 				
-				// Adding vectors gives a resultant vector
-				resultantAcceleration.add(planet1.accelerationVectorTo(planet2));
+				// Add force vectors for each planet to get a resultant force
+				resultantForce.add(planet1.forceTo(planet2));
 			}
 			
-			// Add acceleration vector for the sun
-			resultantAcceleration.add(planet1.accelerationVectorTo(sun));
+			// Add force vector for the sun to get a resultant force
+			resultantForce.add(planet1.forceTo(sun));
+			
+			// Divide force vector by mass to give acceleration vector
+			float mass = planet1.getMass();
+			Vector3f resultantAcceleration = new Vector3f(resultantForce).scale(1 / mass);
 			
 			planet1.updateVelocity(resultantAcceleration, deltaTime);
 			
 		}
 		
-		// Wait until all planet velocity values
-		// have been updated before updating the position
+		// Wait until all planet velocity values have been updated,
+		// before updating the position of each planet
 		
-		// For basic Euler integration
 		for (Planet planet : planets) {
+			// Update position
 			planet.updatePosition(deltaTime);
+			// Rotate planet with time
 			planet.setRotY(getTime() * 100);
 		}
 		
