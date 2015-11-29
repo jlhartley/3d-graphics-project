@@ -4,7 +4,7 @@ public class Vector4f {
 	
 	public float x, y, z, w;
 	
-	// Empty constructor for default (0, 0, 0)
+	// Empty constructor for default zero vector (0, 0, 0, 0)
 	public Vector4f() {
 
 	}

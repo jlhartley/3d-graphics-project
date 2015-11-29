@@ -18,7 +18,7 @@ public class Vector2f {
 	
 	public float x, y;
 	
-	// Empty constructor for default (0, 0, 0)
+	// Empty constructor for default zero vector (0, 0)
 	public Vector2f() {
 		
 	}

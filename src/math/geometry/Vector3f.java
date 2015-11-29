@@ -40,7 +40,7 @@ public class Vector3f {
 	
 	public float x, y, z;
 
-	// Empty constructor for default (0, 0, 0)
+	// Empty constructor for default zero vector (0, 0, 0)
 	public Vector3f() {
 		
 	}
