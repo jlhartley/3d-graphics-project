@@ -4,12 +4,15 @@ import render.Renderer;
 import render.ProjectionType;
 import util.ModelUtils;
 import window.Window;
+import window.InputCallbacks;
+import window.WindowCallbacks;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 import logging.Logger;
 import math.geometry.Vector2f;
 
-public abstract class Prototyper implements Window.InputCallbacks, Window.WindowCallbacks {
+public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9

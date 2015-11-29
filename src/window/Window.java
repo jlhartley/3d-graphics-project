@@ -19,20 +19,6 @@ import math.geometry.Vector2f;
 
 public class Window {
 	
-	public interface InputCallbacks {
-		public void onKeyPressed(int keyCode);
-		public void onKeyReleased(int keyCode);
-		public void onMouseDown(MouseButton mouseButton);
-		public void onMouseUp(MouseButton mouseButton);
-		//public void onMousePositionChanged(Vector2f mousePosition);
-	}
-	
-	public interface WindowCallbacks {
-		public void onFramebufferResized(int width, int height);
-	}
-	
-	
-	
 	// The pointer that this class wraps
 	private long window;
 	
