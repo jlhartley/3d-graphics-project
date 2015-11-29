@@ -120,9 +120,12 @@ public class Vector3f {
 		return this;
 	}
 	
-	public Vector3f setMagnitude(float mag) {
-		normalise();
-		scale(mag);
+	public Vector3f setMagnitude(float newMag) {
+		float oldMag = magnitude();
+		scale(newMag / oldMag);
+		// Alternative
+		//normalise();
+		//scale(newMag);
 		return this;
 	}
 
