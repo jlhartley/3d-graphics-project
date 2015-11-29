@@ -26,9 +26,9 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 	
 	
 	protected Window window;
-	private Renderer renderer;
+	protected Renderer renderer;
 	
-	private Logger logger;
+	protected Logger logger;
 	
 	// Default projection matrix is perspective
 	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
@@ -56,7 +56,10 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 		// resources have finished loading
 		window.show();
 		
-		loop(); // The main game loop
+		// The main loop
+		loop();
+		
+		// Final clean up of used resources
 		cleanUp();
 	}
 	

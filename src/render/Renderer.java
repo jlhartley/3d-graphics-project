@@ -43,7 +43,7 @@ public class Renderer {
 	}
 	
 	public void setClearColour(Vector3f colour) {
-		glClearColor(colour.x, colour.y, colour.z, 1);
+		setClearColour(colour.x, colour.y, colour.z);
 	}
 	
 	public void setClearColour(float r, float g, float b) {
@@ -63,11 +63,14 @@ public class Renderer {
 	}
 	
 	public void updateProjection(int width, int height, ProjectionType projectionType) {
-		Matrix4f projectionMatrix;
-		if (projectionType == ProjectionType.ORTHOGRAPHIC) {
+		Matrix4f projectionMatrix = null;
+		switch (projectionType) {
+		case ORTHOGRAPHIC:
 			projectionMatrix = MatrixUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
-		} else {
+			break;
+		case PERSPECTIVE:
 			projectionMatrix = MatrixUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+			break;
 		}
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
