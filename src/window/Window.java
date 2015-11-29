@@ -134,7 +134,8 @@ public class Window {
 	
 	private void initGL() {
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(1);
+        // Disable vsync
+        glfwSwapInterval(0);
 		GL.createCapabilities();
 		// Setup debugging output for OpenGL
 		debugMessageCallback = GLUtil.setupDebugMessageCallback();
