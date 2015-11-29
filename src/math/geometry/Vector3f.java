@@ -63,6 +63,11 @@ public class Vector3f {
 		return this;
 	}
 	
+	// Set every component to the same value
+	public Vector3f set(float f) {
+		return set(f, f, f);
+	}
+	
 	
 	// Translate by a vector by adding the components
 	public Vector3f translate(Vector3f vec) {
@@ -99,6 +104,11 @@ public class Vector3f {
 		y = -y;
 		z = -z;
 		return this;
+	}
+	
+	// Set every component to 0
+	public Vector3f zero() {
+		return set(0);
 	}
 	
 	// For efficiency - sometimes this is required
