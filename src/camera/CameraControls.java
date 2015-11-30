@@ -9,7 +9,7 @@ import window.Window;
 public class CameraControls {
 	
 	// Positional movement
-	private static final float MOVEMENT_SPEED = 25;
+	private static final float MOVEMENT_SPEED = 35;
 	
 	// Rotational movement
 	private static final float ROTATION_SPEED = 30;
@@ -29,6 +29,8 @@ public class CameraControls {
 	private Camera camera;
 	private Window window;
 	
+	private Vector3f cameraTrajectory = new Vector3f();
+	
 	public CameraControls(Camera camera, Window window) {
 		this.camera = camera;
 		this.window = window;
@@ -45,6 +47,7 @@ public class CameraControls {
 			rotationSpeed *= FAST_SPEED_MULTIPLIER;
 		}
 		
+		/*
 		// Positional controls
 		// Forward and back
 		if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -66,6 +69,7 @@ public class CameraControls {
 		} else if (window.isKeyPressed(GLFW_KEY_PAGE_DOWN)){
 			camera.moveDown(movementSpeed, deltaTime);
 		}
+		*/
 		
 		
 		// Rotational controls
@@ -84,6 +88,30 @@ public class CameraControls {
 		}
 		
 		rotateCamera();
+		
+		Vector3f cameraRotation = camera.getRotation();
+		
+		// Rotation is from z
+		
+		cameraTrajectory.x = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
+		
+		cameraTrajectory.y = -(float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.x * 2)));
+		
+		cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
+		
+		if (window.isKeyPressed(GLFW_KEY_W)) {
+			
+			camera.moveRight(cameraTrajectory.x, deltaTime);
+			camera.moveUp(cameraTrajectory.y, deltaTime);
+			camera.moveForward(cameraTrajectory.z, deltaTime);
+			
+		} else if (window.isKeyPressed(GLFW_KEY_S)) {
+			
+			camera.moveLeft(cameraTrajectory.x, deltaTime);
+			camera.moveDown(cameraTrajectory.y, deltaTime);
+			camera.moveBack(cameraTrajectory.z, deltaTime);
+			
+		}
 		
 	}
 	
@@ -123,15 +151,6 @@ public class CameraControls {
 		mouseDown = false;
 		window.enableCursor();
 	}
-	
-	public void setMouseDownPosition(Vector2f mouseDownPosition) {
-		this.mouseDownPosition = mouseDownPosition;
-	}
-
-	public void setMouseDownCameraRotation(Vector3f mouseDownCameraRotation) {
-		this.mouseDownCameraRotation = mouseDownCameraRotation;
-	}
-	
 	
 
 }
