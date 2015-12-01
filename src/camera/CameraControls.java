@@ -9,14 +9,17 @@ import window.Window;
 public class CameraControls {
 	
 	// Positional movement
-	private static final float MOVEMENT_SPEED = 35;
+	private static final float MOVEMENT_SPEED = 45;
 	
 	// Rotational movement
 	private static final float ROTATION_SPEED = 30;
 	
 	// Scale speed for faster movement
-	private static final float FAST_SPEED_MULTIPLIER = 3;
+	private static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4;
+	private static final float FAST_ROTATION_SPEED_MULTIPLIER = 1.5f;
 	
+	// Degrees per virtual screen coordinate
+	// Scales mouse movement to camera rotation
 	private static final float MOUSE_MOVEMENT_SCALE = 0.05f;
 	
 	// Holds the mouse position at the instant the mouse is pressed down
@@ -29,7 +32,14 @@ public class CameraControls {
 	private Camera camera;
 	private Window window;
 	
-	private Vector3f cameraTrajectory = new Vector3f();
+	private Vector3f cameraVelocity = new Vector3f();
+	
+	// Relative controls by default
+	private ControlType controlType = ControlType.RELATIVE;
+	
+	public void setControlType(ControlType controlType) {
+		this.controlType = controlType;
+	}
 	
 	public enum ControlType {
 		ABSOLUTE,
@@ -42,17 +52,30 @@ public class CameraControls {
 	}
 	
 	
+	
+	
 	public void moveCamera(float deltaTime) {
 		
 		float movementSpeed = MOVEMENT_SPEED;
 		float rotationSpeed = ROTATION_SPEED;
 		
 		if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			movementSpeed *= FAST_SPEED_MULTIPLIER;
-			rotationSpeed *= FAST_SPEED_MULTIPLIER;
+			movementSpeed *= FAST_MOVEMENT_SPEED_MULTIPLIER;
+			rotationSpeed *= FAST_ROTATION_SPEED_MULTIPLIER;
 		}
 		
-		/*
+		rotateCamera(rotationSpeed, deltaTime);
+		
+		if (controlType == ControlType.ABSOLUTE) {
+			moveCameraAbsolute(movementSpeed, deltaTime);
+		} else {
+			moveCameraRelative(movementSpeed, deltaTime);
+		}
+		
+	}
+	
+	private void moveCameraAbsolute(float movementSpeed, float deltaTime) {
+		
 		// Positional controls
 		// Forward and back
 		if (window.isKeyPressed(GLFW_KEY_W)) {
@@ -74,10 +97,53 @@ public class CameraControls {
 		} else if (window.isKeyPressed(GLFW_KEY_PAGE_DOWN)){
 			camera.moveDown(movementSpeed, deltaTime);
 		}
-		*/
+		
+	}
+	
+	private void moveCameraRelative(float movementSpeed, float deltaTime) {
+		
+		Vector3f cameraPosition = camera.getPosition();
+		Vector3f cameraRotation = camera.getRotation();
+		
+		//float pitch = cameraRotation.x;
+		//float yaw = cameraRotation.y;
 		
 		
-		// Rotational controls
+		// Project the movement speed onto the x-z plane
+		float projectedMovementSpeed = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.x)));
+		
+		// Movement in x and z can now be considered as an orthographic projection
+		// Angle is z, therefore x is sin and z is cosine (against the convention)
+		cameraVelocity.x = (float) (projectedMovementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
+		// z is negated since z decreases into the screen (with depth, when considering perspective)
+		cameraVelocity.z = -(float) (projectedMovementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
+		
+		// Rotation around x increases as the camera is pointed down. Since we want to move down in y
+		// more as the camera is pointed further down, the rotation needs to be negated.
+		// Also note: sin(-theta)=-sin(theta)
+		cameraVelocity.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
+		
+		
+		
+		if (window.isKeyPressed(GLFW_KEY_W)) {
+			
+			cameraPosition.x += cameraVelocity.x * deltaTime;
+			cameraPosition.y += cameraVelocity.y * deltaTime;
+			cameraPosition.z += cameraVelocity.z * deltaTime;
+			
+		} else if (window.isKeyPressed(GLFW_KEY_S)) {
+			
+			cameraPosition.x -= cameraVelocity.x * deltaTime;
+			cameraPosition.y -= cameraVelocity.y * deltaTime;
+			cameraPosition.z -= cameraVelocity.z * deltaTime;
+			
+		}
+		
+	}
+	
+	private void rotateCamera(float rotationSpeed, float deltaTime) {
+		
+		// Keyboard controls
 		// Pitch
 		if (window.isKeyPressed(GLFW_KEY_DOWN)) {
 			camera.increasePitch(rotationSpeed, deltaTime);
@@ -92,68 +158,8 @@ public class CameraControls {
 			camera.decreaseYaw(rotationSpeed, deltaTime);
 		}
 		
-		rotateCamera();
 		
-		Vector3f cameraRotation = camera.getRotation();
-		
-		//float pitch = cameraRotation.x;
-		
-		//float yaw = cameraRotation.y;
-		
-		
-		
-		
-		float projectedMovementSpeed = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.x)));
-		
-		cameraTrajectory.x = (float) (projectedMovementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
-		
-		cameraTrajectory.z = (float) (projectedMovementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
-		
-		
-		cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
-		
-		
-		// Rotation is from z
-		
-		//cameraTrajectory.x = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
-		
-		
-		// sin(-theta)=-sin(theta)
-		
-		// Pitch increases the more you point down
-		
-		//cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x * 2)));
-		
-		//cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
-		
-		
-		//cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
-		
-		//cameraTrajectory.z = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.x)));
-		
-		//cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)) + Math.sin(Math.toRadians(cameraRotation.x)) );
-		
-		
-		
-		if (window.isKeyPressed(GLFW_KEY_W)) {
-			
-			camera.moveRight(cameraTrajectory.x, deltaTime);
-			camera.moveUp(cameraTrajectory.y, deltaTime);
-			camera.moveForward(cameraTrajectory.z, deltaTime);
-			
-		} else if (window.isKeyPressed(GLFW_KEY_S)) {
-			
-			camera.moveLeft(cameraTrajectory.x, deltaTime);
-			camera.moveDown(cameraTrajectory.y, deltaTime);
-			camera.moveBack(cameraTrajectory.z, deltaTime);
-			
-		}
-		
-	}
-	
-	private void rotateCamera() {
-		
-		// Mouse control
+		// Mouse controls
 		if (mouseDown) {
 			
 			Vector2f mousePosition = window.getMousePosition();

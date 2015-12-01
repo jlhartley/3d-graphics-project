@@ -49,6 +49,10 @@ public class Tester5 extends Prototyper {
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
+		} else if (keyCode == GLFW_KEY_N) {
+			cameraControls.setControlType(CameraControls.ControlType.ABSOLUTE);
+		} else if (keyCode == GLFW_KEY_M) {
+			cameraControls.setControlType(CameraControls.ControlType.RELATIVE);
 		}
 	}
 	
