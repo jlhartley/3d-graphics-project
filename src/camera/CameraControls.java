@@ -31,6 +31,11 @@ public class CameraControls {
 	
 	private Vector3f cameraTrajectory = new Vector3f();
 	
+	public enum ControlType {
+		ABSOLUTE,
+		RELATIVE
+	}
+	
 	public CameraControls(Camera camera, Window window) {
 		this.camera = camera;
 		this.window = window;
@@ -91,13 +96,44 @@ public class CameraControls {
 		
 		Vector3f cameraRotation = camera.getRotation();
 		
+		//float pitch = cameraRotation.x;
+		
+		//float yaw = cameraRotation.y;
+		
+		
+		
+		
+		float projectedMovementSpeed = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.x)));
+		
+		cameraTrajectory.x = (float) (projectedMovementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
+		
+		cameraTrajectory.z = (float) (projectedMovementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
+		
+		
+		cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
+		
+		
 		// Rotation is from z
 		
-		cameraTrajectory.x = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
+		//cameraTrajectory.x = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
 		
-		cameraTrajectory.y = -(float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.x * 2)));
 		
-		cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
+		// sin(-theta)=-sin(theta)
+		
+		// Pitch increases the more you point down
+		
+		//cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x * 2)));
+		
+		//cameraTrajectory.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
+		
+		
+		//cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
+		
+		//cameraTrajectory.z = (float) (movementSpeed * Math.sin(Math.toRadians(cameraRotation.x)));
+		
+		//cameraTrajectory.z = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.y)) + Math.sin(Math.toRadians(cameraRotation.x)) );
+		
+		
 		
 		if (window.isKeyPressed(GLFW_KEY_W)) {
 			
