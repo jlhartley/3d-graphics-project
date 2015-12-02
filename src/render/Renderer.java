@@ -105,6 +105,8 @@ public class Renderer {
 	public void setLightSource(LightSource lightSource) {
 		Vector3f lightPosition = lightSource.getLightPosition();
 		shaderProgram.setUniformValue("light_position", lightPosition);
+		Vector3f lightColour = lightSource.getLightColour();
+		shaderProgram.setUniformValue("light_colour", lightColour);
 	}
 	
 	private void setMatrices(Entity entity, Camera camera) {

@@ -5,6 +5,9 @@ import math.geometry.Vector3f;
 import model.Model;
 
 public class Star extends CelestialEntity implements LightSource {
+	
+	// Consider having light as a field here
+	Vector3f lightColour = new Vector3f(1, 1, 0.702f);
 
 	public Star(Model model, Vector3f position) {
 		super(model, position);
@@ -24,14 +27,12 @@ public class Star extends CelestialEntity implements LightSource {
 
 	@Override
 	public Vector3f getLightColour() {
-		// TODO Auto-generated method stub
-		return null;
+		return lightColour;
 	}
 
 	@Override
 	public float getLightIntensity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 	
 }

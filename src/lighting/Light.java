@@ -6,16 +6,23 @@ public class Light implements LightSource {
 	
 	private Vector3f position;
 	
-	//private Vector3f colour;
+	private Vector3f colour;
 	
 	//private float intensity;
 	
+	// Empty constructor puts light at the origin
 	public Light() {
 		this(new Vector3f());
 	}
 	
+	// Light is white if no colour is set
 	public Light(Vector3f position) {
+		this(position, new Vector3f(1, 1, 1));
+	}
+	
+	public Light(Vector3f position, Vector3f colour) {
 		this.position = position;
+		this.colour = colour;
 	}
 	
 	
@@ -60,17 +67,16 @@ public class Light implements LightSource {
 	public Vector3f getLightPosition() {
 		return getPosition();
 	}
-
+	
 	@Override
 	public Vector3f getLightColour() {
-		// TODO Auto-generated method stub
-		return null;
+		return colour;
 	}
-
+	
+	// TODO: Use intensity field
 	@Override
 	public float getLightIntensity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 	
 }

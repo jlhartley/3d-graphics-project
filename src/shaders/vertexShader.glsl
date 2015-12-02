@@ -59,10 +59,10 @@ void main()
 	
 	
 	// Just white
-    //pass_colour = vec3(1, 1, 1);
+    pass_colour = vec3(1, 1, 1);
     
     // World position direction colouring
-    pass_colour = normalize(abs(worldPosition.xyz));
+    //pass_colour = normalize(abs(worldPosition.xyz));
     
     // Colour using the world space normals
     //pass_colour = abs(unitWorldNormal);

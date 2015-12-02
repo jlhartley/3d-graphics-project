@@ -11,6 +11,7 @@ in vec3 unit_to_light;
 
 // Uniforms
 uniform bool lighting_enabled;
+uniform vec3 light_colour;
 
 
 // Output
@@ -71,5 +72,5 @@ void main()
 		
 	}
     
-    out_color = vec4(colour * brightness, 1.0);
+    out_color = vec4(colour * brightness * light_colour, 1.0);
 }
