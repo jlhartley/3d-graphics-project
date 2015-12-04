@@ -10,6 +10,7 @@ public class Entity {
 	// Model holding the vertex attributes
 	private Model model;
 	
+	
 	// Position in world space - x, y and z
 	private Vector3f position;
 	
@@ -25,6 +26,10 @@ public class Entity {
 	
 	
 	// Telescoping constructors
+	public Entity(Model model) {
+		this(model, new Vector3f());
+	}
+	
 	public Entity(Model model, Vector3f position) {
 		this(model, position, new Vector3f());
 	}
@@ -42,6 +47,26 @@ public class Entity {
 	
 	
 	// Movement methods
+	public void moveX(float speed, float deltaTime) {
+		position.x += speed * deltaTime;
+	}
+	
+	public void moveY(float speed, float deltaTime) {
+		position.y += speed * deltaTime;
+	}
+	
+	public void moveZ(float speed, float deltaTime) {
+		position.z += speed * deltaTime;
+	}
+	
+	// Integrate the position by simple accumulation
+	public void move(Vector3f velocity, float deltaTime) {
+		position.x += velocity.x * deltaTime;
+		position.y += velocity.y * deltaTime;
+		position.z += velocity.z * deltaTime;
+	}
+	
+	/*
 	public void moveUp(float speed, float deltaTime) {
 		position.y += speed * deltaTime;
 	}
@@ -65,23 +90,19 @@ public class Entity {
 	public void moveLeft(float speed, float deltaTime) {
 		position.x -= speed * deltaTime;
 	}
+	*/
 	
 	
 	// TODO: Rotational methods
 	
 	
 	// Translate position by a vector
-	public void translate(Vector3f vec) {
-		position.translate(vec);
-	}
-	
-	// Set position using the provided components
-	public void setPosition(float x, float y, float z) {
-		position.set(x, y, z);
+	public void translate(Vector3f vector) {
+		position.translate(vector);
 	}
 	
 	
-	// For rendering
+	// Model matrix for rendering
 	public Matrix4f getModelMatrix() {
 		modelMatrix.identity();
 		modelMatrix.translate(position);
@@ -102,11 +123,25 @@ public class Entity {
 	public void setPosition(Vector3f position) {
 		this.position = position;
 	}
-
+	
+	// Set position using the provided components
+	public void setPosition(float x, float y, float z) {
+		position.set(x, y, z);
+	}
+	
 	public Vector3f getRotation() {
 		return rotation;
 	}
-
+	
+	public void setRotation(Vector3f rotation) {
+		this.rotation = rotation;
+	}
+	
+	// Set rotation using the provided components
+	public void setRotation(float x, float y, float z) {
+		rotation.set(x, y, z);
+	}
+	
 	public float getScale() {
 		return scale;
 	}
@@ -114,7 +149,13 @@ public class Entity {
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
-
+	
+	
+	public Model getModel() {
+		return model;
+	}
+	
+	
 	// Convenience methods
 	public float getRotX() {
 		return rotation.x;
@@ -138,11 +179,6 @@ public class Entity {
 
 	public void setRotZ(float rotZ) {
 		rotation.z = rotZ;
-	}
-	
-	
-	public Model getModel() {
-		return model;
 	}
 	
 	

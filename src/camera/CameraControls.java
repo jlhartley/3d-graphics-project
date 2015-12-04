@@ -66,43 +66,58 @@ public class CameraControls {
 		
 		rotateCamera(rotationSpeed, deltaTime);
 		
+		
+		cameraVelocity.zero();
+		
 		if (controlType == ControlType.ABSOLUTE) {
 			moveCameraAbsolute(movementSpeed, deltaTime);
 		} else {
 			moveCameraRelative(movementSpeed, deltaTime);
 		}
 		
+		Vector3f cameraPosition = camera.getPosition();
+		
+		cameraPosition.x += cameraVelocity.x * deltaTime;
+		cameraPosition.y += cameraVelocity.y * deltaTime;
+		cameraPosition.z += cameraVelocity.z * deltaTime;
+		
+		
+		
 	}
 	
 	private void moveCameraAbsolute(float movementSpeed, float deltaTime) {
 		
 		// Positional controls
-		// Forward and back
-		if (window.isKeyPressed(GLFW_KEY_W)) {
-			camera.moveForward(movementSpeed, deltaTime);
-		} else if (window.isKeyPressed(GLFW_KEY_S)) {
-			camera.moveBack(movementSpeed, deltaTime);
-		}
-		
 		// Right and left
 		if (window.isKeyPressed(GLFW_KEY_D)) {
-			camera.moveRight(movementSpeed, deltaTime);
+			cameraVelocity.x = 1;
 		} else if (window.isKeyPressed(GLFW_KEY_A)) {
-			camera.moveLeft(movementSpeed, deltaTime);
+			cameraVelocity.x = -1;
 		}
 		
 		// Up and down
 		if (window.isKeyPressed(GLFW_KEY_PAGE_UP)) {
-			camera.moveUp(movementSpeed, deltaTime);
+			cameraVelocity.y = 1;
 		} else if (window.isKeyPressed(GLFW_KEY_PAGE_DOWN)){
-			camera.moveDown(movementSpeed, deltaTime);
+			cameraVelocity.y = -1;
+		}
+		
+		// Forward and back
+		if (window.isKeyPressed(GLFW_KEY_W)) {
+			cameraVelocity.z = -1;
+		} else if (window.isKeyPressed(GLFW_KEY_S)) {
+			cameraVelocity.z = 1;
+		}
+		
+		
+		if (cameraVelocity.magnitude() != 0) {
+			cameraVelocity.setMagnitude(movementSpeed);
 		}
 		
 	}
 	
 	private void moveCameraRelative(float movementSpeed, float deltaTime) {
 		
-		Vector3f cameraPosition = camera.getPosition();
 		Vector3f cameraRotation = camera.getRotation();
 		
 		//float pitch = cameraRotation.x;
@@ -127,15 +142,17 @@ public class CameraControls {
 		
 		if (window.isKeyPressed(GLFW_KEY_W)) {
 			
-			cameraPosition.x += cameraVelocity.x * deltaTime;
-			cameraPosition.y += cameraVelocity.y * deltaTime;
-			cameraPosition.z += cameraVelocity.z * deltaTime;
+			
 			
 		} else if (window.isKeyPressed(GLFW_KEY_S)) {
 			
-			cameraPosition.x -= cameraVelocity.x * deltaTime;
-			cameraPosition.y -= cameraVelocity.y * deltaTime;
-			cameraPosition.z -= cameraVelocity.z * deltaTime;
+			cameraVelocity.x = -cameraVelocity.x;
+			cameraVelocity.y = -cameraVelocity.y;
+			cameraVelocity.z = -cameraVelocity.z;
+			
+		} else {
+			
+			cameraVelocity.zero();
 			
 		}
 		

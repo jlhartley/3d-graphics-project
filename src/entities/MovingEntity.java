@@ -3,24 +3,22 @@ package entities;
 import math.geometry.Vector3f;
 import model.Model;
 
-public class MovableEntity extends Entity {
+public class MovingEntity extends Entity {
 	
 	private Vector3f velocity;
 	
 	// Telescoping constructors
-	public MovableEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity) {
+	public MovingEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity) {
 		this(model, position, rotation, velocity, 1);
 	}
 
-	public MovableEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity, float scale) {
+	public MovingEntity(Model model, Vector3f position, Vector3f rotation, Vector3f velocity, float scale) {
 		super(model, position, rotation, scale);
 		this.velocity = velocity;
 	}
 	
-	public void tick(float deltaTime) {
-		super.moveRight(velocity.x, deltaTime);
-		super.moveUp(velocity.y, deltaTime);
-		super.moveForward(velocity.z, deltaTime);
+	public void move(float deltaTime) {
+		super.move(velocity, deltaTime);
 	}
 
 	public Vector3f getVelocity() {
@@ -29,6 +27,10 @@ public class MovableEntity extends Entity {
 
 	public void setVelocity(Vector3f velocity) {
 		this.velocity = velocity;
+	}
+	
+	public void setVelocity(float x, float y, float z) {
+		velocity.set(x, y, z);
 	}
 	
 

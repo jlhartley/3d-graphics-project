@@ -7,7 +7,7 @@ import java.util.List;
 
 import camera.Camera;
 import entities.Entity;
-import entities.MovableEntity;
+import entities.MovingEntity;
 import lighting.Light;
 import math.geometry.Vector3f;
 import model.Model;
@@ -117,7 +117,7 @@ public class Tester4 extends Prototyper {
 	Light light = new Light();
 	
 	List<Entity> entities = new LinkedList<>();
-	List<MovableEntity> movingEntities = new LinkedList<>();
+	List<MovingEntity> movingEntities = new LinkedList<>();
 	
 	Entity startSquare = new Entity(Models.getSquareModel(), new Vector3f(0, 0, -MIN_DISTANCE));
 	
@@ -135,7 +135,7 @@ public class Tester4 extends Prototyper {
 			Vector3f randomRotation = getRandomRotation();
 			//Vector3f randomColour = getRandomColour();
 			Vector3f randomVelocity = getRandomVelocity();
-			movingEntities.add(new MovableEntity(model, randomPosition, randomRotation, randomVelocity));
+			movingEntities.add(new MovingEntity(model, randomPosition, randomRotation, randomVelocity));
 		}
 		
 		entities.addAll(movingEntities);
@@ -265,8 +265,8 @@ public class Tester4 extends Prototyper {
 		}
 		
 		// Moving entities bounce off of their container
-		for (MovableEntity movEntity : movingEntities) {
-			movEntity.tick(deltaTime);
+		for (MovingEntity movEntity : movingEntities) {
+			movEntity.move(deltaTime);
 			Vector3f position = movEntity.getPosition();
 			Vector3f velocity = movEntity.getVelocity();
 			if (Math.abs(position.x) > XY_LIMIT) {
