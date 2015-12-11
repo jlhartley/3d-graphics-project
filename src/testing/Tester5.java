@@ -5,8 +5,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import camera.AbsoluteControls;
 import camera.Camera;
 import camera.CameraControls;
+import camera.RelativeControls;
 import entities.Entity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
@@ -49,10 +51,10 @@ public class Tester5 extends Prototyper {
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
-		} else if (keyCode == GLFW_KEY_N) {
-			cameraControls.setControlType(CameraControls.ControlType.ABSOLUTE);
-		} else if (keyCode == GLFW_KEY_M) {
-			cameraControls.setControlType(CameraControls.ControlType.RELATIVE);
+		} else if (keyCode == GLFW_KEY_1) {
+			cameraControls = new AbsoluteControls(camera, window);
+		} else if (keyCode == GLFW_KEY_2) {
+			cameraControls = new RelativeControls(camera, window);
 		}
 	}
 	
@@ -120,7 +122,7 @@ public class Tester5 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	CameraControls cameraControls = new CameraControls(camera, window);
+	CameraControls cameraControls = new RelativeControls(camera, window);
 	
 	Model sphereModel = Models.getIcosphereModel();
 	
@@ -194,7 +196,7 @@ public class Tester5 extends Prototyper {
 		
 		deltaTime *= timeMultiplier;
 		
-		cameraControls.moveCamera(deltaTime);
+		cameraControls.move(deltaTime);
 		
 		if (paused) {
 			return;

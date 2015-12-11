@@ -6,21 +6,34 @@ import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import window.Window;
 
-public class CameraControls {
+public abstract class CameraControls {
 	
 	// Positional movement
-	private static final float MOVEMENT_SPEED = 45;
+	public static final float MOVEMENT_SPEED = 45;
 	
 	// Rotational movement
-	private static final float ROTATION_SPEED = 30;
+	public static final float ROTATION_SPEED = 30;
 	
 	// Scale speed for faster movement
-	private static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4;
-	private static final float FAST_ROTATION_SPEED_MULTIPLIER = 1.5f;
+	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4;
+	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 1.5f;
 	
 	// Degrees per virtual screen coordinate
 	// Scales mouse movement to camera rotation
 	private static final float MOUSE_MOVEMENT_SCALE = 0.05f;
+	
+	// Key mappings
+	public static final int SPEED_MODIFIER_KEY = GLFW_KEY_LEFT_CONTROL;
+	
+	public static final int RIGHT_KEY = GLFW_KEY_D;
+	public static final int LEFT_KEY = GLFW_KEY_A;
+	
+	public static final int UP_KEY = GLFW_KEY_PAGE_UP;
+	public static final int DOWN_KEY = GLFW_KEY_PAGE_DOWN;
+	
+	public static final int FORWARD_KEY = GLFW_KEY_W;
+	public static final int BACK_KEY = GLFW_KEY_S;
+	
 	
 	// Holds the mouse position at the instant the mouse is pressed down
 	private Vector2f mouseDownPosition = new Vector2f();
@@ -29,134 +42,33 @@ public class CameraControls {
 	// Tracks if the mouse button relevant to camera movement is held down or not
 	boolean mouseDown = false;
 	
-	private Camera camera;
-	private Window window;
 	
-	private Vector3f cameraVelocity = new Vector3f();
+	// TODO: Sort the accessibility issue
+	protected Camera camera;
+	protected Window window;
 	
-	// Relative controls by default
-	private ControlType controlType = ControlType.RELATIVE;
-	
-	public void setControlType(ControlType controlType) {
-		this.controlType = controlType;
-	}
-	
-	public enum ControlType {
-		ABSOLUTE,
-		RELATIVE
-	}
+	//private Vector3f cameraVelocity = new Vector3f();
 	
 	public CameraControls(Camera camera, Window window) {
 		this.camera = camera;
 		this.window = window;
 	}
 	
-	
-	
-	
-	public void moveCamera(float deltaTime) {
+	public void move(float deltaTime) {
 		
 		float movementSpeed = MOVEMENT_SPEED;
 		float rotationSpeed = ROTATION_SPEED;
 		
-		if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
+		if (window.isKeyPressed(SPEED_MODIFIER_KEY)) {
 			movementSpeed *= FAST_MOVEMENT_SPEED_MULTIPLIER;
 			rotationSpeed *= FAST_ROTATION_SPEED_MULTIPLIER;
 		}
 		
+		moveCamera(movementSpeed, deltaTime);
 		rotateCamera(rotationSpeed, deltaTime);
-		
-		
-		cameraVelocity.zero();
-		
-		if (controlType == ControlType.ABSOLUTE) {
-			moveCameraAbsolute(movementSpeed, deltaTime);
-		} else {
-			moveCameraRelative(movementSpeed, deltaTime);
-		}
-		
-		Vector3f cameraPosition = camera.getPosition();
-		
-		cameraPosition.x += cameraVelocity.x * deltaTime;
-		cameraPosition.y += cameraVelocity.y * deltaTime;
-		cameraPosition.z += cameraVelocity.z * deltaTime;
-		
-		
-		
 	}
 	
-	private void moveCameraAbsolute(float movementSpeed, float deltaTime) {
-		
-		// Positional controls
-		// Right and left
-		if (window.isKeyPressed(GLFW_KEY_D)) {
-			cameraVelocity.x = 1;
-		} else if (window.isKeyPressed(GLFW_KEY_A)) {
-			cameraVelocity.x = -1;
-		}
-		
-		// Up and down
-		if (window.isKeyPressed(GLFW_KEY_PAGE_UP)) {
-			cameraVelocity.y = 1;
-		} else if (window.isKeyPressed(GLFW_KEY_PAGE_DOWN)){
-			cameraVelocity.y = -1;
-		}
-		
-		// Forward and back
-		if (window.isKeyPressed(GLFW_KEY_W)) {
-			cameraVelocity.z = -1;
-		} else if (window.isKeyPressed(GLFW_KEY_S)) {
-			cameraVelocity.z = 1;
-		}
-		
-		
-		if (cameraVelocity.magnitude() != 0) {
-			cameraVelocity.setMagnitude(movementSpeed);
-		}
-		
-	}
-	
-	private void moveCameraRelative(float movementSpeed, float deltaTime) {
-		
-		Vector3f cameraRotation = camera.getRotation();
-		
-		//float pitch = cameraRotation.x;
-		//float yaw = cameraRotation.y;
-		
-		
-		// Project the movement speed onto the x-z plane
-		float projectedMovementSpeed = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.x)));
-		
-		// Movement in x and z can now be considered as an orthographic projection
-		// Angle is z, therefore x is sin and z is cosine (against the convention)
-		cameraVelocity.x = (float) (projectedMovementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
-		// z is negated since z decreases into the screen (with depth, when considering perspective)
-		cameraVelocity.z = -(float) (projectedMovementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
-		
-		// Rotation around x increases as the camera is pointed down. Since we want to move down in y
-		// more as the camera is pointed further down, the rotation needs to be negated.
-		// Also note: sin(-theta)=-sin(theta)
-		cameraVelocity.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
-		
-		
-		
-		if (window.isKeyPressed(GLFW_KEY_W)) {
-			
-			
-			
-		} else if (window.isKeyPressed(GLFW_KEY_S)) {
-			
-			cameraVelocity.x = -cameraVelocity.x;
-			cameraVelocity.y = -cameraVelocity.y;
-			cameraVelocity.z = -cameraVelocity.z;
-			
-		} else {
-			
-			cameraVelocity.zero();
-			
-		}
-		
-	}
+	public abstract void moveCamera(float movementSpeed, float deltaTime);
 	
 	private void rotateCamera(float rotationSpeed, float deltaTime) {
 		
