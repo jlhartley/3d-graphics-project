@@ -8,6 +8,10 @@ public class Star extends CelestialEntity implements LightSource {
 	
 	// Consider having light as a field here
 	Vector3f lightColour = new Vector3f(1, 1, 0.702f);
+	
+	public Star(Model model) {
+		super(model);
+	}
 
 	public Star(Model model, Vector3f position) {
 		super(model, position);

@@ -11,14 +11,18 @@ public class CelestialEntity extends Entity {
 	
 	private Vector3f velocity;
 	
+	// Initialise at origin, with velocity = (0, 0, 0)
+	public CelestialEntity(Model model) {
+		this(model, new Vector3f());
+	}
 	
-	// Initialise with a velocity of (0, 0, 0)
+	// Initialise at given position, with a velocity of (0, 0, 0)
 	public CelestialEntity(Model model, Vector3f position) {
 		this(model, position, new Vector3f());
 	}
 	
-	// Call through to Entity constructor for model and position, and then set
-	// velocity field
+	// Call through to Entity constructor for model and position, 
+	// and then set velocity field
 	public CelestialEntity(Model model, Vector3f position, Vector3f velocity) {
 		super(model, position);
 		this.velocity = velocity;
