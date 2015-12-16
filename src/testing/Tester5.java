@@ -107,19 +107,19 @@ public class Tester5 extends Prototyper {
 	
 	// Entities
 	private static final double MIN_ORBITAL_RADIUS = 100;
-	private static final double MAX_ORBITAL_RADIUS = 500;
+	private static final double MAX_ORBITAL_RADIUS = 200;
 	
 	private static final double MAX_PLANET_Y = 10;
 	private static final double MIN_PLANET_Y = -10;
 	
-	private static final double MIN_PLANET_MASS = 0.5;
+	private static final double MIN_PLANET_MASS = 0.1;
 	private static final double MAX_PLANET_MASS = 15;
 	
 	private static final double PLANET_DENSITY = 5;
 	
 	private static final double STAR_DENSITY = 1;
 	
-	private static final int PLANET_COUNT = 300;
+	private static final int PLANET_COUNT = 250;
 	
 	// Time
 	private static final int MAX_TIME_MULTIPLIER = 5;
@@ -257,6 +257,33 @@ public class Tester5 extends Prototyper {
 		
 		deltaTime *= timeMultiplier;
 		
+		// Euler integration
+		
+		for (int i = 0; i < planets.size(); i++) {
+			Planet planet1 = planets.get(i);
+			Vector3f acceleration1 = planet1.getAcceleration();
+			
+			for (int j = i + 1; j < planets.size(); j++) {
+				Planet planet2 = planets.get(j);
+				Vector3f acceleration2 = planet2.getAcceleration();
+				
+				Vector3f force = planet1.forceTo(planet2);
+				acceleration1.add(force);
+				acceleration2.add(force.negate());
+			}
+			// Add the vector for the sun
+			acceleration1.add(planet1.forceTo(sun));
+			
+			// Divide force vector by mass to give acceleration vector
+			float mass = planet1.getMass();
+			acceleration1.scale(1 / mass);
+			planet1.updateVelocity(acceleration1, deltaTime);
+			
+			// Clear ready for next computation
+			acceleration1.zero();
+		}
+		
+		/*
 		
 		// Euler integration
 		
@@ -285,6 +312,8 @@ public class Tester5 extends Prototyper {
 			planet1.updateVelocity(resultantAcceleration, deltaTime);
 			
 		}
+		
+		*/
 		
 		// Wait until all planet velocity values have been updated,
 		// before updating the position of each planet

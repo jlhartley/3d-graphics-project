@@ -11,6 +11,8 @@ public class CelestialEntity extends Entity {
 	
 	private Vector3f velocity;
 	
+	private Vector3f acceleration;
+	
 	// Initialise at origin, with velocity = (0, 0, 0)
 	public CelestialEntity(Model model) {
 		this(model, new Vector3f());
@@ -24,10 +26,14 @@ public class CelestialEntity extends Entity {
 	// Call through to Entity constructor for model and position, 
 	// and then set velocity field
 	public CelestialEntity(Model model, Vector3f position, Vector3f velocity) {
-		super(model, position);
-		this.velocity = velocity;
+		this(model, position, velocity, new Vector3f());
 	}
 	
+	public CelestialEntity(Model model, Vector3f position, Vector3f velocity, Vector3f acceleration) {
+		super(model, position);
+		this.velocity = velocity;
+		this.acceleration = acceleration;
+	}
 	
 	
 	// Euler integration
@@ -79,14 +85,27 @@ public class CelestialEntity extends Entity {
 	private float distanceSquaredTo(CelestialEntity celestialEntity) {
 		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = celestialEntity.getPosition();
-		Vector3f vecToPlanet = Vector3f.sub(pos2, pos1);;
-		return vecToPlanet.magnitudeSquared();
+		Vector3f r = Vector3f.sub(pos2, pos1);;
+		return r.magnitudeSquared();
 	}
 	
 	public float distanceTo(CelestialEntity celestialEntity) {
 		return (float) Math.sqrt(distanceSquaredTo(celestialEntity));
 	}
 	
+	
+	public Vector3f getAcceleration() {
+		return acceleration;
+	}
+
+	public void setAcceleration(Vector3f acceleration) {
+		this.acceleration = acceleration;
+	}
+	
+	// Set velocity with provided components
+	public void setAcceleration(float x, float y, float z) {
+		acceleration.set(x, y, z);
+	}
 	
 	public Vector3f getVelocity() {
 		return velocity;
