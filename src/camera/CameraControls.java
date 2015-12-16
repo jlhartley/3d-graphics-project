@@ -9,13 +9,13 @@ import window.Window;
 public abstract class CameraControls {
 	
 	// Positional movement
-	public static final float MOVEMENT_SPEED = 45;
+	public static final float MOVEMENT_SPEED = 60;
 	
 	// Rotational movement
-	public static final float ROTATION_SPEED = 30;
+	public static final float ROTATION_SPEED = 25;
 	
 	// Scale speed for faster movement
-	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4;
+	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4.2f;
 	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 1.5f;
 	
 	// Degrees per virtual screen coordinate

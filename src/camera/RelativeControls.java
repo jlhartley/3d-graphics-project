@@ -15,45 +15,58 @@ public class RelativeControls extends CameraControls {
 	@Override
 	public void moveCamera(float movementSpeed, float deltaTime) {
 		
-		Vector3f cameraVelocity = new Vector3f();
+		if (!(window.isKeyPressed(FORWARD_KEY) || window.isKeyPressed(BACK_KEY) || 
+				window.isKeyPressed(RIGHT_KEY) || window.isKeyPressed(LEFT_KEY) || 
+				window.isKeyPressed(UP_KEY) || window.isKeyPressed(DOWN_KEY))) {
+			
+			return;
+		}
+		
+		Vector3f velocity = new Vector3f();
 		
 		// Positional controls
 		// Right and left
 		if (window.isKeyPressed(RIGHT_KEY)) {
-			cameraVelocity.x = 1;
+			velocity.x = 1;
 		} else if (window.isKeyPressed(LEFT_KEY)) {
-			cameraVelocity.x = -1;
+			velocity.x = -1;
 		}
 		
 		
 		// Up and down
 		if (window.isKeyPressed(UP_KEY)) {
-			cameraVelocity.y = 1;
+			velocity.y = 1;
 		} else if (window.isKeyPressed(DOWN_KEY)){
-			cameraVelocity.y = -1;
+			velocity.y = -1;
 		}
 		
 		
 		// Forward and back
 		if (window.isKeyPressed(FORWARD_KEY)) {
-			cameraVelocity.z = -1;
+			velocity.z = -1;
 		} else if (window.isKeyPressed(BACK_KEY)) {
-			cameraVelocity.z = 1;
+			velocity.z = 1;
 		}
 		
-		Vector4f vec4 = new Vector4f(cameraVelocity, 0);
+		Vector4f velocity4 = new Vector4f(velocity, 0);
 		
 		Vector3f rotation = camera.getRotation();
 		
 		Matrix4f matrix = new Matrix4f();
 		matrix.rotate((float) -Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
 		matrix.rotate((float) -Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
+		// Roll is not required
 		//matrix.rotate((float) -Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
 		
-		vec4.multiply(matrix);
+		velocity4.multiply(matrix);
 		
-		cameraVelocity.set(vec4.x, vec4.y, vec4.z).setMagnitude(movementSpeed);
+		velocity.set(velocity4.x, velocity4.y, velocity4.z).setMagnitude(movementSpeed);
 		
+		Vector3f cameraPosition = camera.getPosition();
+
+		cameraPosition.x += velocity.x * deltaTime;
+		cameraPosition.y += velocity.y * deltaTime;
+		cameraPosition.z += velocity.z * deltaTime;
 		
 		
 		/*
@@ -94,20 +107,6 @@ public class RelativeControls extends CameraControls {
 			}
 			
 		}*/
-		
-		Vector3f cameraPosition = camera.getPosition();
-		
-		if (window.isKeyPressed(FORWARD_KEY) || window.isKeyPressed(BACK_KEY) || 
-				window.isKeyPressed(RIGHT_KEY) || window.isKeyPressed(LEFT_KEY) || 
-				window.isKeyPressed(UP_KEY) || window.isKeyPressed(DOWN_KEY)) {
-
-			cameraPosition.x += cameraVelocity.x * deltaTime;
-			cameraPosition.y += cameraVelocity.y * deltaTime;
-			cameraPosition.z += cameraVelocity.z * deltaTime;
-
-		}
-		
-		
 	}
 	
 	

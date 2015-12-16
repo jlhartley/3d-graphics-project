@@ -249,13 +249,13 @@ public class Tester5 extends Prototyper {
 	@Override
 	protected void logic(float deltaTime) {
 		
-		deltaTime *= timeMultiplier;
-		
 		cameraControls.move(deltaTime);
 		
 		if (paused) {
 			return;
 		}
+		
+		deltaTime *= timeMultiplier;
 		
 		
 		// Euler integration
