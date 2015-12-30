@@ -66,32 +66,6 @@ public class Entity {
 		position.z += velocity.z * deltaTime;
 	}
 	
-	/*
-	public void moveUp(float speed, float deltaTime) {
-		position.y += speed * deltaTime;
-	}
-	
-	public void moveDown(float speed, float deltaTime) {
-		position.y -= speed *  deltaTime;
-	}
-	
-	public void moveForward(float speed, float deltaTime) {
-		position.z -= speed * deltaTime;
-	}
-	
-	public void moveBack(float speed, float deltaTime) {
-		position.z += speed * deltaTime;
-	}
-	
-	public void moveRight(float speed, float deltaTime) {
-		position.x += speed * deltaTime;
-	}
-	
-	public void moveLeft(float speed, float deltaTime) {
-		position.x -= speed * deltaTime;
-	}
-	*/
-	
 	
 	// TODO: Rotational methods
 	
@@ -180,8 +154,11 @@ public class Entity {
 	public void setRotZ(float rotZ) {
 		rotation.z = rotZ;
 	}
-	
-	
-	
 
+	
+	@Override
+	public String toString() {
+		return "Entity [position=" + position + ", rotation=" + rotation + ", scale=" + scale + "]";
+	}
+	
 }
