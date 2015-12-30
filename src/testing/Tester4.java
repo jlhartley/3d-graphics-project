@@ -237,20 +237,20 @@ public class Tester4 extends Prototyper {
 		}
 		
 		// Camera movement controls and limits
-		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < XY_LIMIT) {
-			camera.moveUp(MOVEMENT_SPEED, deltaTime);
-		} 
-		
-		if (isKeyPressed(GLFW_KEY_DOWN) && camera.getPosition().y > -XY_LIMIT) {
-			camera.moveDown(MOVEMENT_SPEED, deltaTime);
-		}
-		
 		if (isKeyPressed(GLFW_KEY_RIGHT) && camera.getPosition().x < XY_LIMIT) {
-			camera.moveRight(MOVEMENT_SPEED, deltaTime);
+			camera.moveX(MOVEMENT_SPEED, deltaTime);
 		}
 		
 		if (isKeyPressed(GLFW_KEY_LEFT) && camera.getPosition().x > -XY_LIMIT) {
-			camera.moveLeft(MOVEMENT_SPEED, deltaTime);
+			camera.moveX(-MOVEMENT_SPEED, deltaTime);
+		}
+		
+		if (isKeyPressed(GLFW_KEY_UP) && camera.getPosition().y < XY_LIMIT) {
+			camera.moveY(MOVEMENT_SPEED, deltaTime);
+		} 
+		
+		if (isKeyPressed(GLFW_KEY_DOWN) && camera.getPosition().y > -XY_LIMIT) {
+			camera.moveY(-MOVEMENT_SPEED, deltaTime);
 		}
 		
 		for (Entity entity : entities) {
@@ -287,7 +287,7 @@ public class Tester4 extends Prototyper {
 		lightPosition.z = (float) (-(Math.sin(getTime() / 2) + 1) * MAX_DISTANCE / 2);
 		
 		// Finally move the camera forward each frame
-		camera.moveForward(cameraForwardSpeed, deltaTime);
+		camera.moveZ(-cameraForwardSpeed, deltaTime);
 		
 	}
 

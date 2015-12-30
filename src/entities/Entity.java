@@ -59,15 +59,30 @@ public class Entity {
 		position.z += speed * deltaTime;
 	}
 	
-	// Integrate the position by simple accumulation
 	public void move(Vector3f velocity, float deltaTime) {
 		position.x += velocity.x * deltaTime;
 		position.y += velocity.y * deltaTime;
 		position.z += velocity.z * deltaTime;
 	}
 	
+	// Rotational methods
+	public void rotateX(float speed, float deltaTime) {
+		rotation.x += speed * deltaTime;
+	}
 	
-	// TODO: Rotational methods
+	public void rotateY(float speed, float deltaTime) {
+		rotation.y += speed * deltaTime;
+	}
+	
+	public void rotateZ(float speed, float deltaTime) {
+		rotation.z += speed * deltaTime;
+	}
+	
+	public void rotate(Vector3f velocity, float deltaTime) {
+		rotation.x += velocity.x * deltaTime;
+		rotation.y += velocity.y * deltaTime;
+		rotation.z += velocity.z * deltaTime;
+	}
 	
 	
 	// Translate position by a vector

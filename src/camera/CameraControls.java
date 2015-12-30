@@ -77,14 +77,14 @@ public abstract class CameraControls {
 		if (window.isKeyPressed(GLFW_KEY_DOWN)) {
 			camera.increasePitch(rotationSpeed, deltaTime);
 		} else if (window.isKeyPressed(GLFW_KEY_UP)) {
-			camera.decreasePitch(rotationSpeed, deltaTime);
+			camera.increasePitch(-rotationSpeed, deltaTime);
 		}
 		
 		// Yaw
 		if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
 			camera.increaseYaw(rotationSpeed, deltaTime);
 		} else if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-			camera.decreaseYaw(rotationSpeed, deltaTime);
+			camera.increaseYaw(-rotationSpeed, deltaTime);
 		}
 		
 		

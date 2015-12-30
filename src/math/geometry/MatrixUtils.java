@@ -7,6 +7,7 @@ public class MatrixUtils {
 	public static final Vector3f Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
 	public static final Vector3f Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
 	
+	/*
 	// Model matrix
 	public static Matrix4f modelMatrix(Vector3f translation, Vector3f rotation, float scale) {
 		Matrix4f matrix = new Matrix4f();
@@ -27,7 +28,7 @@ public class MatrixUtils {
 		Vector3f negativeTranslation = new Vector3f(translation).negate();
 		matrix.translate(negativeTranslation);
 		return matrix;
-	}
+	}*/
 	
 	// Perspective projection matrix
 	public static Matrix4f perspectiveProjectionMatrix(int width, int height, float fov, float nearPlane, float farPlane) {

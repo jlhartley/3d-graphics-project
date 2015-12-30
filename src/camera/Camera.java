@@ -12,11 +12,10 @@ public class Camera {
 	// Rotation
 	private Vector3f rotation;
 	
-	// Pitch = rotation about x-axis
-	// Yaw = rotation about y-axis
-	// Roll = rotation about z-axis
 	
+	// View matrix held as instance variable to avoid object creation
 	private Matrix4f viewMatrix = new Matrix4f();
+	
 	
 	// Telescoping constructors
 	// Place the camera at the origin with no pitch, yaw or roll
@@ -29,6 +28,7 @@ public class Camera {
 		this(position, new Vector3f());
 	}
 	
+	// Place the camera at the specified position with the specified rotation
 	public Camera(Vector3f position, Vector3f rotation) {
 		this.position = position;
 		this.rotation = rotation;
@@ -39,69 +39,38 @@ public class Camera {
 		this.position = position;
 		this.rotation = new Vector3f(pitch, yaw, roll);
 	}
-
 	
-	// Movement controls
-	public void moveUp(float speed, float deltaTime) {
-		position.y += speed * deltaTime;
-	}
 	
-	public void moveDown(float speed, float deltaTime) {
-		position.y -= speed * deltaTime;
-	}
-	
-	public void moveForward(float speed, float deltaTime) {
-		position.z -= speed * deltaTime;
-	}
-	
-	public void moveBack(float speed, float deltaTime) {
-		position.z += speed * deltaTime;
-	}
-	
-	public void moveRight(float speed, float deltaTime) {
+	// Movement methods
+	public void moveX(float speed, float deltaTime) {
 		position.x += speed * deltaTime;
 	}
 	
-	public void moveLeft(float speed, float deltaTime) {
-		position.x -= speed * deltaTime;
+	public void moveY(float speed, float deltaTime) {
+		position.y += speed * deltaTime;
 	}
 	
+	public void moveZ(float speed, float deltaTime) {
+		position.z += speed * deltaTime;
+	}
 	
-	// Rotational controls
-	// Speed in degrees per second
+	// Rotational methods
 	public void increasePitch(float speed, float deltaTime) {
 		rotation.x += speed * deltaTime;
-	}
-	
-	public void decreasePitch(float speed, float deltaTime) {
-		rotation.x -= speed * deltaTime;
 	}
 	
 	public void increaseYaw(float speed, float deltaTime) {
 		rotation.y += speed * deltaTime;
 	}
 	
-	public void decreaseYaw(float speed, float deltaTime) {
-		rotation.y -= speed * deltaTime;
-	}
-	
 	public void increaseRoll(float speed, float deltaTime) {
 		rotation.z += speed * deltaTime;
-	}
-	
-	public void decreaseRoll(float speed, float deltaTime) {
-		rotation.z -= speed * deltaTime;
 	}
 	
 	
 	// Translate position by a vector
 	public void translate(Vector3f vec) {
 		position.translate(vec);
-	}
-	
-	// Set position using the provided components
-	public void setPosition(float x, float y, float z) {
-		position.set(x, y, z);
 	}
 	
 	
@@ -117,6 +86,7 @@ public class Camera {
 	}
 	
 	
+	
 	// Getters and setters
 	public Vector3f getPosition() {
 		return position;
@@ -124,6 +94,11 @@ public class Camera {
 
 	public void setPosition(Vector3f position) {
 		this.position = position;
+	}
+	
+	// Set position using the provided components
+	public void setPosition(float x, float y, float z) {
+		position.set(x, y, z);
 	}
 	
 	public Vector3f getRotation() {
@@ -134,8 +109,18 @@ public class Camera {
 		this.rotation = rotation;
 	}
 	
+	// Set rotation using the provided components
+	public void setRotation(float x, float y, float z) {
+		rotation.set(x, y, z);
+	}
+	
+	
 	
 	// Component-wise rotation aliases
+	
+	// Pitch = rotation about x-axis
+	// Yaw = rotation about y-axis
+	// Roll = rotation about z-axis
 	
 	public float getPitch() {
 		return rotation.x;

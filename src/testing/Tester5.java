@@ -279,7 +279,7 @@ public class Tester5 extends Prototyper {
 			acceleration1.scale(1 / mass);
 			planet1.updateVelocity(acceleration1, deltaTime);
 			
-			// Clear ready for next computation
+			// Clear ready for next frame computation
 			acceleration1.zero();
 		}
 		
