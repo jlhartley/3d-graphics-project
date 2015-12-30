@@ -16,6 +16,7 @@ public class Camera {
 	// Yaw = rotation about y-axis
 	// Roll = rotation about z-axis
 	
+	private Matrix4f viewMatrix = new Matrix4f();
 	
 	// Telescoping constructors
 	// Place the camera at the origin with no pitch, yaw or roll
@@ -106,7 +107,13 @@ public class Camera {
 	
 	// For rendering
 	public Matrix4f getViewMatrix() {
-		return MatrixUtils.viewMatrix(position, rotation);
+		viewMatrix.identity();
+		viewMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
+		viewMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
+		viewMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		Vector3f negativeTranslation = new Vector3f(position).negate();
+		viewMatrix.translate(negativeTranslation);
+		return viewMatrix;
 	}
 	
 	
