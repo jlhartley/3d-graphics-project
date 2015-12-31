@@ -56,8 +56,10 @@ public class Tester5 extends Prototyper {
 			camera.setPitch(90);
 			camera.setYaw(0);
 		} else if (keyCode == GLFW_KEY_1) {
+			log("Absolute Camera Controls");
 			cameraControls = new AbsoluteControls(camera, window);
 		} else if (keyCode == GLFW_KEY_2) {
+			log("Relative Camera Controls");
 			cameraControls = new RelativeControls(camera, window);
 		}
 	}

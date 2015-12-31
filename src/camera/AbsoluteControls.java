@@ -5,14 +5,21 @@ import window.Window;
 
 public class AbsoluteControls extends CameraControls {
 	
-
+	
 	public AbsoluteControls(Camera camera, Window window) {
 		super(camera, window);
 	}
 	
 	
 	@Override
-	public void moveCamera(float movementSpeed, float deltaTime) {
+	public void moveCamera(float speed, float deltaTime) {
+		
+		if (!(window.isKeyPressed(FORWARD_KEY) || window.isKeyPressed(BACK_KEY) || 
+				window.isKeyPressed(RIGHT_KEY) || window.isKeyPressed(LEFT_KEY) || 
+				window.isKeyPressed(UP_KEY) || window.isKeyPressed(DOWN_KEY))) {
+			
+			return;
+		}
 		
 		Vector3f cameraVelocity = new Vector3f();
 		
@@ -38,10 +45,7 @@ public class AbsoluteControls extends CameraControls {
 			cameraVelocity.z = 1;
 		}
 		
-		
-		if (cameraVelocity.magnitude() != 0) {
-			cameraVelocity.setMagnitude(movementSpeed);
-		}
+		cameraVelocity.setMagnitude(speed);
 		
 		Vector3f cameraPosition = camera.getPosition();
 		

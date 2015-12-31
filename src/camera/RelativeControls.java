@@ -53,10 +53,10 @@ public class RelativeControls extends CameraControls {
 		Vector3f rotation = camera.getRotation();
 		
 		Matrix4f matrix = new Matrix4f();
-		matrix.rotate((float) -Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		matrix.rotate((float) -Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
 		// Roll is not required
 		//matrix.rotate((float) -Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		matrix.rotate((float) -Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
+		matrix.rotate((float) -Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
 		
 		velocity4.multiply(matrix);
 		
@@ -97,12 +97,6 @@ public class RelativeControls extends CameraControls {
 				cameraVelocity.x = -cameraVelocity.x;
 				cameraVelocity.y = -cameraVelocity.y;
 				cameraVelocity.z = -cameraVelocity.z;
-				
-			}
-			
-			if (window.isKeyPressed(RIGHT_KEY)) {
-				
-				
 				
 			}
 			

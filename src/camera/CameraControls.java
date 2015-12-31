@@ -16,7 +16,7 @@ public abstract class CameraControls {
 	
 	// Scale speed for faster movement
 	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4.2f;
-	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 1.5f;
+	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 2.5f;
 	
 	// Degrees per virtual screen coordinate
 	// Scales mouse movement to camera rotation
@@ -47,8 +47,6 @@ public abstract class CameraControls {
 	protected Camera camera;
 	protected Window window;
 	
-	//private Vector3f cameraVelocity = new Vector3f();
-	
 	public CameraControls(Camera camera, Window window) {
 		this.camera = camera;
 		this.window = window;
@@ -68,23 +66,23 @@ public abstract class CameraControls {
 		rotateCamera(rotationSpeed, deltaTime);
 	}
 	
-	public abstract void moveCamera(float movementSpeed, float deltaTime);
+	public abstract void moveCamera(float speed, float deltaTime);
 	
-	private void rotateCamera(float rotationSpeed, float deltaTime) {
+	private void rotateCamera(float speed, float deltaTime) {
 		
 		// Keyboard controls
 		// Pitch
 		if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-			camera.increasePitch(rotationSpeed, deltaTime);
+			camera.increasePitch(speed, deltaTime);
 		} else if (window.isKeyPressed(GLFW_KEY_UP)) {
-			camera.increasePitch(-rotationSpeed, deltaTime);
+			camera.increasePitch(-speed, deltaTime);
 		}
 		
 		// Yaw
 		if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-			camera.increaseYaw(rotationSpeed, deltaTime);
+			camera.increaseYaw(speed, deltaTime);
 		} else if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-			camera.increaseYaw(-rotationSpeed, deltaTime);
+			camera.increaseYaw(-speed, deltaTime);
 		}
 		
 		
