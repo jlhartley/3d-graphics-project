@@ -235,7 +235,8 @@ public class Tester5 extends Prototyper {
 	
 	private void resetCamera() {
 		// Place the camera up and back from the origin
-		camera.setPosition(0, 500, 500);
+		//camera.setPosition(0, 500, 500);
+		camera.setPosition(0, 100, 100);
 		// Point camera downwards at 45 degrees
 		camera.setPitch(45);
 		camera.setYaw(0);
@@ -324,7 +325,7 @@ public class Tester5 extends Prototyper {
 			// Update position
 			planet.updatePosition(deltaTime);
 			// Rotate planet with time
-			planet.setRotY(getTime() * 100);
+			//planet.setRotY(getTime() * 100);
 		}
 		
 		

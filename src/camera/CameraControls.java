@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
+import ui.Window2;
 import window.Window;
 
 public abstract class CameraControls {
@@ -45,9 +46,9 @@ public abstract class CameraControls {
 	
 	// TODO: Sort the accessibility issue
 	protected Camera camera;
-	protected Window window;
+	protected Window2 window;
 	
-	public CameraControls(Camera camera, Window window) {
+	public CameraControls(Camera camera, Window2 window) {
 		this.camera = camera;
 		this.window = window;
 	}
