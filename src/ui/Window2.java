@@ -339,12 +339,14 @@ public class Window2 {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println(e);
+				System.out.println(Key.fromSWT(e.keyCode));
 				inputCallbacks.onKeyPressed(e.keyCode);
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				System.out.println(e);
+				System.out.println(Key.fromSWT(e.keyCode));
 				inputCallbacks.onKeyReleased(e.keyCode);
 			}
 		});
