@@ -1,6 +1,7 @@
 package testing;
 
 import render.Renderer;
+import ui.Canvas;
 import ui.Window2;
 import render.ProjectionType;
 import util.ModelUtils;
@@ -120,8 +121,8 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
-		int canvasWidth = window.getCanvas().getBounds().width;
-		int canvasHeight = window.getCanvas().getBounds().height;
+		//int canvasWidth = window.getCanvas().getBounds().width;
+		//int canvasHeight = window.getCanvas().getBounds().height;
 		
 		//renderer.onFramebufferResized(canvasWidth, canvasHeight, projectionType);
 		
@@ -144,7 +145,7 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 		// so nothing will happen and the first run is like a trial 
 		// run to find the deltaTime
 		
-		GLCanvas canvas = window.getCanvas();
+		Canvas canvas = window.getCanvas();
 		
 		window.asyncExec(new Runnable() {
 			

@@ -33,6 +33,8 @@ import window.InputCallbacks;
 import window.MouseButton;
 import window.WindowCallbacks;
 
+import static ui.UIUtils.*;
+
 public class Window2 {
 	
 	// Display manages the connection between SWT and the OS
@@ -50,8 +52,9 @@ public class Window2 {
 	// Mouse position, relative the the window centre
 	private Vector2f mousePosition = new Vector2f();
 	
-	private GLCanvas canvas;
-	private int canvasWidth, canvasHeight;
+	//private GLCanvas canvas;
+	//private int canvasWidth, canvasHeight;
+	private Canvas canvas;
 	
 	private Vector2f canvasCentre = new Vector2f();
 	
@@ -67,12 +70,16 @@ public class Window2 {
 		centre.y = (float)height / 2;
 	}
 	
+	/*
+	
 	private void updateCanvasSize(int canvasWidth, int canvasHeight) {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		canvasCentre.x = (float)canvasWidth / 2;
 		canvasCentre.y = (float)canvasHeight / 2;
 	}
+	
+	*/
 	
 	
 	private void init() {
@@ -156,7 +163,13 @@ public class Window2 {
 		rootLayout.numColumns = 2;
 		shell.setLayout(rootLayout);
 		
-		initGLCanvas();
+		
+		
+		canvas = new Canvas(shell);
+		canvas.setCurrent();
+		GL.createCapabilities();
+		
+		//initGLCanvas();
 		
 		//Text text = new Text(shell, SWT.BORDER | SWT.WRAP | SWT.MULTI);
 		//text.setLayoutData(getGLCanvasLayoutData());
@@ -315,6 +328,8 @@ public class Window2 {
 		return new GridData(SWT.FILL, SWT.CENTER, true, false);
 	}
 	
+	/*
+	
 	private GridData getGLCanvasLayoutData() {
 		GridData layoutData = new GridData();
 		layoutData.horizontalAlignment = SWT.FILL;
@@ -323,6 +338,10 @@ public class Window2 {
 		layoutData.grabExcessVerticalSpace = true;
 		return layoutData;
 	}
+	
+	*/
+	
+	/*
 	
 	private void initGLCanvas() {
 		GLData glData = new GLData();
@@ -407,6 +426,7 @@ public class Window2 {
 		GL.createCapabilities();
 	}
 	
+	*/
 	
 	public Window2(Display display, int width, int height, String title) {
 		updateSize(width, height);
@@ -467,7 +487,7 @@ public class Window2 {
 		return canvas.isDisposed();
 	}
 	
-	public GLCanvas getCanvas() {
+	public Canvas getCanvas() {
 		return canvas;
 	}
 	
