@@ -2,7 +2,7 @@ package model.parser;
 
 import math.geometry.Vector3f;
 
-public class Utils {
+public class ParserUtils {
 	
 	protected static Vector3f lineToVector3f(String[] lineParts) {
 		// Start at index 1 because the first part of the line is the identifier

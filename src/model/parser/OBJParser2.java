@@ -12,7 +12,7 @@ import java.util.Map;
 import math.geometry.Vector3f;
 import model.Model;
 
-import static model.parser.Utils.*;
+import static model.parser.ParserUtils.*;
 
 public class OBJParser2 {
 	
