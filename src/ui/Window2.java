@@ -1,25 +1,15 @@
 package ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.opengl.GLCanvas;
-import org.eclipse.swt.opengl.GLData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Monitor;
@@ -29,9 +19,6 @@ import org.eclipse.swt.widgets.Text;
 import org.lwjgl.opengl.GL;
 
 import math.geometry.Vector2f;
-import window.InputCallbacks;
-import window.MouseButton;
-import window.WindowCallbacks;
 
 import static ui.UIUtils.*;
 
@@ -52,16 +39,13 @@ public class Window2 {
 	// Mouse position, relative the the window centre
 	private Vector2f mousePosition = new Vector2f();
 	
-	//private GLCanvas canvas;
-	//private int canvasWidth, canvasHeight;
+	
 	private Canvas canvas;
 	
-	private Vector2f canvasCentre = new Vector2f();
+	private Canvas.Callbacks canvasCallbacks;
 	
-	
-	private WindowCallbacks windowCallbacks;
-	private InputCallbacks inputCallbacks;
-	
+	//private WindowCallbacks windowCallbacks;
+	//private InputCallbacks inputCallbacks;
 	
 	private void updateSize(int width, int height) {
 		this.width = width;
@@ -69,17 +53,6 @@ public class Window2 {
 		centre.x = (float)width / 2;
 		centre.y = (float)height / 2;
 	}
-	
-	/*
-	
-	private void updateCanvasSize(int canvasWidth, int canvasHeight) {
-		this.canvasWidth = canvasWidth;
-		this.canvasHeight = canvasHeight;
-		canvasCentre.x = (float)canvasWidth / 2;
-		canvasCentre.y = (float)canvasHeight / 2;
-	}
-	
-	*/
 	
 	
 	private void init() {
@@ -165,7 +138,10 @@ public class Window2 {
 		
 		
 		
-		canvas = new Canvas(shell);
+		canvas = new Canvas(shell, canvasCallbacks);
+		
+		
+		
 		canvas.setCurrent();
 		GL.createCapabilities();
 		
@@ -175,7 +151,7 @@ public class Window2 {
 		//text.setLayoutData(getGLCanvasLayoutData());
 		
 		
-		Composite sidePanel = getSidePanel();
+		Composite sidePanel = getSidePanel(shell);
 		
 		// Projection Stuff
 		
@@ -296,50 +272,8 @@ public class Window2 {
 		pausedButton.setLayoutData(pausedButtonData);
 		*/
 	}
+
 	
-	private FillLayout getGroupFillLayout() {
-		FillLayout layout = new FillLayout();
-		layout.type = SWT.VERTICAL;
-		layout.marginHeight = 5;
-		layout.spacing = 5;
-		return layout;
-	}
-	
-	private Composite getSidePanel() {
-		Composite sidePanel = new Composite(shell, SWT.BORDER);
-		
-		GridData layoutData = new GridData();
-		// Should really not specify the width as a pixel value
-		layoutData.widthHint = 250;
-		// Fill any available space
-		layoutData.verticalAlignment = SWT.FILL;
-		layoutData.horizontalAlignment = SWT.FILL;
-		sidePanel.setLayoutData(layoutData);
-		
-		// Would ideally like to achieve the same effect 
-		// with a simpler layout, but this doesn't seem possible.
-		GridLayout sidePanelLayout = new GridLayout();
-		sidePanel.setLayout(sidePanelLayout);
-		
-		return sidePanel;
-	}
-	
-	private GridData getFillHorizontalGridData() {
-		return new GridData(SWT.FILL, SWT.CENTER, true, false);
-	}
-	
-	/*
-	
-	private GridData getGLCanvasLayoutData() {
-		GridData layoutData = new GridData();
-		layoutData.horizontalAlignment = SWT.FILL;
-		layoutData.verticalAlignment = SWT.FILL;
-		layoutData.grabExcessHorizontalSpace = true;
-		layoutData.grabExcessVerticalSpace = true;
-		return layoutData;
-	}
-	
-	*/
 	
 	/*
 	
@@ -428,15 +362,21 @@ public class Window2 {
 	
 	*/
 	
-	public Window2(Display display, int width, int height, String title) {
+	public Window2(Display display, int width, int height, String title, Canvas.Callbacks canvasCallbacks) {
 		updateSize(width, height);
 		this.title = title;
 		this.display = display;
+		this.canvasCallbacks = canvasCallbacks;
 		init();
 		initUI();
 		//initGL();
 	}
 	
+	public void setCanvasCallbacks(Canvas.Callbacks canvasCallbacks) {
+		this.canvasCallbacks = canvasCallbacks;
+	}
+	
+	/*
 	public void setWindowCallbacks(WindowCallbacks windowCallbacks) {
 		this.windowCallbacks = windowCallbacks;
 	}
@@ -444,6 +384,7 @@ public class Window2 {
 	public void setInputCallbacks(InputCallbacks inputCallbacks) {
 		this.inputCallbacks = inputCallbacks;
 	}
+	*/
 	
 	
 	public void show() {
@@ -563,11 +504,11 @@ public class Window2 {
 	
 	public static void main(String[] args) {
 		
-		Display display = new Display();
+		//Display display = new Display();
 		
-		Window2 window = new Window2(display, 1280, 720, "Title");
-		window.centre();
-		window.run();
+		//Window2 window = new Window2(display, 1280, 720, "Title");
+		//window.centre();
+		//window.run();
 		
 		//window.cleanUp();
 		

@@ -1,6 +1,5 @@
 package testing;
 
-import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +12,14 @@ import entities.Entity;
 import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
+import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
 import physics.Constants;
 import render.ProjectionType;
 import render.Renderer;
+import ui.Key;
 import math.MathUtils;
 import window.MouseButton;
 
@@ -33,39 +34,39 @@ public class Tester5 extends Prototyper {
 	// Keyboard input
 	
 	@Override
-	public void onKeyPressed(int keyCode) {
-		if (keyCode == GLFW_KEY_SPACE) {
+	public void onKeyPressed(Key key) {
+		if (key == Key.SPACE) {
 			// Cycle through values for timeMultiplier,
 			// from 1 to MAX_TIME_MULTIPLIER
 			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
-		} else if (keyCode == GLFW_KEY_I) {
+		} else if (key == Key.I) {
 			paused = !paused;
-		} else if (keyCode == GLFW_KEY_R) {
+		} else if (key == Key.R) {
 			resetCamera();
 			initPlanets();
-		} else if (keyCode == GLFW_KEY_O) {
+		} else if (key == Key.O) {
 			log("Orthographic Projection");
 			switchProjection(ProjectionType.ORTHOGRAPHIC);
-		} else if (keyCode == GLFW_KEY_P) {
+		} else if (key == Key.P) {
 			log("Perspective Projection");
 			switchProjection(ProjectionType.PERSPECTIVE);
-		} else if (keyCode == GLFW_KEY_U) {
+		} else if (key == Key.U) {
 			// Place the camera directly up in y
 			camera.setPosition(0, (float) Math.sqrt(500*500 + 500*500), 0);
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
-		} else if (keyCode == GLFW_KEY_1) {
+		} else if (key == Key.ONE) {
 			log("Absolute Camera Controls");
 			cameraControls = new AbsoluteControls(camera, window);
-		} else if (keyCode == GLFW_KEY_2) {
+		} else if (key == Key.TWO) {
 			log("Relative Camera Controls");
 			cameraControls = new RelativeControls(camera, window);
 		}
 	}
 	
 	@Override
-	public void onKeyReleased(int keyCode) {
+	public void onKeyReleased(Key key) {
 		
 	}
 	
@@ -349,6 +350,14 @@ public class Tester5 extends Prototyper {
 		for (Entity planet : planets) {
 			renderer.render(planet, camera);
 		}
+		
+	}
+
+
+
+	@Override
+	public void onMousePositionChanged(Vector2f mousePosition) {
+		// TODO Auto-generated method stub
 		
 	}
 	

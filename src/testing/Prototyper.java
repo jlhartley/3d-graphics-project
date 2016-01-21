@@ -5,15 +5,8 @@ import ui.Canvas;
 import ui.Window2;
 import render.ProjectionType;
 import util.ModelUtils;
-import window.Window;
-import window.InputCallbacks;
-import window.WindowCallbacks;
 
 import static org.lwjgl.glfw.GLFW.*;
-
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.swt.opengl.GLCanvas;
 import org.eclipse.swt.widgets.Display;
@@ -21,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 import logging.Logger;
 import math.geometry.Vector2f;
 
-public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
+public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ Canvas.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -50,7 +43,9 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 	
 	protected void switchProjection(ProjectionType type) {
 		this.projectionType = type;
-		renderer.updateProjection(window.getWidth(), window.getHeight(), type);
+		int framebufferWidth = window.getCanvas().getWidth();
+		int framebufferHeight = window.getCanvas().getHeight();
+		renderer.updateProjection(framebufferWidth, framebufferHeight, type);
 	}
 
 
@@ -79,7 +74,7 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 	}
 	
 	protected Vector2f getMousePosition() {
-		return window.getMousePosition();
+		return window.getCanvas().getMousePosition();
 	}
 	
 	protected void disableCursor() {
@@ -107,9 +102,11 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 		// Instantiate logger
 		logger = new Logger();
 		
-		window = new Window2(new Display(), WIDTH, HEIGHT, TITLE);
-		window.setWindowCallbacks(this);
-		window.setInputCallbacks(this);
+		window = new Window2(new Display(), WIDTH, HEIGHT, TITLE, this);
+		//window.setWindowCallbacks(this);
+		//window.setInputCallbacks(this);
+		
+		//window.setCanvasCallbacks(this);
 		
 		// Create window and OpenGL context
 		// It is important this is the first setup stage
@@ -121,8 +118,8 @@ public abstract class Prototyper implements InputCallbacks, WindowCallbacks {
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
-		//int canvasWidth = window.getCanvas().getBounds().width;
-		//int canvasHeight = window.getCanvas().getBounds().height;
+		//int canvasWidth = window.getCanvas().getWidth();
+		//int canvasHeight = window.getCanvas().getHeight();
 		
 		//renderer.onFramebufferResized(canvasWidth, canvasHeight, projectionType);
 		

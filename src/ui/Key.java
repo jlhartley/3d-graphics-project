@@ -7,7 +7,8 @@ import org.eclipse.swt.SWT;
 public enum Key {
 	W, A, S, D,
 	RIGHT, LEFT, UP, DOWN,
-	SPACE, CONTROL, SHIFT;
+	SPACE, CONTROL, SHIFT,
+	O, P, I, R, U, ONE, TWO;
 	
 	public static Key fromGLFW(int value) {
 		switch(value) {
@@ -33,6 +34,21 @@ public enum Key {
 			return CONTROL;
 		case GLFW_KEY_LEFT_SHIFT:
 			return SHIFT;
+			
+		case GLFW_KEY_O:
+			return O;
+		case GLFW_KEY_P:
+			return P;
+		case GLFW_KEY_I:
+			return I;
+		case GLFW_KEY_R:
+			return R;
+		case GLFW_KEY_U:
+			return U;
+		case GLFW_KEY_1:
+			return ONE;
+		case GLFW_KEY_2:
+			return TWO;
 		}
 		return null;
 	}
@@ -61,6 +77,21 @@ public enum Key {
 			return CONTROL;
 		case SWT.SHIFT:
 			return SHIFT;
+			
+		case 'o':
+			return O;
+		case 'p':
+			return P;
+		case 'i':
+			return I;
+		case 'r':
+			return R;
+		case 'u':
+			return U;
+		case '1':
+			return ONE;
+		case '2':
+			return TWO;
 		}
 		return null;
 	}

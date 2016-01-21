@@ -8,6 +8,7 @@ public enum MouseButton {
 	RIGHT(GLFW_MOUSE_BUTTON_RIGHT),
 	MIDDLE(GLFW_MOUSE_BUTTON_MIDDLE);
 	
+	// Code corresponding to GLFW representation
 	private int mouseCode;
 	
 	MouseButton(int mouseCode) {

@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
 import math.geometry.Vector2f;
+import ui.Key;
 
 public class Window {
 	
@@ -147,9 +148,9 @@ public class Window {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				// Here repeat does not count as a key press
 				if (action == GLFW_PRESS) {
-					inputCallbacks.onKeyPressed(key);
+					inputCallbacks.onKeyPressed(Key.fromGLFW(key));
 				} else if (action == GLFW_RELEASE) {
-					inputCallbacks.onKeyReleased(key);
+					inputCallbacks.onKeyReleased(Key.fromGLFW(key));
 				}
 			}
 		};

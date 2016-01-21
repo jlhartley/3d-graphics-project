@@ -13,24 +13,41 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import math.geometry.Vector2f;
-import window.InputCallbacks;
+import window.MouseButton;
 
 public class Canvas {
+	
+	public interface Callbacks {
+		public void onKeyPressed(Key key);
+		public void onKeyReleased(Key key);
+		public void onMouseDown(MouseButton mouseButton);
+		public void onMouseUp(MouseButton mouseButton);
+		public void onMousePositionChanged(Vector2f mousePosition);
+		public void onFramebufferResized(int width, int height);
+	}
 	
 	private static final int STYLE_BITS = SWT.BORDER | SWT.NO_BACKGROUND | SWT.NO_REDRAW_RESIZE;
 	
 	
+	// Wrapping the SWT GLCanvas
 	private GLCanvas glCanvas;
 	
+	// Width and height of the canvas in pixels
 	private int width, height;
 	
+	// Centre of the canvas, in pixels, relative to the top-left corner
 	private Vector2f centre = new Vector2f();
 	
+	// The mouse position relative to the canvas centre
 	private Vector2f mousePosition = new Vector2f();
 	
-	private InputCallbacks inputCallbacks;
 	
-	public Canvas(Shell shell) {
+	private Callbacks callbacks;
+	
+	
+	public Canvas(Shell shell, Callbacks callbacks) {
+		
+		this.callbacks = callbacks;
 		
 		GLData glData = new GLData();
 		glData.doubleBuffer = true;
@@ -44,6 +61,10 @@ public class Canvas {
 		initListeners();
 		
 		//GL.createCapabilities();
+	}
+	
+	public void setCallbacks(Callbacks callbacks) {
+		this.callbacks = callbacks;
 	}
 	
 	public void setCurrent() {
@@ -73,13 +94,21 @@ public class Canvas {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println(e);
-				System.out.println("Key Pressed: " + Key.fromSWT(e.keyCode));
+				Key key = Key.fromSWT(e.keyCode);
+				System.out.println("Key Pressed: " + key);
+				if (callbacks != null) {
+					callbacks.onKeyPressed(key);
+				}
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				System.out.println(e);
-				System.out.println("Key Pressed: " + Key.fromSWT(e.keyCode));
+				Key key = Key.fromSWT(e.keyCode);
+				System.out.println("Key Released: " + key);
+				if (callbacks != null) {
+					callbacks.onKeyReleased(key);
+				}
 			}
 		});
 		
@@ -91,6 +120,9 @@ public class Canvas {
 				int height = glCanvas.getBounds().height;
 				setSize(width, height);
 				// Should be using this size to update the framebuffer?
+				if (callbacks != null) {
+					callbacks.onFramebufferResized(width, height);
+				}
 			}
 		});
 		
@@ -99,22 +131,22 @@ public class Canvas {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if (e.button == 1) {
-					//inputCallbacks.onMouseUp(MouseButton.LEFT);
+					callbacks.onMouseUp(MouseButton.LEFT);
 				} else if (e.button == 2) {
-					//inputCallbacks.onMouseUp(MouseButton.MIDDLE);
+					callbacks.onMouseUp(MouseButton.MIDDLE);
 				} else if (e.button == 3) {
-					//inputCallbacks.onMouseUp(MouseButton.RIGHT);
+					callbacks.onMouseUp(MouseButton.RIGHT);
 				}
 			}
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
 				if (e.button == 1) {
-					//inputCallbacks.onMouseDown(MouseButton.LEFT);
+					callbacks.onMouseDown(MouseButton.LEFT);
 				} else if (e.button == 2) {
-					//inputCallbacks.onMouseDown(MouseButton.MIDDLE);
+					callbacks.onMouseDown(MouseButton.MIDDLE);
 				} else if (e.button == 3) {
-					//inputCallbacks.onMouseDown(MouseButton.RIGHT);
+					callbacks.onMouseDown(MouseButton.RIGHT);
 				}
 			}
 			
@@ -130,6 +162,9 @@ public class Canvas {
 			public void mouseMove(MouseEvent e) {
 				mousePosition.x = (float) (e.x - centre.x);
 				mousePosition.y = -(float) (e.y - centre.y);
+				if (callbacks != null) {
+					callbacks.onMousePositionChanged(mousePosition);
+				}
 			}
 		});
 		
@@ -138,6 +173,8 @@ public class Canvas {
 	
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
+	
+	public Vector2f getMousePosition() { return mousePosition; }
 	
 	
 	
