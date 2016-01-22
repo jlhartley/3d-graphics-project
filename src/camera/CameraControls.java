@@ -5,7 +5,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import ui.Window2;
-import window.Window;
 
 public abstract class CameraControls {
 	
@@ -36,8 +35,8 @@ public abstract class CameraControls {
 	public static final int BACK_KEY = GLFW_KEY_S;
 	
 	
-	// Holds the mouse position at the instant the mouse is pressed down
-	private Vector2f mouseDownPosition = new Vector2f();
+	// Holds the cursor position at the instant the mouse is pressed down
+	private Vector2f mouseDownCursorPosition = new Vector2f();
 	// Holds the camera rotation at the instant the mouse is pressed down
 	private Vector3f mouseDownCameraRotation = new Vector3f();
 	// Tracks if the mouse button relevant to camera movement is held down or not
@@ -90,10 +89,10 @@ public abstract class CameraControls {
 		// Mouse controls
 		if (mouseDown) {
 			
-			Vector2f mousePosition = window.getMousePosition();
+			Vector2f cursorPosition = window.getCursorPosition();
 			
 			// Find the mouse movement vector
-			Vector2f mouseDelta = Vector2f.sub(mouseDownPosition, mousePosition);
+			Vector2f mouseDelta = Vector2f.sub(mouseDownCursorPosition, cursorPosition);
 			mouseDelta.scale(MOUSE_MOVEMENT_SCALE);
 			
 			float mouseDownYaw = mouseDownCameraRotation.y;
@@ -111,10 +110,10 @@ public abstract class CameraControls {
 		mouseDown = true;
 		// Allow endless cursor movement
 		window.disableCursor();
-		// Record the mouse position and camera rotation
-		mouseDownPosition = window.getMousePosition().getCopy();
+		// Record the mouse cursor position and camera rotation
+		mouseDownCursorPosition = window.getCursorPosition().getCopy();
 		mouseDownCameraRotation = camera.getRotation().getCopy();
-		System.out.println("Mouse Down Position: " + mouseDownPosition);
+		System.out.println("Mouse Down Cursor Position: " + mouseDownCursorPosition);
 	}
 	
 	public void onMouseUp() {
