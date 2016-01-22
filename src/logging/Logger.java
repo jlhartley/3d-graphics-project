@@ -6,17 +6,17 @@ public class Logger {
 	
 	private static final int REPORT_INTERVAL = 5;
 	
+	private static final DecimalFormat frameRateFormatter = new DecimalFormat("00.0 FPS");
+	private static final DecimalFormat frameTimeFormatter = new DecimalFormat("00.000 ms");
+	
 	private int frameCount = 0;
 	private double lastReportTime = 0;
-	
-	DecimalFormat frameRateFormatter = new DecimalFormat("00.0 FPS");
-	DecimalFormat frameTimeFormatter = new DecimalFormat("00.000 ms");
 	
 	public Logger() {
 		
 	}
 	
-	public void log(String message) {
+	public static void log(String message) {
 		System.out.println(message);
 	}
 	
