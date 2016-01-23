@@ -20,6 +20,10 @@ public class Logger {
 		System.out.println(message);
 	}
 	
+	public static void log() {
+		System.out.println();
+	}
+	
 	public void onFrame(double currentTime) {
 		
 		double elapsedTime = currentTime - lastReportTime;
