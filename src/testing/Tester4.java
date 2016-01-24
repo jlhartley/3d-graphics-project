@@ -9,11 +9,13 @@ import camera.Camera;
 import entities.Entity;
 import entities.MovingEntity;
 import lighting.Light;
+import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
+import ui.Key;
 import math.MathUtils;
 import window.MouseButton;
 
@@ -24,21 +26,51 @@ public class Tester4 extends Prototyper {
 	}
 
 	
+	@Override
+	public void onCameraControlTypeChanged(boolean relative) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCameraPositionChanged(Vector3f newPosition) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCameraRotationChanged(Vector3f newRotation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTimeMultiplierChanged(double timeMultiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onCursorPositionChanged(Vector2f cursorPosition) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	// Input callbacks
 	@Override
-	public void onKeyPressed(int keyCode) {
-		if (keyCode == GLFW_KEY_SPACE) {
+	public void onKeyPressed(Key key) {
+		if (key == Key.SPACE) {
 			reset();
-		} if (keyCode == GLFW_KEY_O) {
+		} if (key == Key.O) {
 			switchProjection(ProjectionType.ORTHOGRAPHIC);
-		} else if (keyCode == GLFW_KEY_P) {
+		} else if (key == Key.P) {
 			switchProjection(ProjectionType.PERSPECTIVE);
 		}
 	}
 
 	@Override
-	public void onKeyReleased(int keyCode) {
+	public void onKeyReleased(Key key) {
 		
 	}
 	
@@ -261,7 +293,7 @@ public class Tester4 extends Prototyper {
 				collided = true;
 			}
 			// Rotate entity around y
-			entity.setRotY(getTime() * 100);
+			entity.setRotY((float) (getTime() * 100));
 		}
 		
 		// Moving entities bounce off of their container
@@ -281,7 +313,7 @@ public class Tester4 extends Prototyper {
 		}
 		
 		// Rotate the dragon
-		dragon.setRotY(getTime() * 100);
+		dragon.setRotY((float) (getTime() * 100));
 		
 		Vector3f lightPosition = light.getPosition();
 		lightPosition.z = (float) (-(Math.sin(getTime() / 2) + 1) * MAX_DISTANCE / 2);
@@ -317,6 +349,7 @@ public class Tester4 extends Prototyper {
 		renderer.render(dragon, camera);
 		
 	}
+
 	
 
 }

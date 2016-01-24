@@ -9,12 +9,14 @@ import java.util.List;
 import camera.Camera;
 import entities.Entity;
 import lighting.Light;
+import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.ModelBuilder;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
+import ui.Key;
 import math.MathUtils;
 import window.MouseButton;
 
@@ -23,20 +25,50 @@ public class Tester3 extends Prototyper {
 	public static void main(String[] args) {
 		new Tester3().run();
 	}
+	
+	@Override
+	public void onCameraControlTypeChanged(boolean relative) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void onKeyPressed(int keyCode) {
-		if (keyCode == GLFW_KEY_SPACE) {
+	public void onCameraPositionChanged(Vector3f newPosition) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCameraRotationChanged(Vector3f newRotation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTimeMultiplierChanged(double timeMultiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCursorPositionChanged(Vector2f cursorPosition) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKeyPressed(Key key) {
+		if (key == Key.SPACE) {
 			reset();
-		} if (keyCode == GLFW_KEY_O) {
+		} if (key == Key.O) {
 			switchProjection(ProjectionType.ORTHOGRAPHIC);
-		} else if (keyCode == GLFW_KEY_P) {
+		} else if (key == Key.P) {
 			switchProjection(ProjectionType.PERSPECTIVE);
 		}
 	}
 
 	@Override
-	public void onKeyReleased(int keyCode) {
+	public void onKeyReleased(Key key) {
 		
 	}
 	
