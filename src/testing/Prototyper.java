@@ -105,7 +105,7 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		// so nothing will happen and the first run is like a trial 
 		// run to find the deltaTime
 		
-		long startTime = getTime();
+		double startTime = getTime();
 		
 		new Thread(new Runnable() {
 			
@@ -113,13 +113,13 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 			
 			@Override
 			public void run() {
-				long oldTime = 0;
+				double oldTime = 0;
 				while (!window.isCanvasDisposed()) {
-					long currentTime = getTime() - startTime;
-					long deltaTime = currentTime - oldTime;
+					double currentTime = getTime() - startTime;
+					double deltaTime = currentTime - oldTime;
 					oldTime = currentTime;
-					logicLogger.onFrame(currentTime / 10E8);
-					logic((float) (deltaTime / 10E8));
+					logicLogger.onFrame(currentTime);
+					logic((float) deltaTime);
 				}
 			}
 			
@@ -133,9 +133,9 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 			public void run() {
 				if (!window.isCanvasDisposed()) {
 					
-					long currentTime = getTime() - startTime;
+					double currentTime = getTime() - startTime;
 					
-					renderLogger.onFrame(currentTime / 10E8);
+					renderLogger.onFrame(currentTime);
 					
 					renderer.clear();
 					render(renderer);
@@ -197,9 +197,9 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		//return (float) glfwGetTime();
 	//}
 	
-	protected long getTime() {
-		return System.nanoTime();
-		//return System.nanoTime() / 10E8;
+	protected double getTime() {
+		//return System.nanoTime();
+		return System.nanoTime() / 10E8;
 	}
 	
 	//private double nanosecondsToSeconds(long nanoseconds) {
