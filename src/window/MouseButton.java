@@ -18,5 +18,17 @@ public enum MouseButton {
 	public int getMouseCode() {
 		return mouseCode;
 	}
+	
+	public static MouseButton fromCode(int mouseCode) {
+		switch(mouseCode) {
+		case 1:
+			return LEFT;
+		case 2:
+			return MIDDLE;
+		case 3:
+			return RIGHT;
+		}
+		return null;
+	}
 
 }

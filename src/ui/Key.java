@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.eclipse.swt.SWT;
 
 public enum Key {
+	
 	W, A, S, D,
 	RIGHT, LEFT, UP, DOWN,
 	SPACE, CONTROL, SHIFT,

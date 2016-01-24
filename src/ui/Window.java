@@ -6,10 +6,11 @@ public interface Window {
 	public void show();
 	public void hide();
 	public void centre();
-	public boolean isKeyPressed(Key key);
+	public boolean shouldClose();
+	public int getWidth();
+	public int getHeight();
+	public boolean isKeyPressed(int keyCode);
 	public void enableCursor();
 	public void disableCursor();
 	public Vector2f getCursorPosition();
-	public int getWidth();
-	public int getHeight();
 }
