@@ -1,20 +1,18 @@
 package testing;
 
-import render.Renderer;
-import ui.Canvas;
-import ui.Window2;
-import render.ProjectionType;
-import util.ModelUtils;
+import static logging.Logger.log;
 
-import static org.lwjgl.glfw.GLFW.*;
-
-import org.eclipse.swt.opengl.GLCanvas;
 import org.eclipse.swt.widgets.Display;
 
 import logging.Logger;
 import math.geometry.Vector2f;
+import render.ProjectionType;
+import render.Renderer;
+import ui.Canvas;
+import ui.Window2;
+import util.ModelUtils;
 
-public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ Canvas.Callbacks {
+public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ Window2.UICallbacks, Canvas.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -30,10 +28,18 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 	protected Window2 window;
 	protected Renderer renderer;
 	
-	protected Logger logger;
-	
 	// Default projection matrix is perspective
 	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
+	
+	
+	// UI Callbacks
+	
+	@Override
+	public void onProjectionChanged(ProjectionType projectionType) {
+		switchProjection(projectionType);
+	}
+
+	// Canvas Callbacks
 	
 	@Override
 	public void onFramebufferResized(int width, int height) {
@@ -53,60 +59,9 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		setUp();
 	}
 	
-	
-	public void run() {
-		// Show the window just before the main loop
-		// This ensures it is only displayed after all other
-		// resources have finished loading
-		window.show();
-		
-		// The main loop
-		loop();
-		
-		// Final clean up of used resources
-		cleanUp();
-	}
-	
-	
-	// Mostly a set of convenience methods
-	protected boolean isKeyPressed(int key) {
-		return window.isKeyPressed(key);
-	}
-	
-	protected Vector2f getMousePosition() {
-		return window.getCanvas().getMousePosition();
-	}
-	
-	protected void disableCursor() {
-		//window.disableCursor();
-	}
-	
-	protected void enableCursor() {
-		//window.enableCursor();
-	}
-	
-	//protected float getTime() {
-		//return (float) glfwGetTime();
-	//}
-	
-	protected void log(String message) {
-		logger.log(message);
-	}
-	
-	protected void closeWindow() {
-		//window.setShouldClose(true);
-	}
-	
-	
 	private void setUp() {
-		// Instantiate logger
-		logger = new Logger();
 		
-		window = new Window2(new Display(), WIDTH, HEIGHT, TITLE, this);
-		//window.setWindowCallbacks(this);
-		//window.setInputCallbacks(this);
-		
-		//window.setCanvasCallbacks(this);
+		window = new Window2(new Display(), WIDTH, HEIGHT, TITLE, this, this);
 		
 		// Create window and OpenGL context
 		// It is important this is the first setup stage
@@ -118,85 +73,81 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 		renderer.setClearColour(0, 0, 0); // Set background colour to black
 		
-		//int canvasWidth = window.getCanvas().getWidth();
-		//int canvasHeight = window.getCanvas().getHeight();
-		
-		//renderer.onFramebufferResized(canvasWidth, canvasHeight, projectionType);
-		
 		// Centre window
 		window.centre();
 	}
 	
-	private double getTime() {
-		return System.nanoTime() / 10E8;
+	
+	public void run() {
+		// Show the window just before the main loop
+		// This ensures it is only displayed after all other
+		// resources have finished loading
+		//window.show();
+		window.open();
+		
+		// The main loop
+		loop();
+		
+		// Final clean up of used resources
+		cleanUp();
 	}
+	
+	
+
 	
 	private void loop() {
 		
 		// Zero the timer
 		//glfwSetTime(0);
 		//double oldTime = 0;
-		double startTime = getTime();
 		
 		// On the first run deltaTime will approximately = 0,
 		// so nothing will happen and the first run is like a trial 
 		// run to find the deltaTime
 		
-		Canvas canvas = window.getCanvas();
-		
-		window.asyncExec(new Runnable() {
-			
-			private double oldTime = 0;
-			
-			@Override
-			public void run() {
-				if (!window.isCanvasDisposed()) {
-					
-					//canvas.setCurrent();
-					
-					//System.out.println(oldTime);
-					//System.out.println(deltaTime);
-					
-					double currentTime = getTime() - startTime;
-					
-					double deltaTime = currentTime - oldTime;
-					oldTime = currentTime;
-					
-					logger.onFrame(currentTime);
-					
-					//logic((float) deltaTime);
-					renderer.clear();
-					render(renderer);
-					
-					canvas.swapBuffers();
-					window.asyncExec(this);
-					
-					
-				}
-			}
-		});
-		
-		
-		Logger logicLogger = new Logger();
+		long startTime = getTime();
 		
 		new Thread(new Runnable() {
 			
-			private double oldTime = 0;
+			Logger logicLogger = new Logger();
 			
 			@Override
 			public void run() {
-				while (true) {
-					double currentTime = getTime() - startTime;
-					double deltaTime = currentTime - oldTime;
+				long oldTime = 0;
+				while (!window.isCanvasDisposed()) {
+					long currentTime = getTime() - startTime;
+					long deltaTime = currentTime - oldTime;
 					oldTime = currentTime;
-					logicLogger.onFrame(currentTime);
-					logic((float) deltaTime);
+					logicLogger.onFrame(currentTime / 10E8);
+					logic((float) (deltaTime / 10E8));
 				}
 			}
 			
 		}).start();
 		
-		window.run();
+		window.asyncExec(new Runnable() {
+			
+			Logger renderLogger = new Logger();
+			
+			@Override
+			public void run() {
+				if (!window.isCanvasDisposed()) {
+					
+					long currentTime = getTime() - startTime;
+					
+					renderLogger.onFrame(currentTime / 10E8);
+					
+					renderer.clear();
+					render(renderer);
+					
+					window.getCanvas().swapBuffers();
+					window.asyncExec(this);
+					
+				}
+			}
+		});
+		
+		window.loop();
 		
 		/*
 		while (!window.shouldClose()) {
@@ -222,13 +173,48 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 	}
 	
 	protected abstract void logic(float deltaTime);
-	protected abstract void render(Renderer renderer);
+	protected abstract void render(Renderer renderer);	
+	
+	
+	// Mostly a set of convenience methods
+	protected boolean isKeyPressed(int key) {
+		return window.getCanvas().isKeyPressed(key);
+	}
+	
+	protected Vector2f getCursorPosition() {
+		return window.getCanvas().getCursorPosition();
+	}
+	
+	protected void disableCursor() {
+		window.disableCursor();
+	}
+	
+	protected void enableCursor() {
+		window.enableCursor();
+	}
+	
+	//protected float getTime() {
+		//return (float) glfwGetTime();
+	//}
+	
+	protected long getTime() {
+		return System.nanoTime();
+		//return System.nanoTime() / 10E8;
+	}
+	
+	//private double nanosecondsToSeconds(long nanoseconds) {
+	//	return nanoseconds / 10E8;
+	//}
+	
+	protected void closeWindow() {
+		//window.setShouldClose(true);
+	}
 	
 	
 	private void cleanUp() {
 		renderer.cleanUp();
 		ModelUtils.cleanUp();
-		//window.cleanup();
+		window.cleanUp();
 	}
 	
 }

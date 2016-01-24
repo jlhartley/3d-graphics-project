@@ -1,5 +1,6 @@
 package testing;
 
+import static logging.Logger.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +13,14 @@ import entities.Entity;
 import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
+import math.MathUtils;
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
 import physics.Constants;
-import render.ProjectionType;
 import render.Renderer;
 import ui.Key;
-import math.MathUtils;
 import window.MouseButton;
 
 public class Tester5 extends Prototyper {
@@ -29,27 +29,46 @@ public class Tester5 extends Prototyper {
 		new Tester5().run();
 	}
 	
+	// UI Input
 	
+	@Override
+	public void onCameraControlTypeChanged(boolean relative) {
+		if (relative) {
+			log("Relative Camera Controls");
+			cameraControls = new RelativeControls(camera, window);
+		} else {
+			log("Absolute Camera Controls");
+			cameraControls = new AbsoluteControls(camera, window);
+		}
+	}
 	
-	// Keyboard input
+	@Override
+	public void onCameraPositionChanged(Vector3f newPosition) {
+		camera.setPosition(newPosition);
+	}
 	
+	@Override
+	public void onCameraRotationChanged(Vector3f newRotation) {
+		camera.setRotation(newRotation);
+	}
+	
+	@Override
+	public void onTimeMultiplierChanged(double timeMultiplier) {
+		this.timeMultiplier = timeMultiplier;
+	}
+	
+	// Keyboard Input
+
 	@Override
 	public void onKeyPressed(Key key) {
 		if (key == Key.SPACE) {
-			// Cycle through values for timeMultiplier,
-			// from 1 to MAX_TIME_MULTIPLIER
-			timeMultiplier = (timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
+			// Cycle through values for timeMultiplier, from 1 to MAX_TIME_MULTIPLIER
+			timeMultiplier = ((int)timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
 		} else if (key == Key.I) {
 			paused = !paused;
 		} else if (key == Key.R) {
 			resetCamera();
-			initPlanets();
-		} else if (key == Key.O) {
-			log("Orthographic Projection");
-			switchProjection(ProjectionType.ORTHOGRAPHIC);
-		} else if (key == Key.P) {
-			log("Perspective Projection");
-			switchProjection(ProjectionType.PERSPECTIVE);
+			//initPlanets();
 		} else if (key == Key.U) {
 			// Place the camera directly up in y
 			camera.setPosition(0, (float) Math.sqrt(500*500 + 500*500), 0);
@@ -71,7 +90,7 @@ public class Tester5 extends Prototyper {
 	}
 	
 	
-	// Mouse input
+	// Mouse Input
 	
 	@Override
 	public void onMouseDown(MouseButton mouseButton) {
@@ -105,6 +124,12 @@ public class Tester5 extends Prototyper {
 		}
 	}
 	
+	@Override
+	public void onCursorPositionChanged(Vector2f cursorPosition) {
+		
+	}
+	
+	
 	
 	// Constants
 	
@@ -132,7 +157,7 @@ public class Tester5 extends Prototyper {
 	// State
 	
 	// Scales deltaTime
-	private int timeMultiplier = 1;
+	private double timeMultiplier = 1;
 	
 	// Pause all logic other than camera movement
 	boolean paused = false;
@@ -235,9 +260,7 @@ public class Tester5 extends Prototyper {
 	}
 	
 	private void resetCamera() {
-		// Place the camera up and back from the origin
-		//camera.setPosition(0, 500, 500);
-		camera.setPosition(0, 100, 100);
+		camera.setPosition(0, 500, 500);
 		// Point camera downwards at 45 degrees
 		camera.setPitch(45);
 		camera.setYaw(0);
@@ -351,13 +374,10 @@ public class Tester5 extends Prototyper {
 			renderer.render(planet, camera);
 		}
 		
-	}
-
-
-
-	@Override
-	public void onMousePositionChanged(Vector2f mousePosition) {
-		// TODO Auto-generated method stub
+		
+		// UI 'rendering'
+		window.getSidePanel().updateCameraPosition(camera.getPosition());
+		window.getSidePanel().updateCameraRotation(camera.getRotation());
 		
 	}
 	
