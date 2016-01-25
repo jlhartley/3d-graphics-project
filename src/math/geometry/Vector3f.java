@@ -47,7 +47,7 @@ public class Vector3f {
 	
 	// Constructor for a copy of an existing vector
 	public Vector3f(Vector3f vec) {
-		set(vec.x, vec.y, vec.z);
+		set(vec);
 	}
 
 	// Constructor with components
@@ -60,6 +60,12 @@ public class Vector3f {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
+	}
+	
+	// Set this vector to another vector
+	public Vector3f set(Vector3f vec) {
+		set(vec.x, vec.y, vec.z);
 		return this;
 	}
 	
