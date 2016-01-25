@@ -61,10 +61,7 @@ public class Tester5 extends Prototyper {
 
 	@Override
 	public void onKeyPressed(Key key) {
-		if (key == Key.SPACE) {
-			// Cycle through values for timeMultiplier, from 1 to MAX_TIME_MULTIPLIER
-			timeMultiplier = ((int)timeMultiplier % MAX_TIME_MULTIPLIER) + 1;
-		} else if (key == Key.I) {
+		if (key == Key.P) {
 			paused = !paused;
 		} else if (key == Key.R) {
 			resetCamera();
@@ -75,12 +72,6 @@ public class Tester5 extends Prototyper {
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
-		} else if (key == Key.ONE) {
-			log("Absolute Camera Controls");
-			cameraControls = new AbsoluteControls(camera, window);
-		} else if (key == Key.TWO) {
-			log("Relative Camera Controls");
-			cameraControls = new RelativeControls(camera, window);
 		}
 	}
 	
