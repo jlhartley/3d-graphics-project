@@ -124,7 +124,6 @@ public class Tester5 extends Prototyper {
 	
 	// Constants
 	
-	// Entities
 	private static final double MIN_ORBITAL_RADIUS = 100;
 	private static final double MAX_ORBITAL_RADIUS = 200;
 	
@@ -139,9 +138,6 @@ public class Tester5 extends Prototyper {
 	private static final double STAR_DENSITY = 1;
 	
 	private static final int PLANET_COUNT = 250;
-	
-	// Time
-	private static final int MAX_TIME_MULTIPLIER = 5;
 	
 	
 	
