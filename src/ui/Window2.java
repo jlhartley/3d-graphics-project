@@ -80,7 +80,6 @@ public class Window2 implements Window {
 		initRootLayout(shell);
 		
 		canvas = new Canvas(shell, canvasCallbacks);
-		canvas.setCurrent();
 		GL.createCapabilities();
 		
 		sidePanel = new SidePanel(shell, uiCallbacks);
