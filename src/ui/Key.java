@@ -9,7 +9,8 @@ public enum Key {
 	W, A, S, D,
 	RIGHT, LEFT, UP, DOWN,
 	SPACE, CONTROL, SHIFT,
-	O, P, I, R, U, ONE, TWO;
+	O, P, I, R, U, ONE, TWO,
+	PAGEUP, PAGEDOWN;
 	
 	public static Key fromGLFW(int value) {
 		switch(value) {
@@ -50,6 +51,11 @@ public enum Key {
 			return ONE;
 		case GLFW_KEY_2:
 			return TWO;
+			
+		case GLFW_KEY_PAGE_UP:
+			return PAGEUP;
+		case GLFW_KEY_PAGE_DOWN:
+			return PAGEDOWN;
 		}
 		return null;
 	}
@@ -93,6 +99,11 @@ public enum Key {
 			return ONE;
 		case '2':
 			return TWO;
+			
+		case SWT.PAGE_UP:
+			return PAGEUP;
+		case SWT.PAGE_DOWN:
+			return PAGEDOWN;
 		}
 		return null;
 	}

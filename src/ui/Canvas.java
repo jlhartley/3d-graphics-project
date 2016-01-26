@@ -43,6 +43,8 @@ public class Canvas {
 	private Vector2f cursorPosition = new Vector2f();
 	
 	private boolean[] keysPressed = new boolean[400];
+	private boolean pageUpPressed = false;
+	private boolean pageDownPressed = false;
 	
 	private Callbacks callbacks;
 	
@@ -65,7 +67,6 @@ public class Canvas {
 		
 		initListeners();
 		
-		//GL.createCapabilities();
 	}
 	
 	private void updateSize(int width, int height) {
@@ -87,6 +88,13 @@ public class Canvas {
 				
 				Key key = Key.fromSWT(e.keyCode);
 				System.out.println("Key Pressed: " + key);
+				
+				if (key == Key.PAGEUP) {
+					pageUpPressed = true;
+				} else if (key == Key.PAGEDOWN) {
+					pageDownPressed = true;
+				}
+				
 				if (callbacks != null) {
 					callbacks.onKeyPressed(key);
 				}
@@ -99,6 +107,13 @@ public class Canvas {
 				
 				Key key = Key.fromSWT(e.keyCode);
 				System.out.println("Key Released: " + key);
+				
+				if (key == Key.PAGEUP) {
+					pageUpPressed = false;
+				} else if (key == Key.PAGEDOWN) {
+					pageDownPressed = false;
+				}
+				
 				if (callbacks != null) {
 					callbacks.onKeyReleased(key);
 				}
@@ -180,6 +195,12 @@ public class Canvas {
 	}
 
 	public boolean isKeyPressed(int keyCode) {
+		if (Key.fromGLFW(keyCode) == Key.PAGEUP) {
+			return pageUpPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.PAGEDOWN) {
+			return pageDownPressed;
+		}
 		return keysPressed[keyCode];
 	}
 
