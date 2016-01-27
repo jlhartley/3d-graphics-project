@@ -1,5 +1,6 @@
 package camera;
 
+import static logging.Logger.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 import math.geometry.Vector2f;
@@ -18,9 +19,9 @@ public abstract class CameraControls {
 	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4.2f;
 	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 2.5f;
 	
-	// Degrees per virtual screen coordinate
+	// Degrees per normalised device coordinate
 	// Scales mouse movement to camera rotation
-	private static final float MOUSE_MOVEMENT_SCALE = 0.05f;
+	private static final float MOUSE_MOVEMENT_SCALE = 45;
 	
 	// Key mappings
 	public static final int SPEED_MODIFIER_KEY = GLFW_KEY_LEFT_CONTROL;
@@ -89,7 +90,7 @@ public abstract class CameraControls {
 		// Mouse controls
 		if (mouseDown) {
 			
-			Vector2f cursorPosition = window.getCursorPosition();
+			Vector2f cursorPosition = convertCursorPositionToNDC(window.getCursorPosition());
 			
 			// Find the mouse movement vector
 			Vector2f mouseDelta = Vector2f.sub(mouseDownCursorPosition, cursorPosition);
@@ -111,9 +112,16 @@ public abstract class CameraControls {
 		// Allow endless cursor movement
 		window.disableCursor();
 		// Record the mouse cursor position and camera rotation
-		mouseDownCursorPosition = window.getCursorPosition().getCopy();
+		mouseDownCursorPosition = convertCursorPositionToNDC(window.getCursorPosition().getCopy());
 		mouseDownCameraRotation = camera.getRotation().getCopy();
-		System.out.println("Mouse Down Cursor Position: " + mouseDownCursorPosition);
+		log("Mouse Down Cursor Position: " + mouseDownCursorPosition);
+	}
+	
+	private Vector2f convertCursorPositionToNDC(Vector2f cursorPosition) {
+		Vector2f transformedCursorPosition = new Vector2f();
+		transformedCursorPosition.x = cursorPosition.x / (window.getCanvas().getWidth() / 2);
+		transformedCursorPosition.y = cursorPosition.y / (window.getCanvas().getHeight() / 2);
+		return transformedCursorPosition;
 	}
 	
 	public void onMouseUp() {

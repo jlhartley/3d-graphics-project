@@ -2,7 +2,6 @@ package camera;
 
 import math.geometry.Vector3f;
 import ui.Window2;
-import window.Window;
 
 public class AbsoluteControls extends CameraControls {
 	
