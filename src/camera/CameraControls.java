@@ -112,16 +112,19 @@ public abstract class CameraControls {
 		// Allow endless cursor movement
 		window.disableCursor();
 		// Record the mouse cursor position and camera rotation
-		mouseDownCursorPosition = convertCursorPositionToNDC(window.getCursorPosition().getCopy());
+		mouseDownCursorPosition = convertCursorPositionToNDC(window.getCursorPosition());
 		mouseDownCameraRotation = camera.getRotation().getCopy();
 		log("Mouse Down Cursor Position: " + mouseDownCursorPosition);
 	}
 	
+	// Note that this returns a new object
 	private Vector2f convertCursorPositionToNDC(Vector2f cursorPosition) {
-		Vector2f transformedCursorPosition = new Vector2f();
-		transformedCursorPosition.x = cursorPosition.x / (window.getCanvas().getWidth() / 2);
-		transformedCursorPosition.y = cursorPosition.y / (window.getCanvas().getHeight() / 2);
-		return transformedCursorPosition;
+		float width = window.getCanvas().getWidth();
+		float height = window.getCanvas().getHeight();
+		Vector2f ndcCursorPosition = new Vector2f();
+		ndcCursorPosition.x = cursorPosition.x / (width / 2);
+		ndcCursorPosition.y = cursorPosition.y / (height / 2);
+		return ndcCursorPosition;
 	}
 	
 	public void onMouseUp() {
