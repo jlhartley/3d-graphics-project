@@ -57,8 +57,11 @@ public class Canvas {
 	
 	public void init() {
 		GLData glData = new GLData();
+		// Use double-buffering
 		glData.doubleBuffer = true;
+		// 8x Multisampling for anti-aliasing
 		glData.samples = 8;
+		// Enable vsync
 		glData.swapInterval = 1;
 		
 		glCanvas = new GLCanvas(shell, STYLE_BITS, glData);
@@ -66,7 +69,6 @@ public class Canvas {
 		glCanvas.setCurrent();
 		
 		initListeners();
-		
 	}
 	
 	private void updateSize(int width, int height) {

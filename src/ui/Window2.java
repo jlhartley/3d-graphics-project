@@ -79,6 +79,10 @@ public class Window2 implements Window {
 		
 		initRootLayout(shell);
 		
+		// The order of object creation for canvas and sidePanel
+		// is important. It determines which one lies on the right
+		// or the left.
+		
 		canvas = new Canvas(shell, canvasCallbacks);
 		GL.createCapabilities();
 		

@@ -25,6 +25,8 @@ import ui.Window2.UICallbacks;
 
 public class SidePanel {
 	
+	// All widgets in this class are the direct or indirect
+	// children of this composite.
 	private Composite sidePanelComposite;
 	
 	private Button perspectiveButton;
@@ -32,6 +34,9 @@ public class SidePanel {
 	
 	private Button relativeButton;
 	private Button absoluteButton;
+	
+	private Button runButton;
+	private Button editButton;
 	
 	private Text xText;
 	private Text yText;
@@ -42,9 +47,6 @@ public class SidePanel {
 	private Text rollText;
 	
 	private Scale speedScale;
-	
-	private Button runButton;
-	private Button editButton;
 	
 	
 	private UICallbacks uiCallbacks;
@@ -59,6 +61,8 @@ public class SidePanel {
 	}
 	
 	public void updateCameraPosition(Vector3f cameraPosition) {
+		// Make sure the user isn't focused on the text box
+		// when we try to change the contents.
 		if (!xText.isFocusControl()) {
 			xText.setText(String.valueOf(cameraPosition.x));
 		}
@@ -71,6 +75,8 @@ public class SidePanel {
 	}
 	
 	public void updateCameraRotation(Vector3f cameraRotation) {
+		// Make sure the user isn't focused on the text box
+		// when we try to change the contents.
 		if (!pitchText.isFocusControl()) {
 			pitchText.setText(String.valueOf(cameraRotation.x));
 		}
@@ -90,6 +96,8 @@ public class SidePanel {
 			newCameraPosition.y = Float.parseFloat(yText.getText());
 			newCameraPosition.z = Float.parseFloat(zText.getText());
 		} catch (NumberFormatException e) {
+			// If there was an exception, return so that onCameraPositionChanged
+			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
 		uiCallbacks.onCameraPositionChanged(newCameraPosition);
@@ -102,6 +110,8 @@ public class SidePanel {
 			newCameraRotation.y = Float.parseFloat(yawText.getText());
 			newCameraRotation.z = Float.parseFloat(rollText.getText());
 		} catch (NumberFormatException e) {
+			// If there was an exception, return so that onCameraRotationChanged
+			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
 		uiCallbacks.onCameraRotationChanged(newCameraRotation);
