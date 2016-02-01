@@ -1,12 +1,12 @@
 package camera;
 
 import math.geometry.Vector3f;
-import ui.Window2;
+import ui.UIWindow;
 
 public class AbsoluteControls extends CameraControls {
 	
 	
-	public AbsoluteControls(Camera camera, Window2 window) {
+	public AbsoluteControls(Camera camera, UIWindow window) {
 		super(camera, window);
 	}
 	

@@ -4,11 +4,11 @@ import math.geometry.Matrix4f;
 import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 import math.geometry.Vector4f;
-import ui.Window2;
+import ui.UIWindow;
 
 public class RelativeControls extends CameraControls {
 
-	public RelativeControls(Camera camera, Window2 window) {
+	public RelativeControls(Camera camera, UIWindow window) {
 		super(camera, window);
 	}
 

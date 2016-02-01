@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Text;
 
 import math.geometry.Vector3f;
 import render.ProjectionType;
-import ui.Window2.UICallbacks;
 
 public class SidePanel {
 	
@@ -48,11 +47,18 @@ public class SidePanel {
 	
 	private Scale speedScale;
 	
+	public interface Callbacks {
+		public void onProjectionChanged(ProjectionType projectionType);
+		public void onCameraControlTypeChanged(boolean relative);
+		public void onCameraPositionChanged(Vector3f newPosition);
+		public void onCameraRotationChanged(Vector3f newRotation);
+		public void onTimeMultiplierChanged(double timeMultiplier);
+	}
 	
-	private UICallbacks uiCallbacks;
+	private Callbacks callbacks;
 	
-	public SidePanel(Shell shell, UICallbacks uiCallbacks) {
-		this.uiCallbacks = uiCallbacks;
+	public SidePanel(Shell shell, Callbacks callbacks) {
+		this.callbacks = callbacks;
 		sidePanelComposite = new Composite(shell, SWT.BORDER);
 		initComposite();
 		initProjectionTypeGroup();
@@ -100,7 +106,7 @@ public class SidePanel {
 			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
-		uiCallbacks.onCameraPositionChanged(newCameraPosition);
+		callbacks.onCameraPositionChanged(newCameraPosition);
 	}
 	
 	private void onCameraRotationEntered() {
@@ -114,7 +120,7 @@ public class SidePanel {
 			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
-		uiCallbacks.onCameraRotationChanged(newCameraRotation);
+		callbacks.onCameraRotationChanged(newCameraRotation);
 	}
 	
 	
@@ -149,9 +155,9 @@ public class SidePanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (perspectiveButton.getSelection()) {
-					uiCallbacks.onProjectionChanged(ProjectionType.PERSPECTIVE);
+					callbacks.onProjectionChanged(ProjectionType.PERSPECTIVE);
 				} else {
-					uiCallbacks.onProjectionChanged(ProjectionType.ORTHOGRAPHIC);
+					callbacks.onProjectionChanged(ProjectionType.ORTHOGRAPHIC);
 				}
 			}
 			
@@ -185,9 +191,9 @@ public class SidePanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (relativeButton.getSelection()) {
-					uiCallbacks.onCameraControlTypeChanged(true);
+					callbacks.onCameraControlTypeChanged(true);
 				} else {
-					uiCallbacks.onCameraControlTypeChanged(false);
+					callbacks.onCameraControlTypeChanged(false);
 				}
 			}
 			
@@ -313,7 +319,7 @@ public class SidePanel {
 			public void widgetSelected(SelectionEvent e) {
 				int selection = speedScale.getSelection();
 				System.out.println(selection);
-				uiCallbacks.onTimeMultiplierChanged((double)selection / 4);
+				callbacks.onTimeMultiplierChanged((double)selection / 4);
 			}
 			
 		});

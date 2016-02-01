@@ -35,10 +35,10 @@ public class Tester5 extends Prototyper {
 	public void onCameraControlTypeChanged(boolean relative) {
 		if (relative) {
 			log("Relative Camera Controls");
-			cameraControls = new RelativeControls(camera, window);
+			cameraControls = relativeCameraControls;
 		} else {
 			log("Absolute Camera Controls");
-			cameraControls = new AbsoluteControls(camera, window);
+			cameraControls = absoluteCameraControls;
 		}
 	}
 	
@@ -154,7 +154,10 @@ public class Tester5 extends Prototyper {
 	
 	Camera camera = new Camera();
 	
-	CameraControls cameraControls = new RelativeControls(camera, window);
+	RelativeControls relativeCameraControls = new RelativeControls(camera, window);
+	AbsoluteControls absoluteCameraControls = new AbsoluteControls(camera, window);
+	
+	CameraControls cameraControls = relativeCameraControls;
 	
 	Model sphereModel = Models.getIcosphereModel();
 	

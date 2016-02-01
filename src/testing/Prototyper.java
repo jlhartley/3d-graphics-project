@@ -9,10 +9,11 @@ import math.geometry.Vector2f;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
-import ui.Window2;
+import ui.SidePanel;
+import ui.UIWindow;
 import util.ModelUtils;
 
-public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ Window2.UICallbacks, Canvas.Callbacks {
+public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -25,7 +26,7 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 	private static final String FRAGMENT_SHADER_PATH = "src/shaders/fragmentShader.glsl";
 	
 	
-	protected Window2 window;
+	protected UIWindow window;
 	protected Renderer renderer;
 	
 	// Default projection matrix is perspective
@@ -38,14 +39,6 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 	public void onProjectionChanged(ProjectionType projectionType) {
 		switchProjection(projectionType);
 	}
-
-	// Canvas Callbacks
-	
-	@Override
-	public void onFramebufferResized(int width, int height) {
-		log("Framebuffer Width: " + width + ", Height: " + height);
-		renderer.onFramebufferResized(width, height, projectionType);
-	}
 	
 	protected void switchProjection(ProjectionType type) {
 		this.projectionType = type;
@@ -54,24 +47,24 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		renderer.updateProjection(framebufferWidth, framebufferHeight, type);
 	}
 
+	// Canvas Callbacks
+	
+	@Override
+	public void onFramebufferResized(int width, int height) {
+		log("Framebuffer Width: " + width + ", Height: " + height);
+		renderer.onFramebufferResized(width, height, projectionType);
+	}
+
 
 	public Prototyper() {
-		setUp();
-	}
-	
-	private void setUp() {
+		// Create window and OpenGL context.
+		// It is important that this happens before anything else,
+		// since other stuff depends on OpenGL context creation.
+		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this);
 		
-		window = new Window2(new Display(), WIDTH, HEIGHT, TITLE, this, this);
-		
-		// Create window and OpenGL context
-		// It is important this is the first setup stage
-		//window = new Window(WIDTH, HEIGHT, TITLE);
-		//window.setInputCallbacks(this); // Callbacks for keyboard
-		//window.setWindowCallbacks(this); // Callbacks for framebuffer resize
-		
-		// Set up the renderer
+		// Instantiate the renderer
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
-		renderer.setClearColour(0, 0, 0); // Set background colour to black
+		renderer.setClearColour(0, 0, 0); // Set clear colour to black
 		
 		// Centre window
 		window.centre();
@@ -79,9 +72,9 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 	
 	
 	public void run() {
-		// Show the window just before the main loop
-		// This ensures it is only displayed after all other
-		// resources have finished loading
+		// Open the window just before the main loop.
+		// This ensures it is only displayed after 
+		// all other resources have finished loading.
 		//window.show();
 		window.open();
 		
@@ -107,6 +100,7 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		
 		double startTime = getTime();
 		
+		// The logic thread
 		new Thread(new Runnable() {
 			
 			Logger logicLogger = new Logger();
@@ -125,6 +119,7 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 			
 		}).start();
 		
+		// The rendering and UI thread
 		window.asyncExec(new Runnable() {
 			
 			Logger renderLogger = new Logger();
@@ -148,27 +143,6 @@ public abstract class Prototyper implements /*InputCallbacks, WindowCallbacks*/ 
 		});
 		
 		window.loop();
-		
-		/*
-		while (!window.shouldClose()) {
-			
-			double currentTime = glfwGetTime();
-			
-			// Calculate delta time
-			double deltaTime = currentTime - oldTime;
-			oldTime = currentTime;
-			
-			// Output data at regular intervals
-			logger.onFrame(currentTime);
-			
-			logic((float) deltaTime); // Logic goes here
-			renderer.clear();
-			render(renderer); // Rendering entities goes here
-			
-			window.update(); // Swap buffers and poll for events
-			
-		}
-		*/
 		
 	}
 	

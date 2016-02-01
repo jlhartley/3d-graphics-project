@@ -2,26 +2,17 @@ package ui;
 
 import static logging.Logger.log;
 
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.lwjgl.opengl.GL;
 
 import math.geometry.Vector2f;
-import math.geometry.Vector3f;
-import render.ProjectionType;
 
 import static ui.UIUtils.*;
 
-public class Window2 implements Window {
-	
-	public interface UICallbacks {
-		public void onProjectionChanged(ProjectionType projectionType);
-		public void onCameraControlTypeChanged(boolean relative);
-		public void onCameraPositionChanged(Vector3f newPosition);
-		public void onCameraRotationChanged(Vector3f newRotation);
-		public void onTimeMultiplierChanged(double timeMultiplier);
-	}
+public class UIWindow implements Window {
 	
 	// Display manages the connection between SWT and the OS
 	private final Display display;
@@ -46,12 +37,12 @@ public class Window2 implements Window {
 	private SidePanel sidePanel;
 	
 	
-	public Window2(Display display, int width, int height, String title, UICallbacks uiCallbacks, Canvas.Callbacks canvasCallbacks) {
+	public UIWindow(Display display, int width, int height, String title, SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
 		this.display = display;
 		this.title = title;
 		updateSize(width, height);
 		initShell();
-		initUI(uiCallbacks, canvasCallbacks);
+		initUI(sidePanelCallbacks, canvasCallbacks);
 		log("Display Bounds: " + display.getBounds());
 		log("Window Bounds: " + shell.getBounds());
 		log("Window Size: " + shell.getSize());
@@ -74,19 +65,22 @@ public class Window2 implements Window {
 	}
 
 	
-	private void initUI(UICallbacks uiCallbacks, Canvas.Callbacks canvasCallbacks) {
+	private void initUI(SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
 		initMenu(shell);
 		
-		initRootLayout(shell);
+		// Root layout is a GridLayout with 2 columns
+		GridLayout rootLayout = new GridLayout();
+		rootLayout.numColumns = 2;
+		shell.setLayout(rootLayout);
 		
 		// The order of object creation for canvas and sidePanel
-		// is important. It determines which one lies on the right
-		// or the left.
+		// is important. It determines which is in the first
+		// or the second column (left versus right).
 		
 		canvas = new Canvas(shell, canvasCallbacks);
 		GL.createCapabilities();
 		
-		sidePanel = new SidePanel(shell, uiCallbacks);
+		sidePanel = new SidePanel(shell, sidePanelCallbacks);
 	}
 	
 	

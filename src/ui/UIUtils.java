@@ -5,7 +5,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -75,13 +74,6 @@ public class UIUtils {
 		MenuItem aboutMenuItem = new MenuItem(helpMenu, SWT.NONE);
 		aboutMenuItem.setText("About");
 		
-	}
-
-	public static void initRootLayout(Shell shell) {
-		// Root layout is a GridLayout with 2 columns
-		GridLayout rootLayout = new GridLayout();
-		rootLayout.numColumns = 2;
-		shell.setLayout(rootLayout);
 	}
 
 	public static FillLayout getGroupFillLayout() {
