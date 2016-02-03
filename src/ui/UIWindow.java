@@ -2,8 +2,11 @@ package ui;
 
 import static logging.Logger.log;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.lwjgl.opengl.GL;
@@ -45,7 +48,6 @@ public class UIWindow implements Window {
 		initUI(sidePanelCallbacks, canvasCallbacks);
 		log("Display Bounds: " + display.getBounds());
 		log("Window Bounds: " + shell.getBounds());
-		log("Window Size: " + shell.getSize());
 		log("Window Client Area: " + shell.getClientArea());
 	}
 	
@@ -62,6 +64,16 @@ public class UIWindow implements Window {
 		shell = new Shell(display);
 		shell.setSize(width, height);
 		shell.setText(title);
+		
+		shell.addListener(SWT.Resize, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				int width = shell.getBounds().width;
+				int height = shell.getBounds().height;
+				updateSize(width, height);
+			}
+		});
 	}
 
 	

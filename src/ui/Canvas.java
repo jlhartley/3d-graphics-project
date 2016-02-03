@@ -81,6 +81,20 @@ public class Canvas {
 	
 	public void initListeners() {
 		
+		glCanvas.addListener(SWT.Resize, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				int width = glCanvas.getBounds().width;
+				int height = glCanvas.getBounds().height;
+				updateSize(width, height);
+				// Should be using this size to update the framebuffer?
+				if (callbacks != null) {
+					callbacks.onFramebufferResized(width, height);
+				}
+			}
+		});
+		
 		glCanvas.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -118,20 +132,6 @@ public class Canvas {
 				
 				if (callbacks != null) {
 					callbacks.onKeyReleased(key);
-				}
-			}
-		});
-		
-		glCanvas.addListener(SWT.Resize, new Listener() {
-			
-			@Override
-			public void handleEvent(Event event) {
-				int width = glCanvas.getBounds().width;
-				int height = glCanvas.getBounds().height;
-				updateSize(width, height);
-				// Should be using this size to update the framebuffer?
-				if (callbacks != null) {
-					callbacks.onFramebufferResized(width, height);
 				}
 			}
 		});
