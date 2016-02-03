@@ -5,7 +5,6 @@ import static logging.Logger.log;
 import org.eclipse.swt.widgets.Display;
 
 import logging.Logger;
-import math.geometry.Vector2f;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
@@ -150,21 +149,9 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 	protected abstract void render(Renderer renderer);	
 	
 	
-	// Mostly a set of convenience methods
+	// Convenience methods
 	protected boolean isKeyPressed(int key) {
 		return window.getCanvas().isKeyPressed(key);
-	}
-	
-	protected Vector2f getCursorPosition() {
-		return window.getCanvas().getCursorPosition();
-	}
-	
-	protected void disableCursor() {
-		window.disableCursor();
-	}
-	
-	protected void enableCursor() {
-		window.enableCursor();
 	}
 	
 	//protected float getTime() {
