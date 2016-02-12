@@ -58,11 +58,11 @@ public class OBJParser2 {
 		if (line.startsWith("v ")) { // Vertex position definition
 			Vector3f pos = lineToVector3f(lineParts);
 			positionsIn.add(pos);
-		} else if (line.startsWith("vt ")) { // Vertex texture coordinate definition
-			// TODO: add implementation
 		} else if (line.startsWith("vn ")) { // Vertex normal definition
 			Vector3f normal = lineToVector3f(lineParts);
 			normalsIn.add(normal);
+		} else if (line.startsWith("vt ")) { // Vertex texture coordinate definition
+			// TODO: add implementation
 		}
 	}
 	
@@ -81,8 +81,8 @@ public class OBJParser2 {
 			// - 1 to convert from OBJ 1-based index system
 			String[] vertexIndexData = lineParts[vertex].split("/");
 			int vertexPositionIndex = Integer.parseInt(vertexIndexData[0]) - 1;
-			//int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
 			int vertexNormalIndex = Integer.parseInt(vertexIndexData[2]) - 1;
+			//int vertexTextureIndex = Integer.parseInt(vertexIndexData[1]) - 1;
 			
 			processIndexData(vertexPositionIndex, vertexNormalIndex);
 			
