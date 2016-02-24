@@ -10,15 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import math.geometry.Vector3f;
-import model.Model;
 import model.vertices.Mesh;
 import model.vertices.Vertex;
 
 import static model.parser.ParserUtils.*;
 
 public class OBJParser2 {
-	
-	// TODO: A lot of optimisation
 	
 	private static final String PATH = "res/models/";
 	private static final String EXTENSION = ".obj";
@@ -81,13 +78,10 @@ public class OBJParser2 {
 			int vertexNormalIndex = Integer.parseInt(vertexIndexData[2]) - 1;
 			
 			processIndexData(vertexPositionIndex, vertexNormalIndex);
-			
 		}
-		
 	}
 	
 	private void processIndexData(int vertexPositionIndex, int vertexNormalIndex) {
-		
 		// Grab the vertex attributes out of the correct place
 		Vector3f position = positionsIn.get(vertexPositionIndex);
 		Vector3f normal = normalsIn.get(vertexNormalIndex);
@@ -95,7 +89,6 @@ public class OBJParser2 {
 		// Create a vertex and append it to the list of non-indexed vertices
 		Vertex vertex = new Vertex(position, normal);
 		nonIndexedVertices.add(vertex);
-		
 	}
 	
 	private void indexVertices() {
@@ -138,7 +131,7 @@ public class OBJParser2 {
 	
 	
 	
-	public Model getModel() {
+	public Mesh getModel() {
 		
 		try ( BufferedReader reader = new BufferedReader(new FileReader(fullPath)) ) {
 			
@@ -164,6 +157,7 @@ public class OBJParser2 {
 		
 		indexVertices();
 		
+		/*
 		int uniqueVertexCount = indexedVertices.size();
 		
 		// There are 3 (x, y and z) components to each vertex
@@ -185,6 +179,7 @@ public class OBJParser2 {
 			vertexNormals[i * 3 + 1] = normal.y;
 			vertexNormals[i * 3 + 2] = normal.z;
 		}
+		*/
 		
 		
 		Mesh mesh = new Mesh(indexedVertices, indices);
@@ -196,7 +191,7 @@ public class OBJParser2 {
 		System.out.println("Triangle Count: " + mesh.getTriangleCount());
 		
 		// Currently just using the normals to colour the model
-		return new Model(vertexPositions, vertexNormals, vertexNormals, indices);
+		return mesh;
 	}
 	
 	
