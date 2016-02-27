@@ -1,11 +1,11 @@
 package model;
 
+import static model.ModelData.*;
+
 import entities.Entity;
 import math.geometry.Vector3f;
 import model.parser.OBJParser;
 import model.parser.OBJParser2;
-
-import static model.ModelData.*;
 
 public class Models {
 	
@@ -117,7 +117,7 @@ public class Models {
 	public static Model getDragonModel() {
 		if (dragonModel == null) {
 			OBJParser2 parser = new OBJParser2(DRAGON_MODEL_FILENAME);
-			dragonModel = parser.getModel();
+			dragonModel = new Model(parser.getMesh());
 		}
 		return dragonModel;
 	}
@@ -134,7 +134,7 @@ public class Models {
 			String relativePath = ICOSPHERE_DIRECTORY + ICOSPHERE_BASE_FILENAME + ICOSPHERE_SUBDIVISIONS + "-"
 					+ ICOSPHERE_SHADING;
 			OBJParser2 parser = new OBJParser2(relativePath);
-			icosphereModel = parser.getModel();
+			icosphereModel = new Model(parser.getMesh());
 		}
 		return icosphereModel;
 	}
@@ -150,7 +150,7 @@ public class Models {
 		if (uvsphereModel == null) {
 			String relativePath = UVSPHERE_DIRECTORY + UVSPHERE_BASE_FILENAME + "-" + UVSPHERE_SHADING;
 			OBJParser2 parser = new OBJParser2(relativePath);
-			uvsphereModel = parser.getModel();
+			uvsphereModel = new Model(parser.getMesh());
 		}
 		return uvsphereModel;
 	}

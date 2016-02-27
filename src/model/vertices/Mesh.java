@@ -40,6 +40,10 @@ public class Mesh {
 		return vertexNormals;
 	}
 	
+	public List<Vertex> getVertices() {
+		return vertices;
+	}
+	
 	public int[] getIndices() {
 		return indices;
 	}

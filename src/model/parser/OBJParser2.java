@@ -131,7 +131,7 @@ public class OBJParser2 {
 	
 	
 	
-	public Mesh getModel() {
+	public Mesh getMesh() {
 		
 		try ( BufferedReader reader = new BufferedReader(new FileReader(fullPath)) ) {
 			

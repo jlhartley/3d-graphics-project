@@ -82,13 +82,15 @@ public class Renderer {
 		
 		Model model = entity.getModel();
 		
-		model.bindVAO();
+		model.bind();
 		
 		setMatrices(entity, camera);
 		
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		
-		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+		int vertexCount = model.getVertexCount();
+		
+		glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 		
 		//model.unbindVAO();
 		
