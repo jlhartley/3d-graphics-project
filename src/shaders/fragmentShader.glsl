@@ -1,4 +1,7 @@
-#version 400 core
+#version 420 core
+
+// Enable early depth testing
+layout(early_fragment_tests) in;
 
 // Constants
 const float MIN_BRIGHTNESS = 0.1;
