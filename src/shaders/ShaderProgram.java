@@ -25,6 +25,9 @@ public class ShaderProgram {
 	private int fragmentShaderId;
 	private int programId;
 	
+	// Provides an interface for querying the shader program
+	public Introspector introspector;
+	
 	private HashMap<String, Integer> uniformLocationCache = new HashMap<>();
 	
 	public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
@@ -40,6 +43,11 @@ public class ShaderProgram {
 		
 		glLinkProgram(programId);
 		glValidateProgram(programId);
+		
+		introspector = new Introspector(programId);
+		for (VertexAttribute attr : introspector.listVertexAttributes()) {
+			System.out.println(attr);
+		}
 	}
 	
 	private void bindAttributes() {
@@ -110,6 +118,11 @@ public class ShaderProgram {
 		}
 		
 		return location;
+	}
+	
+	
+	public Introspector getIntrospector() {
+		return introspector;
 	}
 	
 	
