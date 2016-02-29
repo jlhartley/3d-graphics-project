@@ -12,6 +12,8 @@ public class Vector3f {
 	
 	// Note that the mutator methods use a fluid interface
 	
+	public static final int FLOATS = 3;
+	
 	public static Vector3f add(Vector3f vec1, Vector3f vec2) {
 		Vector3f vec = new Vector3f();
 		vec.x = vec1.x + vec2.x;

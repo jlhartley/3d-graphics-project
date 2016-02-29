@@ -16,11 +16,13 @@ import shaders.ShaderProgram;
 
 public class ModelUtils {
 	
-	enum VBOFormat {
+	public static enum VBOFormat {
 		INTERLEAVED,
 		SEPARATE
 	}
 	
+	// TODO: Replace with set, just in case the same VBO were used 
+	// for two separate VAOs
 	private static List<Integer> vbos = new ArrayList<>();
 	
 	public static void addVertexAttributes(List<Vertex> vertices) {
@@ -31,6 +33,7 @@ public class ModelUtils {
 		
 		int TOTAL_FLOATS = FLOATS_PER_VERTEX * vertices.size();;
 		
+		
 		FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(TOTAL_FLOATS);
 		
 		for (Vertex vertex : vertices) {
@@ -38,18 +41,12 @@ public class ModelUtils {
 			Vector3f position = vertex.position;
 			Vector3f normal = vertex.normal;
 			
-			// For now, just set colour to normal
-			//Vector3f colour = normal;
+			// For now, just colour using normals
+			Vector3f colour = vertex.normal;
 			
-			float[] positionArray = {position.x, position.y, position.z};
-			verticesBuffer.put(positionArray);
-			
-			float[] normalArray = {normal.x, normal.y, normal.z};
-			verticesBuffer.put(normalArray);
-			
-			// This is actually colour, 
-			// but the colour is the normals for now
-			verticesBuffer.put(normalArray);
+			verticesBuffer.put(position.x).put(position.y).put(position.z);
+			verticesBuffer.put(normal.x).put(normal.y).put(normal.z);
+			verticesBuffer.put(colour.x).put(colour.y).put(colour.z);
 		}
 		
 		verticesBuffer.flip();

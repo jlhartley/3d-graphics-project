@@ -8,10 +8,10 @@ public class VertexAttribute {
 	
 	float[] data;
 	
-	public VertexAttribute(float[] data, int index, String variableName, int size) {
+	public VertexAttribute(float[] data, int index, String name, int size) {
 		this.data = data;
 		this.index = index;
-		this.name = variableName;
+		this.name = name;
 		this.size = size;
 	}
 
