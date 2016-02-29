@@ -4,12 +4,14 @@
 layout(early_fragment_tests) in;
 
 // Constants
+const float PI = 3.14159265359;
 const float MIN_BRIGHTNESS = 0.1;
+
 
 // Input
 in vec3 pass_colour;
-in vec3 unit_world_normal;
-in vec3 unit_to_light;
+in vec3 world_normal;
+in vec3 to_light;
 
 
 // Uniforms
@@ -20,36 +22,6 @@ uniform vec3 light_colour;
 // Output
 out vec4 out_color;
 
-
-// Global state
-vec3 colour = pass_colour;
-
-
-// TODO: Get rid of global state "colour" variable
-void colourByNormalisationError()
-{
-		// The error that results from vertex shader interpolation
-		float toLightNormalisationError = length(unit_to_light) - 1;
-		float normalNormalisationError = length(unit_world_normal) - 1;
-		
-		// Colour based on the error
-		
-		// Green and red for normal interpolation error
-		if (normalNormalisationError > 0.0035) {
-			colour = vec3(0, 1, 0);
-		} else if (normalNormalisationError < -0.0035) {
-			colour = vec3(1, 0, 0);
-		}
-		
-		
-		// Orange and blue "to light" interpolation error
-		if (toLightNormalisationError > 0.0001) {
-			colour = vec3(0, 0, 1);
-		} else if (toLightNormalisationError < -0.0001) {
-			colour = vec3(1, 1, 0);
-		}
-}
-
 void main()
 {
 	// Brightness will remain at a default of 1 if lighting is not enabled
@@ -57,23 +29,15 @@ void main()
 	
 	if (lighting_enabled) {
 		
-		//float distanceToLight = length(to_light);
-		
-		//colourByNormalisationError();
-		
-		// Because of interpolation, the normalised status cannot be guaranteed.
+		// Because of barycentric interpolation, the normalised status cannot be guaranteed.
 		// Therefore, we normalise again.
-		vec3 unitToLight = normalize(unit_to_light);
-		vec3 unitWorldNormal = normalize(unit_world_normal);
+		vec3 unitWorldNormal = normalize(world_normal);
+		vec3 unitToLight = normalize(to_light);
 		
 		// Ensure that the brightness does not fall below a minimum value
-		//brightness = max(dot(unit_world_normal, unit_to_light), MIN_BRIGHTNESS);
-		
 		brightness = max(dot(unitWorldNormal, unitToLight), MIN_BRIGHTNESS);
-		
-		//brightness *= 10000 / (distanceToLight * distanceToLight);
 		
 	}
     
-    out_color = vec4(colour * brightness * light_colour, 1.0);
+    out_color = vec4(pass_colour * brightness * light_colour, 1.0);
 }
