@@ -1,6 +1,7 @@
 package ui;
 
 import static logging.Logger.log;
+import static org.lwjgl.opengl.GL11.*;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -10,6 +11,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.libffi.Closure;
 
 import math.geometry.Vector2f;
 
@@ -39,6 +42,7 @@ public class UIWindow implements Window {
 	// Wraps the side panel composite
 	private SidePanel sidePanel;
 	
+	private Closure debugMessageCallback;
 	
 	public UIWindow(Display display, int width, int height, String title, SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
 		this.display = display;
@@ -91,6 +95,9 @@ public class UIWindow implements Window {
 		
 		canvas = new Canvas(shell, canvasCallbacks);
 		GL.createCapabilities();
+		debugMessageCallback = GLUtil.setupDebugMessageCallback();
+		// If OpenGL initialisation was successful, display the version
+		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
 		
 		sidePanel = new SidePanel(shell, sidePanelCallbacks);
 	}
@@ -214,6 +221,9 @@ public class UIWindow implements Window {
 	
 	// Cleanup
 	public void cleanUp() {
+		if (debugMessageCallback != null) {
+			debugMessageCallback.release();
+		}
 		// Once the shell is disposed, the display should be disposed
 		display.dispose();
 	}
