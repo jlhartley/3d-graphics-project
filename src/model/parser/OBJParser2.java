@@ -116,13 +116,13 @@ public class OBJParser2 {
 				int duplicateVertexIndex = vertexIndexMap.get(nonIndexedVertex);
 				indices[i] = duplicateVertexIndex;
 			} else { // If this is a unique vertex
-				// The size of the indexed list reflects the index 
+				// The current size of the indexed list gives the index 
 				// where the vertex will be added
-				int nextVertexIndex = indexedVertices.size();
-				indices[i] = nextVertexIndex;
-				vertexIndexMap.put(nonIndexedVertex, nextVertexIndex);
-				// Else if this is a unique vertex
+				int vertexIndex = indexedVertices.size();
 				indexedVertices.add(nonIndexedVertex);
+				indices[i] = vertexIndex;
+				// Update the map for further indexing
+				vertexIndexMap.put(nonIndexedVertex, vertexIndex);
 			}
 			
 		}
@@ -157,29 +157,6 @@ public class OBJParser2 {
 		
 		indexVertices();
 		
-		/*
-		int uniqueVertexCount = indexedVertices.size();
-		
-		// There are 3 (x, y and z) components to each vertex
-		float[] vertexPositions = new float[uniqueVertexCount * 3];
-		float[] vertexNormals = new float[uniqueVertexCount * 3];
-		
-		// Copy the vertex positions into the array
-		for (int i = 0; i < uniqueVertexCount; i++) {
-			Vector3f position = indexedVertices.get(i).position;
-			vertexPositions[i * 3] = position.x;
-			vertexPositions[i * 3 + 1] = position.y;
-			vertexPositions[i * 3 + 2] = position.z;
-		}
-		
-		// Copy the vertex normals into the array
-		for (int i = 0; i < uniqueVertexCount; i++) {
-			Vector3f normal = indexedVertices.get(i).normal;
-			vertexNormals[i * 3] = normal.x;
-			vertexNormals[i * 3 + 1] = normal.y;
-			vertexNormals[i * 3 + 2] = normal.z;
-		}
-		*/
 		
 		
 		Mesh mesh = new Mesh(indexedVertices, indices);
