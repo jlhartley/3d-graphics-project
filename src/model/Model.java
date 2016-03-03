@@ -29,7 +29,7 @@ public class Model {
 	
 	// The total vertex count = indices.length
 	private int vertexCount;
-
+	
 	public Model(float[] vertexPositions, float[] vertexNormals, float[] vertexColours, int[] indices) {
 		
 		// Generate and bind the Vertex Array Object (VAO)
@@ -47,7 +47,7 @@ public class Model {
 		setIndices(indices);
 		
 		// Unbind the VAO, so no more state can be changed
-		// unit it is bound again.
+		// until it is bound again.
 		// TODO: Replace with something like GL.NULL
 		glBindVertexArray(0);
 	}
@@ -73,7 +73,7 @@ public class Model {
 		vao = glGenVertexArrays();
 		glBindVertexArray(vao);
 		
-		ModelUtils.addVertexAttributes(mesh.getVertices());
+		ModelUtils.setVertexAttributes(mesh.getVertices());
 		
 		setIndices(mesh.getIndices());
 		

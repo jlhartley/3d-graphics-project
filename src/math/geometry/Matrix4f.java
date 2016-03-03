@@ -143,6 +143,22 @@ public class Matrix4f {
 		elements[2][3] = elements[2][3] * vec.z;
 	}
 	
+	// Apply a uniform scale - equivalent to scale(new Vector3f(s, s, s))
+	public void scale(float s) {
+		elements[0][0] = elements[0][0] * s;
+		elements[0][1] = elements[0][1] * s;
+		elements[0][2] = elements[0][2] * s;
+		elements[0][3] = elements[0][3] * s;
+		elements[1][0] = elements[1][0] * s;
+		elements[1][1] = elements[1][1] * s;
+		elements[1][2] = elements[1][2] * s;
+		elements[1][3] = elements[1][3] * s;
+		elements[2][0] = elements[2][0] * s;
+		elements[2][1] = elements[2][1] * s;
+		elements[2][2] = elements[2][2] * s;
+		elements[2][3] = elements[2][3] * s;
+	}
+	
 	public void setScale(Vector3f vec) {
 		elements[0][0] = vec.x;
 		elements[1][1] = vec.y;

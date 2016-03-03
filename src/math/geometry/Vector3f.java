@@ -152,6 +152,17 @@ public class Vector3f {
 		return this.x * vec.x + this.y * vec.y + this.z * vec.z;
 	}
 	
+	// Perform matrix multiplication on this vector
+	public Vector3f multiply(Matrix4f matrix, float w) {
+		float[][] elements = matrix.elements;
+		float xnew = x * elements[0][0] + y * elements[1][0] + z * elements[2][0] + w * elements[3][0];
+		float ynew = x * elements[0][1] + y * elements[1][1] + z * elements[2][1] + w * elements[3][1];
+		float znew = x * elements[0][2] + y * elements[1][2] + z * elements[2][2] + w * elements[3][2];
+		// Discard w component
+		set(xnew, ynew, znew);
+		return this;
+	}
+	
 	
 	// Returns a copy using the constructor
 	public Vector3f getCopy() {

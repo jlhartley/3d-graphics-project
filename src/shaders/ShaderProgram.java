@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.FloatBuffer;
-import java.util.HashMap;
 
 import org.lwjgl.BufferUtils;
 
@@ -15,11 +14,12 @@ import math.geometry.Vector3f;
 
 public class ShaderProgram {
 	
-	// Constants used when binding named attributes to an index. Also used when setting up a VAO for a model.
+	// Constants used when binding named attributes to an index.
+	// These are also used when setting up a VAO for a model.
 	public static final int POSITION_ATTRIB_LOCATION = 0;
 	public static final int NORMAL_ATTRIB_LOCATION = 1;
-	public static final int COLOUR_ATTRIB_LOCATION = 2;
-	
+	public static final int TEXTURE_COORDS_ATTRIB_LOCATION = 2;
+	public static final int COLOUR_ATTRIB_LOCATION = 3;
 	
 	private int vertexShaderId;
 	private int fragmentShaderId;
@@ -28,9 +28,8 @@ public class ShaderProgram {
 	// Provides an interface for querying the shader program
 	public Introspector introspector;
 	
-	private HashMap<String, Integer> uniformLocationCache = new HashMap<>();
-	
 	public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
+		
 		vertexShaderId = loadShaderFromFile(vertexShaderPath, GL_VERTEX_SHADER);
 		fragmentShaderId = loadShaderFromFile(fragmentShaderPath, GL_FRAGMENT_SHADER);
 		
@@ -45,14 +44,12 @@ public class ShaderProgram {
 		glValidateProgram(programId);
 		
 		introspector = new Introspector(programId);
-		for (VertexAttribute attr : introspector.listVertexAttributes()) {
-			System.out.println(attr);
-		}
 	}
 	
 	private void bindAttributes() {
 		glBindAttribLocation(programId, POSITION_ATTRIB_LOCATION, "position");
 		glBindAttribLocation(programId, NORMAL_ATTRIB_LOCATION, "normal");
+		glBindAttribLocation(programId, TEXTURE_COORDS_ATTRIB_LOCATION, "texture_coords");
 		glBindAttribLocation(programId, COLOUR_ATTRIB_LOCATION, "colour");
 	}
 	
@@ -89,10 +86,15 @@ public class ShaderProgram {
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 	
+	private int getUniformLocation(String name) {
+		return introspector.getUniformLocation(name);
+	}
+	
 	// Dedicated buffer for matrix uniforms
 	FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(Matrix4f.SIZE);
 	
 	public void setUniformValue(String name, Matrix4f matrix) {
+		// Transfer as column-major
 		matrixBuffer.put(matrix.elements[0]);
 		matrixBuffer.put(matrix.elements[1]);
 		matrixBuffer.put(matrix.elements[2]);
@@ -102,45 +104,25 @@ public class ShaderProgram {
 	}
 	
 	
-	private int getUniformLocation(String name) {
-		
-		if (uniformLocationCache.containsKey(name)) {
-			return uniformLocationCache.get(name);
-		}
-		
-		int location = glGetUniformLocation(programId, name);
-		
-		if (location == -1) {
-			System.err.println("Could not get location for uniform variable \"" + name + "\"!");
-			// TODO: Maybe should call System.exit(1) here too?
-		} else {
-			uniformLocationCache.put(name, location);
-		}
-		
-		return location;
-	}
-	
-	
 	public Introspector getIntrospector() {
 		return introspector;
 	}
 	
 	
-	// Maintenance methods
-	public void useProgram() {
+	public void use() {
 		glUseProgram(programId);
 	}
 	
-	public void stopUsingProgram() {
-		glUseProgram(0);
-	}
-	
 	public void cleanUp() {
-		stopUsingProgram();
+		// Stop using the program
+		glUseProgram(0);
+		// Detach the shaders
 		glDetachShader(programId, vertexShaderId);
 		glDetachShader(programId, fragmentShaderId);
+		// Delete the shaders
 		glDeleteShader(vertexShaderId);
 		glDeleteShader(fragmentShaderId);
+		//Delete the program
 		glDeleteProgram(programId);
 	}
 

@@ -25,16 +25,16 @@ public class ModelUtils {
 	// for two separate VAOs
 	private static List<Integer> vbos = new ArrayList<>();
 	
-	public static void addVertexAttributes(List<Vertex> vertices) {
+	public static void setVertexAttributes(List<Vertex> vertices) {
 		
 		// 3 values for each position, 3 for each normal, 
 		// 3 for each colour
-		int FLOATS_PER_VERTEX = 3 + 3 + 3;
+		int floatsPerVertex = Vector3f.FLOATS + Vector3f.FLOATS + Vector3f.FLOATS;
 		
-		int TOTAL_FLOATS = FLOATS_PER_VERTEX * vertices.size();;
+		int totalFloats = floatsPerVertex * vertices.size();;
 		
 		
-		FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(TOTAL_FLOATS);
+		FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(totalFloats);
 		
 		for (Vertex vertex : vertices) {
 			
@@ -59,9 +59,11 @@ public class ModelUtils {
 		
 		glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
 		
+		
+		
 		// 1 float = 32 bits = 4 bytes
 		// The stride is the number of bytes a vertex takes up in total
-		int stride = FLOATS_PER_VERTEX * Float.BYTES;
+		int stride = floatsPerVertex * Float.BYTES;
 		
 		int index = ShaderProgram.POSITION_ATTRIB_LOCATION;
 		glVertexAttribPointer(index, 3, GL_FLOAT, false, stride, 0);

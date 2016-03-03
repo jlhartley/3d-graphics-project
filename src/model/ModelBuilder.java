@@ -4,57 +4,94 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
+import entities.WorldTransform;
 import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
 import math.geometry.Vector4f;
+import model.vertices.Mesh;
+import model.vertices.Vertex;
 
 public class ModelBuilder {
 	
-	private List<Entity> entities = new ArrayList<>();
-	
-	private int totalVertexPositionsLength;
-	private int totalVertexNormalsLength;
-	private int totalVertexColoursLength;
-	private int totalIndicesLength;
-	
-	
-	public ModelBuilder() {
+	private static class WorldMesh {
+		Mesh mesh;
+		WorldTransform worldTransform;
 		
-	}
-	
-	public ModelBuilder(List<Entity> entities) {
-		addEntities(entities);
-	}
-	
-	
-	public void addEntity(Entity entity) {
-		entities.add(entity);
-		Model model = entity.getModel();
-		totalVertexPositionsLength += model.getVertexPositions().length;
-		totalVertexNormalsLength += model.getVertexNormals().length;
-		totalVertexColoursLength += model.getVertexColours().length;
-		totalIndicesLength += model.getIndices().length;
-	}
-	
-	public void addEntities(List<Entity> entities) {
-		this.entities.addAll(entities);
-		for (Entity entity : entities) {
-			Model model = entity.getModel();
-			totalVertexPositionsLength += model.getVertexPositions().length;
-			totalVertexNormalsLength += model.getVertexNormals().length;
-			totalVertexColoursLength += model.getVertexColours().length;
-			totalIndicesLength += model.getIndices().length;
+		public WorldMesh(Mesh mesh, WorldTransform worldTransform) {
+			this.mesh = mesh;
+			this.worldTransform = worldTransform;
 		}
 	}
 	
-	public void removeEntity(Entity entity) {
-		entities.remove(entity);
-		Model model = entity.getModel();
-		totalVertexPositionsLength -= model.getVertexPositions().length;
-		totalVertexNormalsLength -= model.getVertexNormals().length;
-		totalVertexColoursLength -= model.getVertexColours().length;
-		totalIndicesLength -= model.getIndices().length;
+	private List<WorldMesh> worldMeshes = new ArrayList<>();
+	
+	
+	public ModelBuilder(List<WorldMesh> worldMeshes) {
+		
 	}
+	
+	
+	
+	public void addMesh(Mesh mesh) {
+		
+	}
+	
+	
+	private Vertex transformVertex(Vertex vertex, Matrix4f matrix) {
+		Vector3f position = vertex.position;
+		Vector3f normal = vertex.normal;
+		
+		// Multiply with w = 1, so that translation is applied
+		Vector3f transformedPosition = new Vector3f(position).multiply(matrix, 1);
+		
+		// Multiply with w = 0, so that the normal is not translated (only rotated and scaled)
+		// Note that this will not work in cases where a non-uniform scale is applied.
+		// For that case, the transpose of the inverse is required (see note in shader)
+		Vector3f transformedNormal = new Vector3f(normal).multiply(matrix, 0);
+		// Make the normal length 1 (a unit vector) again
+		transformedNormal.normalise();
+		
+		return new Vertex(transformedPosition, transformedNormal);
+	}
+	
+	public Mesh build() {
+		
+		int uniqueVertexCount = 0;
+		int totalVertexCount = 0;
+		
+		for (WorldMesh worldMesh : worldMeshes) {
+			uniqueVertexCount += worldMesh.mesh.getUniqueVertexCount();
+			totalVertexCount += worldMesh.mesh.getTotalVertexCount();
+		}
+		
+		List<Vertex> vertices = new ArrayList<>(uniqueVertexCount);
+		List<Integer> indices = new ArrayList<>(totalVertexCount);
+		
+		for (WorldMesh worldMesh : worldMeshes) {
+			
+			Mesh mesh = worldMesh.mesh;
+			
+			// Copy over the indices, offsetting them based on the
+			// number of vertices previously added
+			int verticesAddedSoFar = vertices.size();
+			for (int index : mesh.getIndices()) {
+				indices.add(index + verticesAddedSoFar);
+			}
+			
+			Matrix4f modelMatrix = worldMesh.worldTransform.getModelMatrix();
+			
+			for (Vertex vertex : mesh.getVertices()) {
+				Vertex transformedVertex = transformVertex(vertex, modelMatrix);
+				// Add the transformed vertex to the array
+				vertices.add(transformedVertex);
+			}
+			
+		}
+		
+		return new Mesh(vertices, indices)
+		
+	}
+	
 	
 	public Model build() {
 		
