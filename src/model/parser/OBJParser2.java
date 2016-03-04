@@ -35,8 +35,12 @@ public class OBJParser2 {
 	
 	// The final vertex list, all indexed (without duplicates)
 	private List<Vertex> indexedVertices = new ArrayList<>();
-	private int[] indices;
+	private List<Integer> indices; 
+	//private int[] indices;
 	
+	public static Mesh parse(String path) {
+		return new OBJParser2(path).getMesh();
+	}
 	
 	public OBJParser2(String relativePath) {
 		this.fullPath = PATH + relativePath + EXTENSION;
@@ -94,35 +98,28 @@ public class OBJParser2 {
 	private void indexVertices() {
 		
 		// There will be 1 index added for every vertex in the non-indexed list
-		// Therefore the indices array should be the same size
-		indices = new int[nonIndexedVertices.size()];
+		// Therefore the indices list should be the same size
+		indices = new ArrayList<>(nonIndexedVertices.size());
 		
 		// Map vertices to their position in the indexed vertices array,
 		// for O(1) lookup / duplicate finding
 		Map<Vertex, Integer> vertexIndexMap = new HashMap<>();
 		
-		
-		//TODO: Look at a revised implementation of this
-		// Ideally using an enhanced for loop
-		
-		for (int i = 0; i < nonIndexedVertices.size(); i++) {
-			
-			// For each non-indexed vertex
-			Vertex nonIndexedVertex = nonIndexedVertices.get(i);
+		for (Vertex vertex : nonIndexedVertices) {
 			
 			// If a duplicate does exist
-			if (vertexIndexMap.containsKey(nonIndexedVertex)) {
+			if (vertexIndexMap.containsKey(vertex)) {
 				// Add the index of the duplicate vertex, instead of adding the same vertex twice
-				int duplicateVertexIndex = vertexIndexMap.get(nonIndexedVertex);
-				indices[i] = duplicateVertexIndex;
+				int duplicateVertexIndex = vertexIndexMap.get(vertex);
+				indices.add(duplicateVertexIndex);
 			} else { // If this is a unique vertex
 				// The current size of the indexed list gives the index 
 				// where the vertex will be added
 				int vertexIndex = indexedVertices.size();
-				indexedVertices.add(nonIndexedVertex);
-				indices[i] = vertexIndex;
+				indexedVertices.add(vertex);
+				indices.add(vertexIndex);
 				// Update the map for further indexing
-				vertexIndexMap.put(nonIndexedVertex, vertexIndex);
+				vertexIndexMap.put(vertex, vertexIndex);
 			}
 			
 		}

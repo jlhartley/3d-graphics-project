@@ -4,7 +4,7 @@ import math.geometry.Matrix4f;
 import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 
-public class WorldTransform {
+public class Transform {
 	
 	// Position in world space - x, y and z
 	private Vector3f position;
@@ -16,38 +16,38 @@ public class WorldTransform {
 	private float scale;
 	
 	
-	// Model matrix held as instance variable to avoid object creation
-	private Matrix4f modelMatrix = new Matrix4f();
+	// Matrix representing the transformation
+	private Matrix4f matrix = new Matrix4f();
 	
 	
 	// Telescoping constructors
-	public WorldTransform() {
+	public Transform() {
 		this(new Vector3f());
 	}
 	
-	public WorldTransform(Vector3f position) {
+	public Transform(Vector3f position) {
 		this(position, new Vector3f());
 	}
 	
-	public WorldTransform(Vector3f position, Vector3f rotation) {
+	public Transform(Vector3f position, Vector3f rotation) {
 		this(position, rotation, 1);
 	}
 	
-	public WorldTransform(Vector3f position, Vector3f rotation, float scale) {
+	public Transform(Vector3f position, Vector3f rotation, float scale) {
 		this.position = position;
 		this.rotation = rotation;
 		this.scale = scale;
 	}
 	
 	
-	public Matrix4f getModelMatrix() {
-		modelMatrix.identity();
-		modelMatrix.translate(position);
-		modelMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
-		modelMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		modelMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
-		modelMatrix.scale(new Vector3f(scale, scale, scale));
-		return modelMatrix;
+	public Matrix4f getMatrix() {
+		matrix.identity();
+		matrix.translate(position);
+		matrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
+		matrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		matrix.scale(scale);
+		return matrix;
 	}
 	
 	
@@ -58,34 +58,39 @@ public class WorldTransform {
 		return position;
 	}
 
-	public void setPosition(Vector3f position) {
+	public Transform setPosition(Vector3f position) {
 		this.position = position;
+		return this;
 	}
 	
 	// Set position using the provided components
-	public void setPosition(float x, float y, float z) {
+	public Transform setPosition(float x, float y, float z) {
 		position.set(x, y, z);
+		return this;
 	}
 	
 	public Vector3f getRotation() {
 		return rotation;
 	}
 	
-	public void setRotation(Vector3f rotation) {
+	public Transform setRotation(Vector3f rotation) {
 		this.rotation = rotation;
+		return this;
 	}
 	
 	// Set rotation using the provided components
-	public void setRotation(float x, float y, float z) {
+	public Transform setRotation(float x, float y, float z) {
 		rotation.set(x, y, z);
+		return this;
 	}
 	
 	public float getScale() {
 		return scale;
 	}
 
-	public void setScale(float scale) {
+	public Transform setScale(float scale) {
 		this.scale = scale;
+		return this;
 	}
 	
 	
@@ -95,23 +100,26 @@ public class WorldTransform {
 		return rotation.x;
 	}
 
-	public void setRotX(float rotX) {
+	public Transform setRotX(float rotX) {
 		rotation.x = rotX;
+		return this;
 	}
 
 	public float getRotY() {
 		return rotation.y;
 	}
 
-	public void setRotY(float rotY) {
+	public Transform setRotY(float rotY) {
 		this.rotation.y = rotY;
+		return this;
 	}
 
 	public float getRotZ() {
 		return rotation.z;
 	}
 
-	public void setRotZ(float rotZ) {
+	public Transform setRotZ(float rotZ) {
 		rotation.z = rotZ;
+		return this;
 	}
 }

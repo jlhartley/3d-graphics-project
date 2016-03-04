@@ -3,6 +3,8 @@ package model;
 import static model.ModelData.*;
 
 import entities.Entity;
+import entities.Transform;
+import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
 import model.parser.OBJParser;
 import model.parser.OBJParser2;
@@ -42,10 +44,12 @@ public class Models {
 	
 	public static Model getExplodedCubeModel() {
 		if (explodedCubeModel == null) {
-			Model squareModel = getSquareModel();
-			ModelBuilder explodedCubeBuilder = new ModelBuilder();
 			
-			float spacing = 1.2f; // Distance from each square to the model centre
+			Model squareModel = getSquareModel();
+			ModelBuilder builder = new ModelBuilder();
+			
+			// Distance from each square to the model centre
+			float spacing = 1.2f;
 			
 			// Must be careful here with the rotation, for face culling purposes - the normals must point the right way!
 			// Important to remember that rotation is counter-clockwise, for this reason. Therefore sometimes negative angles
@@ -54,17 +58,17 @@ public class Models {
 			// TODO: Have face culling disabled on a per model basis, for models such as this
 			
 			//Front
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, spacing)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(0, 0, spacing)));
 			// Back
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -spacing), new Vector3f(0, 180, 0)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(0, 0, -spacing), new Vector3f(0, 180, 0)));
 			// Top
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, spacing, 0), new Vector3f(-90, 0, 0)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(0, spacing, 0), new Vector3f(-90, 0, 0)));
 			// Bottom
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(0, -spacing, 0), new Vector3f(90, 0, 0)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(0, -spacing, 0), new Vector3f(90, 0, 0)));
 			// Right
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(spacing, 0, 0), new Vector3f(0, 90, 0)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(spacing, 0, 0), new Vector3f(0, 90, 0)));
 			// Left
-			explodedCubeBuilder.addEntity(new Entity(squareModel, new Vector3f(-spacing, 0, 0), new Vector3f(0, -90, 0)));
+			builder.addEntity(new Entity(squareModel, new Vector3f(-spacing, 0, 0), new Vector3f(0, -90, 0)));
 			
 			explodedCubeModel = explodedCubeBuilder.build();
 		}

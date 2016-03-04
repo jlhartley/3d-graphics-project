@@ -24,7 +24,7 @@ public class Renderer {
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
 		
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
-		shaderProgram.useProgram();
+		shaderProgram.use();
 		
 		glEnable(GL_DEPTH_TEST);
 		

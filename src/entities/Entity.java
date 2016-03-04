@@ -98,7 +98,7 @@ public class Entity {
 		modelMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
 		modelMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
 		modelMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
-		modelMatrix.scale(new Vector3f(scale, scale, scale)); // Uniform scale in all axes
+		modelMatrix.scale(scale); // Uniform scale in all axes
 		return modelMatrix;
 	}
 	

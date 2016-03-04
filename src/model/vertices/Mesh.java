@@ -7,9 +7,9 @@ import math.geometry.Vector3f;
 public class Mesh {
 	
 	private List<Vertex> vertices;
-	private int[] indices;
+	private List<Integer> indices;
 	
-	public Mesh(List<Vertex> vertices, int[] indices) {
+	public Mesh(List<Vertex> vertices, List<Integer> indices) {
 		this.vertices = vertices;
 		this.indices = indices;
 	}
@@ -44,7 +44,7 @@ public class Mesh {
 		return vertices;
 	}
 	
-	public int[] getIndices() {
+	public List<Integer> getIndices() {
 		return indices;
 	}
 	
@@ -53,7 +53,7 @@ public class Mesh {
 	}
 	
 	public int getTotalVertexCount() {
-		return indices.length;
+		return indices.size();
 	}
 	
 	public int getTriangleCount() {

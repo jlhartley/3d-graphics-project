@@ -113,6 +113,26 @@ public class Model {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
+	// For a list
+	private void setIndices(List<Integer> indices) {
+		
+		this.vertexCount = indices.size();
+		
+		ibo = glGenBuffers();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		
+		// Transfer the content of the indices list to the Java NIO buffer
+		IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
+		for (int index : indices) {
+			indicesBuffer.put(index);
+		}
+		indicesBuffer.flip();
+		
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
+		
+	}
+	
+	// For an array
 	private void setIndices(int[] indices) {
 		
 		// Vertex count = indices.length, in context of rendering

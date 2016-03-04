@@ -1,5 +1,7 @@
 package model.parser;
 
+import model.vertices.Mesh;
+
 public enum OBJMesh {
 	ICOSPHERE1_FLAT("res/models/ico-spheres/icosphere1-flat.obj"), 
 	ICOSPHERE1_SMOOTH("res/models/ico-spheres/icosphere1-smooth.obj"), 
@@ -21,12 +23,18 @@ public enum OBJMesh {
 	ROCK1("res/models/rock1.obj");
 	
 	private String path;
+	private Mesh mesh;
 	
 	OBJMesh(String path) {
 		this.path = path;
+		this.mesh = OBJParser2.parse(path);
 	}
 	
 	public String getPath() {
 		return path;
+	}
+	
+	public Mesh getMesh() {
+		return mesh;
 	}
 }
