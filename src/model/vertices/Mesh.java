@@ -14,11 +14,11 @@ public class Mesh {
 		this.indices = indices;
 	}
 	
-	public float[] getVertexPositions() {
+	public float[] getPositionsArray() {
 		// 3 components (x, y, z) for each vertex position
-		float[] vertexPositions = new float[getUniqueVertexCount() * 3];
+		float[] vertexPositions = new float[vertices.size() * 3];
 		// Copy the vertex positions into the array
-		for (int i = 0; i < getUniqueVertexCount(); i++) {
+		for (int i = 0; i < vertices.size(); i++) {
 			Vector3f position = vertices.get(i).position;
 			vertexPositions[i * 3] = position.x;
 			vertexPositions[i * 3 + 1] = position.y;
@@ -27,11 +27,11 @@ public class Mesh {
 		return vertexPositions;
 	}
 	
-	public float[] getVertexNormals() {
+	public float[] getNormalsArray() {
 		// 3 components (x, y, z) for each vertex normal
-		float[] vertexNormals = new float[getUniqueVertexCount() * 3];
+		float[] vertexNormals = new float[vertices.size() * 3];
 		// Copy the vertex normals into the array
-		for (int i = 0; i < getUniqueVertexCount(); i++) {
+		for (int i = 0; i < vertices.size(); i++) {
 			Vector3f normal = vertices.get(i).normal;
 			vertexNormals[i * 3] = normal.x;
 			vertexNormals[i * 3 + 1] = normal.y;
@@ -41,13 +41,15 @@ public class Mesh {
 	}
 	
 	public int[] getIndicesArray() {
-		int length = getTotalVertexCount();
+		int length = indices.size();
 		int[] indicesArray = new int[length];
 		for (int i = 0; i < length; i++) {
 			indicesArray[i] = indices.get(i);
 		}
 		return indicesArray;
 	}
+	
+	
 	
 	public List<Vertex> getVertices() {
 		return vertices;
@@ -66,7 +68,6 @@ public class Mesh {
 	}
 	
 	public int getTriangleCount() {
-		// 3 vertices per triangle
 		return getTotalVertexCount() / 3;
 	}
 	

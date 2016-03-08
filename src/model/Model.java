@@ -98,7 +98,7 @@ public class Model {
 	// Interleaved
 	public Model(Mesh mesh) {
 		
-		this(mesh.getVertexPositions(), mesh.getVertexNormals(), mesh.getIndicesArray());
+		this(mesh.getPositionsArray(), mesh.getNormalsArray(), mesh.getIndicesArray());
 		
 		this.mesh = mesh;
 		
@@ -197,7 +197,7 @@ public class Model {
 			vertex.normal.x *= Math.random();
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, positionsVbo);
-		float[] vertexPositions = mesh.getVertexPositions();
+		float[] vertexPositions = mesh.getPositionsArray();
 		// Transfer the float array to a Java NIO buffer so that it can be passed to the OpenGL call.
 		FloatBuffer vertexDataBuffer = BufferUtils.createFloatBuffer(vertexPositions.length);
 		vertexDataBuffer.put(vertexPositions);
@@ -205,7 +205,7 @@ public class Model {
 		glBufferData(GL_ARRAY_BUFFER, vertexDataBuffer, GL_STATIC_DRAW);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, normalsVbo);
-		float[] vertexNormals = mesh.getVertexNormals();
+		float[] vertexNormals = mesh.getNormalsArray();
 		// Transfer the float array to a Java NIO buffer so that it can be passed to the OpenGL call.
 		FloatBuffer vertexNormalBuffer = BufferUtils.createFloatBuffer(vertexNormals.length);
 		vertexNormalBuffer.put(vertexPositions);

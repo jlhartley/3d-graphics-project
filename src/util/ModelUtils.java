@@ -27,9 +27,8 @@ public class ModelUtils {
 	
 	public static void setVertexAttributes(List<Vertex> vertices) {
 		
-		// 3 values for each position, 3 for each normal, 
-		// 3 for each colour
-		int floatsPerVertex = Vector3f.FLOATS + Vector3f.FLOATS + Vector3f.FLOATS;
+		// 3 values for each position, 3 for each normal, 3 for each colour
+		int floatsPerVertex = Vector3f.FLOATS + Vector3f.FLOATS;
 		
 		int totalFloats = floatsPerVertex * vertices.size();;
 		
@@ -42,11 +41,11 @@ public class ModelUtils {
 			Vector3f normal = vertex.normal;
 			
 			// For now, just colour using normals
-			Vector3f colour = vertex.normal;
+			//Vector3f colour = vertex.normal;
 			
 			verticesBuffer.put(position.x).put(position.y).put(position.z);
 			verticesBuffer.put(normal.x).put(normal.y).put(normal.z);
-			verticesBuffer.put(colour.x).put(colour.y).put(colour.z);
+			//verticesBuffer.put(colour.x).put(colour.y).put(colour.z);
 		}
 		
 		verticesBuffer.flip();
@@ -74,10 +73,12 @@ public class ModelUtils {
 		glVertexAttribPointer(index, 3, GL_FLOAT, false, stride, 3 * Float.BYTES);
 		glEnableVertexAttribArray(index);
 		
+		/*
 		// Offset is 6 floats (24 bytes) after the position + colour data
 		index = ShaderProgram.COLOUR_ATTRIB_LOCATION;
 		glVertexAttribPointer(index, 3, GL_FLOAT, false, stride, 6 * Float.BYTES);
 		glEnableVertexAttribArray(index);
+		*/
 		
 		// Unbind for consistency
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
