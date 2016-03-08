@@ -33,15 +33,13 @@ public class UIWindow implements Window {
 	// Centre of the window, in pixels, relative to the top-left corner
 	private Vector2f centre = new Vector2f();
 	
-	// Mouse position, relative the the window centre
-	//private Vector2f mousePosition = new Vector2f();
-	
 	// Wraps GLCanvas
 	private Canvas canvas;
 	
 	// Wraps the side panel composite
 	private SidePanel sidePanel;
 	
+	// OpenGL debugging output
 	private Closure debugMessageCallback;
 	
 	public UIWindow(Display display, int width, int height, String title, SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
@@ -50,6 +48,7 @@ public class UIWindow implements Window {
 		updateSize(width, height);
 		initShell();
 		initUI(sidePanelCallbacks, canvasCallbacks);
+		log("SWT Version: " + SWT.getVersion());
 		log("Display Bounds: " + display.getBounds());
 		log("Window Bounds: " + shell.getBounds());
 		log("Window Client Area: " + shell.getClientArea());
@@ -82,6 +81,7 @@ public class UIWindow implements Window {
 
 	
 	private void initUI(SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
+		// TODO: Represent as an object, like SidePanel
 		initMenu(shell);
 		
 		// Root layout is a GridLayout with 2 columns
@@ -94,11 +94,18 @@ public class UIWindow implements Window {
 		// or the second column (left versus right).
 		
 		canvas = new Canvas(shell, canvasCallbacks);
+		// Set the OpenGL context associated with the canvas to the current context
+		canvas.setCurrent();
+		// Create capabilities for the current context, so OpenGL calls can be made
 		GL.createCapabilities();
-		debugMessageCallback = GLUtil.setupDebugMessageCallback();
-		// If OpenGL initialisation was successful, display the version
-		System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
 		
+		// Set up OpenGL debugging output
+		debugMessageCallback = GLUtil.setupDebugMessageCallback();
+		
+		// If OpenGL initialisation was successful, display the version
+		log("OpenGL Version: " + glGetString(GL_VERSION));
+		
+		// Add the side panel
 		sidePanel = new SidePanel(shell, sidePanelCallbacks);
 	}
 	
@@ -133,6 +140,10 @@ public class UIWindow implements Window {
 	
 	public void open() {
 		shell.open();
+	}
+	
+	public void handleEvents() {
+		display.readAndDispatch();
 	}
 	
 	public void loop() {
@@ -198,7 +209,8 @@ public class UIWindow implements Window {
 		return canvas.isKeyPressed(keyCode);
 	}
 
-
+	
+	// For mouse movement locking like GLFW, if possible
 	@Override
 	public void enableCursor() {
 		

@@ -45,6 +45,7 @@ public class Canvas {
 	private boolean[] keysPressed = new boolean[400];
 	private boolean pageUpPressed = false;
 	private boolean pageDownPressed = false;
+	private boolean controlPressed = false;
 	
 	private Callbacks callbacks;
 	
@@ -66,7 +67,6 @@ public class Canvas {
 		
 		glCanvas = new GLCanvas(shell, STYLE_BITS, glData);
 		glCanvas.setLayoutData(UIUtils.getGLCanvasLayoutData());
-		glCanvas.setCurrent();
 		
 		initListeners();
 	}
@@ -80,6 +80,8 @@ public class Canvas {
 	
 	
 	public void initListeners() {
+		
+		// Resizing
 		
 		glCanvas.addListener(SWT.Resize, new Listener() {
 			
@@ -95,6 +97,9 @@ public class Canvas {
 			}
 		});
 		
+		
+		// Input handling
+		
 		glCanvas.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -103,12 +108,13 @@ public class Canvas {
 				keysPressed[character] = true;
 				
 				Key key = Key.fromSWT(e.keyCode);
-				System.out.println("Key Pressed: " + key);
 				
 				if (key == Key.PAGEUP) {
 					pageUpPressed = true;
 				} else if (key == Key.PAGEDOWN) {
 					pageDownPressed = true;
+				} else if (key == Key.CONTROL) {
+					controlPressed = true;
 				}
 				
 				if (callbacks != null) {
@@ -122,12 +128,13 @@ public class Canvas {
 				keysPressed[character] = false;;
 				
 				Key key = Key.fromSWT(e.keyCode);
-				System.out.println("Key Released: " + key);
 				
 				if (key == Key.PAGEUP) {
 					pageUpPressed = false;
 				} else if (key == Key.PAGEDOWN) {
 					pageDownPressed = false;
+				} else if (key == Key.CONTROL) {
+					controlPressed = false;
 				}
 				
 				if (callbacks != null) {
@@ -202,6 +209,9 @@ public class Canvas {
 		}
 		if (Key.fromGLFW(keyCode) == Key.PAGEDOWN) {
 			return pageDownPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.CONTROL) {
+			return controlPressed;
 		}
 		return keysPressed[keyCode];
 	}

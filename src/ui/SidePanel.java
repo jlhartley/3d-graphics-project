@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import math.geometry.Vector3f;
+import render.PolygonMode;
 import render.ProjectionType;
 
 public class SidePanel {
@@ -31,11 +32,18 @@ public class SidePanel {
 	private Button perspectiveButton;
 	private Button orthographicButton;
 	
+	private Button fillButton;
+	private Button lineButton;
+	
 	private Button relativeButton;
 	private Button absoluteButton;
 	
 	private Button runButton;
 	private Button editButton;
+	
+	private Button traceButton;
+	private Button depthTestButton;
+	private Button faceCullingButton;
 	
 	private Text xText;
 	private Text yText;
@@ -48,11 +56,16 @@ public class SidePanel {
 	private Scale speedScale;
 	
 	public interface Callbacks {
-		public void onProjectionChanged(ProjectionType projectionType);
-		public void onCameraControlTypeChanged(boolean relative);
-		public void onCameraPositionChanged(Vector3f newPosition);
-		public void onCameraRotationChanged(Vector3f newRotation);
-		public void onTimeMultiplierChanged(double timeMultiplier);
+		public void onProjectionTypeSet(ProjectionType projectionType);
+		// TODO: Have an enum for this too
+		public void onCameraControlTypeSet(boolean relative);
+		public void onCameraPositionSet(Vector3f newPosition);
+		public void onCameraRotationSet(Vector3f newRotation);
+		public void onTimeMultiplierSet(double timeMultiplier);
+		public void onTraceSet(boolean shouldTrace);
+		public void onDepthTestEnabledSet(boolean enabled);
+		public void onFaceCullingEnabledSet(boolean enabled);
+		public void onPolygonModeSet(PolygonMode polygonMode);
 	}
 	
 	private Callbacks callbacks;
@@ -61,7 +74,7 @@ public class SidePanel {
 		this.callbacks = callbacks;
 		sidePanelComposite = new Composite(shell, SWT.BORDER);
 		initComposite();
-		initProjectionTypeGroup();
+		initRenderingGroup();
 		initCameraGroup();
 		initSimulationGroup();
 	}
@@ -102,11 +115,11 @@ public class SidePanel {
 			newCameraPosition.y = Float.parseFloat(yText.getText());
 			newCameraPosition.z = Float.parseFloat(zText.getText());
 		} catch (NumberFormatException e) {
-			// If there was an exception, return so that onCameraPositionChanged
+			// If there was an exception, return so that onCameraPositionSet
 			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
-		callbacks.onCameraPositionChanged(newCameraPosition);
+		callbacks.onCameraPositionSet(newCameraPosition);
 	}
 	
 	private void onCameraRotationEntered() {
@@ -116,11 +129,11 @@ public class SidePanel {
 			newCameraRotation.y = Float.parseFloat(yawText.getText());
 			newCameraRotation.z = Float.parseFloat(rollText.getText());
 		} catch (NumberFormatException e) {
-			// If there was an exception, return so that onCameraRotationChanged
+			// If there was an exception, return so that onCameraRotationSet
 			// isn't called with a new (0, 0, 0) vector
 			return;
 		}
-		callbacks.onCameraRotationChanged(newCameraRotation);
+		callbacks.onCameraRotationSet(newCameraRotation);
 	}
 	
 	
@@ -140,8 +153,22 @@ public class SidePanel {
 		sidePanelComposite.setLayout(sidePanelLayout);
 	}
 	
-	private void initProjectionTypeGroup() {
-		Group projectionTypeGroup = new Group(sidePanelComposite, SWT.NONE);
+	private void initRenderingGroup() {
+		Group renderingGroup = new Group(sidePanelComposite, SWT.NONE);
+		renderingGroup.setText("Rendering");
+		renderingGroup.setLayoutData(getFillHorizontalGridData());
+		renderingGroup.setLayout(new GridLayout());
+		
+		initProjectionTypeGroup(renderingGroup);
+		
+		initPolygonModeGroup(renderingGroup);
+		
+		initRenderingOptionsGroup(renderingGroup);
+		
+	}
+	
+	private void initProjectionTypeGroup(Group renderingGroup) {
+		Group projectionTypeGroup = new Group(renderingGroup, SWT.NONE);
 		projectionTypeGroup.setText("Projection Type");
 		projectionTypeGroup.setLayoutData(getFillHorizontalGridData());
 		projectionTypeGroup.setLayout(getGroupFillLayout());
@@ -155,15 +182,83 @@ public class SidePanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (perspectiveButton.getSelection()) {
-					callbacks.onProjectionChanged(ProjectionType.PERSPECTIVE);
+					callbacks.onProjectionTypeSet(ProjectionType.PERSPECTIVE);
 				} else {
-					callbacks.onProjectionChanged(ProjectionType.ORTHOGRAPHIC);
+					callbacks.onProjectionTypeSet(ProjectionType.ORTHOGRAPHIC);
 				}
 			}
 			
 		});
 		orthographicButton = new Button(projectionTypeGroup, SWT.RADIO);
 		orthographicButton.setText("Orthographic");
+	}
+	
+	private void initPolygonModeGroup(Group renderingGroup) {
+		Group polygonModeGroup = new Group(renderingGroup, SWT.NONE);
+		polygonModeGroup.setText("Polygon Mode");
+		polygonModeGroup.setLayoutData(getFillHorizontalGridData());
+		polygonModeGroup.setLayout(getGroupFillLayout());
+		
+		fillButton = new Button(polygonModeGroup, SWT.RADIO);
+		fillButton.setText("Fill");
+		fillButton.setSelection(true);
+		// Selection adapter used to avoid the "default selection" override
+		fillButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				callbacks.onPolygonModeSet(fillButton.getSelection() ? PolygonMode.FILL : PolygonMode.LINE);
+			}
+			
+		});
+		lineButton = new Button(polygonModeGroup, SWT.RADIO);
+		lineButton.setText("Line");
+	}
+	
+	private void initRenderingOptionsGroup(Group renderingGroup) {
+		Group renderingOptionsGroup = new Group(renderingGroup, SWT.NONE);
+		renderingOptionsGroup.setText("Options");
+		renderingOptionsGroup.setLayoutData(getFillHorizontalGridData());
+		renderingOptionsGroup.setLayout(new GridLayout(3, false));
+		
+		traceButton = new Button(renderingOptionsGroup, SWT.CHECK);
+		traceButton.setText("Trace");
+		traceButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				callbacks.onTraceSet(traceButton.getSelection());
+			}
+			
+		});
+		
+		depthTestButton = new Button(renderingOptionsGroup, SWT.CHECK);
+		depthTestButton.setText("Depth Test");
+		depthTestButton.setSelection(true);
+		depthTestButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				callbacks.onDepthTestEnabledSet(depthTestButton.getSelection());
+			}
+			
+		});
+		
+		faceCullingButton = new Button(renderingOptionsGroup, SWT.CHECK);
+		faceCullingButton.setText("Face Culling");
+		faceCullingButton.setSelection(true);
+		faceCullingButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				callbacks.onFaceCullingEnabledSet(faceCullingButton.getSelection());
+			}
+			
+		});
+		
+		
+		
+		
 	}
 	
 	private void initCameraGroup() {
@@ -191,9 +286,9 @@ public class SidePanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (relativeButton.getSelection()) {
-					callbacks.onCameraControlTypeChanged(true);
+					callbacks.onCameraControlTypeSet(true);
 				} else {
-					callbacks.onCameraControlTypeChanged(false);
+					callbacks.onCameraControlTypeSet(false);
 				}
 			}
 			
@@ -208,6 +303,7 @@ public class SidePanel {
 		cameraPositioningGroup.setLayoutData(getFillHorizontalGridData());
 		cameraPositioningGroup.setLayout(new GridLayout(2, false));
 		
+		// This is fired when enter is hit on a text box
 		SelectionListener cameraPositionTextSelectionListener = new SelectionAdapter() {
 
 			@Override
@@ -217,6 +313,7 @@ public class SidePanel {
 			
 		};
 		
+		// When focus is lost from a text box, consider this a submission
 		FocusListener cameraPositionTextFocusListener = new FocusAdapter() {
 			
 			@Override
@@ -256,7 +353,7 @@ public class SidePanel {
 		separatorData.horizontalAlignment = SWT.FILL;
 		new Label(cameraPositioningGroup, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(separatorData);
 		
-		
+		// This is fired when enter is hit on a text box
 		SelectionListener cameraRotationTextSelectionListener = new SelectionAdapter() {
 
 			@Override
@@ -266,6 +363,7 @@ public class SidePanel {
 			
 		};
 		
+		// When focus is lost from a text box, consider this a submission
 		FocusListener cameraRotationTextFocusListener = new FocusAdapter() {
 			
 			@Override
@@ -318,8 +416,7 @@ public class SidePanel {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int selection = speedScale.getSelection();
-				System.out.println(selection);
-				callbacks.onTimeMultiplierChanged((double)selection / 4);
+				callbacks.onTimeMultiplierSet((double)selection / 4);
 			}
 			
 		});
@@ -338,6 +435,7 @@ public class SidePanel {
 		runButton.setSelection(true);
 		editButton = new Button(simulationModeGroup, SWT.RADIO);
 		editButton.setText("Edit");
+		
 	}
 
 }
