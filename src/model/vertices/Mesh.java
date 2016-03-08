@@ -40,6 +40,15 @@ public class Mesh {
 		return vertexNormals;
 	}
 	
+	public int[] getIndicesArray() {
+		int length = getTotalVertexCount();
+		int[] indicesArray = new int[length];
+		for (int i = 0; i < length; i++) {
+			indicesArray[i] = indices.get(i);
+		}
+		return indicesArray;
+	}
+	
 	public List<Vertex> getVertices() {
 		return vertices;
 	}

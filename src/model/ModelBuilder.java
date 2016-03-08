@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import entities.Transform;
+import entities.Entity;
 import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
 import model.vertices.Mesh;
@@ -11,6 +11,7 @@ import model.vertices.Vertex;
 
 public class ModelBuilder {
 	
+	/*
 	public static class MeshTransform {
 		
 		Mesh mesh;
@@ -22,40 +23,43 @@ public class ModelBuilder {
 		}
 		
 	}
+	*/
 	
-	private List<MeshTransform> meshTransforms = new ArrayList<>();
+	private List<Entity> entities = new ArrayList<>();
 	
 	
 	public ModelBuilder() {
 		
 	}
 	
-	public ModelBuilder(List<MeshTransform> meshTransforms) {
-		this.meshTransforms = meshTransforms;
+	public ModelBuilder(List<Entity> entities) {
+		this.entities = entities;
 	}
 	
 	
-	public void addMesh(Mesh mesh, Transform transform) {
-		meshTransforms.add(new MeshTransform(mesh, transform));
+	public void addEntity(Entity entity) {
+		entities.add(entity);
 	}
 	
 	public Mesh build() {
 		
+		// Calculate initial capacities for ArrayList efficiency
+		
 		int uniqueVertexCount = 0;
 		int totalVertexCount = 0;
 		
-		for (MeshTransform meshTransform : meshTransforms) {
-			uniqueVertexCount += meshTransform.mesh.getUniqueVertexCount();
-			totalVertexCount += meshTransform.mesh.getTotalVertexCount();
+		for (Entity entity : entities) {
+			uniqueVertexCount += entity.getModel().getMesh().getUniqueVertexCount();
+			totalVertexCount += entity.getModel().getMesh().getTotalVertexCount();
 		}
 		
 		List<Vertex> vertices = new ArrayList<>(uniqueVertexCount);
 		List<Integer> indices = new ArrayList<>(totalVertexCount);
 		
-		for (MeshTransform meshTransform : meshTransforms) {
+		for (Entity entity : entities) {
 			
-			Mesh mesh = meshTransform.mesh;
-			Transform transform = meshTransform.transform;
+			Mesh mesh = entity.getModel().getMesh();
+			Matrix4f matrix = entity.getModelMatrix();
 			
 			// Copy over the indices, offsetting them based on the
 			// number of vertices previously added, so they point to the correct
@@ -65,8 +69,6 @@ public class ModelBuilder {
 				indices.add(index + verticesAddedSoFar);
 			}
 			
-			
-			Matrix4f matrix = transform.getMatrix();
 			
 			for (Vertex vertex : mesh.getVertices()) {
 				Vertex transformedVertex = transformVertex(vertex, matrix);

@@ -3,8 +3,6 @@ package model;
 import static model.ModelData.*;
 
 import entities.Entity;
-import entities.Transform;
-import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
 import model.parser.OBJParser;
 import model.parser.OBJParser2;
@@ -14,7 +12,6 @@ public class Models {
 	// Hard-coded models
 	
 	private static Model squareModel;
-	
 	public static Model getSquareModel() {
 		if (squareModel == null) {
 			squareModel = new Model(SQUARE_VERTEX_POSITIONS, SQUARE_VERTEX_NORMALS, SQUARE_VERTEX_COLOURS,
@@ -23,16 +20,15 @@ public class Models {
 		return squareModel;
 	}
 	
-	
+	/*
 	private static Model cubeModel;
-	
 	public static Model getCubeModel() {
 		if (cubeModel == null) {
 			cubeModel = new Model(CUBE_VERTEX_POSITIONS, CUBE_VERTEX_NORMALS, CUBE_VERTEX_COLOURS,
 					CUBE_INDICES);
 		}
 		return cubeModel;
-	}
+	}*/
 	
 	
 	
@@ -41,7 +37,6 @@ public class Models {
 	// Exploded Cube
 	
 	private static Model explodedCubeModel;
-	
 	public static Model getExplodedCubeModel() {
 		if (explodedCubeModel == null) {
 			
@@ -70,7 +65,7 @@ public class Models {
 			// Left
 			builder.addEntity(new Entity(squareModel, new Vector3f(-spacing, 0, 0), new Vector3f(0, -90, 0)));
 			
-			explodedCubeModel = explodedCubeBuilder.build();
+			explodedCubeModel = new Model(builder.build());
 		}
 		return explodedCubeModel;
 	}
@@ -79,7 +74,6 @@ public class Models {
 	// Cube Grid
 	
 	private static Model cubeGridModel;
-	
 	public static Model getCubeGridModel() {
 		if (cubeGridModel == null) {
 			Model cubeModel = getCubeModel();
@@ -100,7 +94,7 @@ public class Models {
 				Entity cube = new Entity(cubeModel, pos);
 				cubeGridBuilder.addEntity(cube);
 			}
-			cubeGridModel = cubeGridBuilder.build();
+			cubeGridModel = new Model(cubeGridBuilder.build());
 		}
 		return cubeGridModel;
 	}
@@ -112,12 +106,9 @@ public class Models {
 	
 	// Parsed models
 	
-	// DRAGON
-	
 	private static final String DRAGON_MODEL_FILENAME = "dragon";
 	
 	private static Model dragonModel;
-	
 	public static Model getDragonModel() {
 		if (dragonModel == null) {
 			OBJParser2 parser = new OBJParser2(DRAGON_MODEL_FILENAME);
@@ -132,7 +123,6 @@ public class Models {
 	private static final int ICOSPHERE_SUBDIVISIONS = 4;
 	
 	private static Model icosphereModel;
-	
 	public static Model getIcosphereModel() {
 		if (icosphereModel == null) {
 			String relativePath = ICOSPHERE_DIRECTORY + ICOSPHERE_BASE_FILENAME + ICOSPHERE_SUBDIVISIONS + "-"
@@ -149,7 +139,6 @@ public class Models {
 	private static final String UVSPHERE_SHADING = "smooth";
 	
 	private static Model uvsphereModel;
-	
 	public static Model getUVsphereModel() {
 		if (uvsphereModel == null) {
 			String relativePath = UVSPHERE_DIRECTORY + UVSPHERE_BASE_FILENAME + "-" + UVSPHERE_SHADING;
@@ -164,7 +153,6 @@ public class Models {
 	private static final String TORUS_SHADING = "smooth";
 	
 	private static Model torusModel;
-	
 	public static Model getTorusModel() {
 		if (torusModel == null) {
 			String relativePath = TORUS_BASE_FILENAME + "-" + TORUS_SHADING;
@@ -175,17 +163,24 @@ public class Models {
 	}
 	
 	
+	private static Model rockModel;
+	public static Model getRockModel() {
+		if (rockModel == null) {
+			rockModel = new Model(OBJParser2.parse("rock1"));
+		}
+		return rockModel;
+	}
 	
-	/*private static final String CUBE_MODEL_FILENAME = "cube";
+	
+	private static final String CUBE_MODEL_FILENAME = "cube";
 	
 	private static Model cubeModel;
-	
 	public static Model getCubeModel() {
 		if (cubeModel == null) {
 			OBJParser2 parser = new OBJParser2(CUBE_MODEL_FILENAME);
-			cubeModel = parser.getModel();
+			cubeModel = new Model(parser.getMesh());
 		}
 		return cubeModel;
-	}*/
+	}
 
 }
