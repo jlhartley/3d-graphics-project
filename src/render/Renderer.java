@@ -21,6 +21,8 @@ public class Renderer {
 	private static final float NEAR_PLANE = 0.01f; // Near plane distance
 	private static final float FAR_PLANE = 10000; // Far plane distance
 	
+	private int clearBufferBits = GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT;
+	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
 		
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
@@ -50,8 +52,73 @@ public class Renderer {
 		glClearColor(r, g, b, 1);
 	}
 	
+	
+	public void clearColourBuffer() {
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+	
+	public void clearDepthBuffer() {
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+	
+	public void setClearBufferBits(int bits) {
+		this.clearBufferBits = bits;
+	}
+	
 	public void clear() {
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		glClear(clearBufferBits);
+	}
+	
+	/*
+	public void clear(int bits) {
+		glClear(bits);
+	}
+	*/
+	
+	
+	public void setDepthTestEnabled(boolean enabled) {
+		if (enabled) {
+			enableDepthTest();
+		} else {
+			disableDepthTest();
+		}
+	}
+	
+	public void enableDepthTest() {
+		glEnable(GL_DEPTH_TEST);
+	}
+	
+	public void disableDepthTest() {
+		glDisable(GL_DEPTH_TEST);
+	}
+	
+	
+	public void setFaceCullingEnabled(boolean enabled) {
+		if (enabled) {
+			enableFaceCulling();
+		} else {
+			disableFaceCulling();
+		}
+	}
+	
+	public void enableFaceCulling() {
+		glEnable(GL_CULL_FACE);
+	}
+	
+	public void disableFaceCulling() {
+		glDisable(GL_CULL_FACE);
+	}
+	
+	
+	public void setPolygonMode(PolygonMode polygonMode) {
+		switch (polygonMode) {
+		case FILL:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			break;
+		case LINE:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			break;
+		}
 	}
 	
 	// Should be called whenever the framebuffer changes size
@@ -86,14 +153,11 @@ public class Renderer {
 		
 		setMatrices(entity, camera);
 		
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
 		int vertexCount = model.getVertexCount();
 		
 		glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 		
-		//model.unbindVAO();
-		
+		//Model.unbindAll();
 	}
 	
 	public void enableLighting() {
