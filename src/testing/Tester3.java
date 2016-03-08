@@ -17,6 +17,7 @@ import model.Models;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Key;
+import ui.UIWindow;
 import math.MathUtils;
 import window.MouseButton;
 
@@ -27,25 +28,25 @@ public class Tester3 extends Prototyper {
 	}
 	
 	@Override
-	public void onCameraControlTypeChanged(boolean relative) {
+	public void onCameraControlTypeSet(boolean relative) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onCameraPositionChanged(Vector3f newPosition) {
+	public void onCameraPositionSet(Vector3f newPosition) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onCameraRotationChanged(Vector3f newRotation) {
+	public void onCameraRotationSet(Vector3f newRotation) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTimeMultiplierChanged(double timeMultiplier) {
+	public void onTimeMultiplierSet(double timeMultiplier) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -85,7 +86,7 @@ public class Tester3 extends Prototyper {
 	
 	
 	
-	private static final int XY_LIMIT = 200;
+	private static final int XY_LIMIT = 500;
 	
 	private static final int MAX_DISTANCE = 3000;
 	private static final int MIN_DISTANCE = 5;
@@ -153,7 +154,7 @@ public class Tester3 extends Prototyper {
 		Model cubeModel = Models.getCubeModel();
 		generateCubes(cubeModel);
 		ModelBuilder cubeFieldBuilder = new ModelBuilder(cubes);
-		cubeField = new Entity(cubeFieldBuilder.build(), new Vector3f());
+		cubeField = new Entity(new Model(cubeFieldBuilder.build()), new Vector3f());
 		reset();
 	}
 	
@@ -280,6 +281,12 @@ public class Tester3 extends Prototyper {
 		}
 		
 		renderer.render(cubeField, camera);
+	}
+
+	@Override
+	protected void updateUI(UIWindow window) {
+		window.getSidePanel().updateCameraPosition(camera.getPosition());
+		window.getSidePanel().updateCameraRotation(camera.getRotation());
 	}
 	
 	

@@ -21,6 +21,7 @@ import model.Models;
 import physics.Constants;
 import render.Renderer;
 import ui.Key;
+import ui.UIWindow;
 import window.MouseButton;
 
 public class Tester5 extends Prototyper {
@@ -32,7 +33,7 @@ public class Tester5 extends Prototyper {
 	// UI Input
 	
 	@Override
-	public void onCameraControlTypeChanged(boolean relative) {
+	public void onCameraControlTypeSet(boolean relative) {
 		if (relative) {
 			log("Relative Camera Controls");
 			cameraControls = relativeCameraControls;
@@ -43,17 +44,17 @@ public class Tester5 extends Prototyper {
 	}
 	
 	@Override
-	public void onCameraPositionChanged(Vector3f newPosition) {
+	public void onCameraPositionSet(Vector3f newPosition) {
 		camera.setPosition(newPosition);
 	}
 	
 	@Override
-	public void onCameraRotationChanged(Vector3f newRotation) {
+	public void onCameraRotationSet(Vector3f newRotation) {
 		camera.setRotation(newRotation);
 	}
 	
 	@Override
-	public void onTimeMultiplierChanged(double timeMultiplier) {
+	public void onTimeMultiplierSet(double timeMultiplier) {
 		this.timeMultiplier = timeMultiplier;
 	}
 	
@@ -68,7 +69,7 @@ public class Tester5 extends Prototyper {
 			//initPlanets();
 		} else if (key == Key.U) {
 			// Place the camera directly up in y
-			camera.setPosition(0, (float) Math.sqrt(500*500 + 500*500), 0);
+			camera.setPosition(0, (float) Math.sqrt(350*350 + 350*350), 0);
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
@@ -160,6 +161,7 @@ public class Tester5 extends Prototyper {
 	CameraControls cameraControls = relativeCameraControls;
 	
 	Model sphereModel = Models.getIcosphereModel();
+	Model rockModel = Models.getRockModel();
 	
 	// Sun is at the origin with no velocity
 	Star sun = new Star(sphereModel);
@@ -173,7 +175,7 @@ public class Tester5 extends Prototyper {
 		
 		for (int i = 0; i < PLANET_COUNT; i++) {
 			
-			Planet planet = new Planet(sphereModel);
+			Planet planet = new Planet(rockModel);
 			
 			// Initial independent values
 			double mass = getPlanetMass();
@@ -250,7 +252,7 @@ public class Tester5 extends Prototyper {
 	}
 	
 	private void resetCamera() {
-		camera.setPosition(0, 500, 500);
+		camera.setPosition(0, 350, 350);
 		// Point camera downwards at 45 degrees
 		camera.setPitch(45);
 		camera.setYaw(0);
@@ -339,7 +341,7 @@ public class Tester5 extends Prototyper {
 			// Update position
 			planet.updatePosition(deltaTime);
 			// Rotate planet with time
-			//planet.setRotY(getTime() * 100);
+			planet.setRotY((float) (getTime() * 100));
 		}
 		
 		
@@ -364,12 +366,15 @@ public class Tester5 extends Prototyper {
 			renderer.render(planet, camera);
 		}
 		
-		
-		// UI 'rendering'
+	}
+	
+	@Override
+	protected void updateUI(UIWindow window) {
 		window.getSidePanel().updateCameraPosition(camera.getPosition());
 		window.getSidePanel().updateCameraRotation(camera.getRotation());
-		
 	}
+	
+	
 	
 	
 

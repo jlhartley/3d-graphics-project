@@ -1,10 +1,12 @@
 package testing;
 
 import static logging.Logger.log;
+import static org.lwjgl.opengl.GL11.*;
 
 import org.eclipse.swt.widgets.Display;
 
 import logging.Logger;
+import render.PolygonMode;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
@@ -35,7 +37,7 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 	// UI Callbacks
 	
 	@Override
-	public void onProjectionChanged(ProjectionType projectionType) {
+	public void onProjectionTypeSet(ProjectionType projectionType) {
 		switchProjection(projectionType);
 	}
 	
@@ -45,9 +47,36 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 		int framebufferHeight = window.getCanvas().getHeight();
 		renderer.updateProjection(framebufferWidth, framebufferHeight, type);
 	}
-
-	// Canvas Callbacks
 	
+	@Override
+	public void onTraceSet(boolean shouldTrace) {
+		if (shouldTrace) {
+			// Trace entities by not clearing the colour buffer
+			renderer.setClearBufferBits(GL_DEPTH_BUFFER_BIT);
+		} else {
+			renderer.setClearBufferBits(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		}
+	}
+	
+	@Override
+	public void onDepthTestEnabledSet(boolean enabled) {
+		renderer.setDepthTestEnabled(enabled);
+	}
+	
+	
+	@Override
+	public void onFaceCullingEnabledSet(boolean enabled) {
+		renderer.setFaceCullingEnabled(enabled);
+	}
+	
+	@Override
+	public void onPolygonModeSet(PolygonMode polygonMode) {
+		renderer.setPolygonMode(polygonMode);
+	}
+	
+	
+	// Canvas Callbacks
+
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		log("Framebuffer Width: " + width + ", Height: " + height);
@@ -134,6 +163,8 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 					renderer.clear();
 					render(renderer);
 					
+					updateUI(window);
+					
 					window.getCanvas().swapBuffers();
 					window.asyncExec(this);
 					
@@ -147,7 +178,7 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 	
 	protected abstract void logic(float deltaTime);
 	protected abstract void render(Renderer renderer);	
-	
+	protected abstract void updateUI(UIWindow window);
 	
 	// Convenience methods
 	protected boolean isKeyPressed(int key) {
@@ -159,13 +190,8 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 	//}
 	
 	protected double getTime() {
-		//return System.nanoTime();
 		return System.nanoTime() / 10E8;
 	}
-	
-	//private double nanosecondsToSeconds(long nanoseconds) {
-	//	return nanoseconds / 10E8;
-	//}
 	
 	protected void closeWindow() {
 		//window.setShouldClose(true);
