@@ -25,6 +25,8 @@ import render.ProjectionType;
 
 public class SidePanel {
 	
+	private static final int WIDTH = 270;
+	
 	// All widgets in this class are the direct or indirect
 	// children of this composite.
 	private Composite sidePanelComposite;
@@ -35,15 +37,15 @@ public class SidePanel {
 	private Button fillButton;
 	private Button lineButton;
 	
+	private Button traceButton;
+	private Button depthTestButton;
+	private Button faceCullingButton;
+	
 	private Button relativeButton;
 	private Button absoluteButton;
 	
 	private Button runButton;
 	private Button editButton;
-	
-	private Button traceButton;
-	private Button depthTestButton;
-	private Button faceCullingButton;
 	
 	private Text xText;
 	private Text yText;
@@ -141,7 +143,7 @@ public class SidePanel {
 	private void initComposite() {
 		GridData layoutData = new GridData();
 		// Should really not specify the width as a pixel value
-		layoutData.widthHint = 250;
+		layoutData.widthHint = WIDTH;
 		// Fill any available space
 		layoutData.verticalAlignment = SWT.FILL;
 		layoutData.horizontalAlignment = SWT.FILL;
