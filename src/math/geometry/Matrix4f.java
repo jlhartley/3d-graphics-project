@@ -70,12 +70,11 @@ public class Matrix4f {
 		elements[3][3] += elements[0][3] * vec.x + elements[1][3] * vec.y + elements[2][3] * vec.z;
 	}
 	
-	public void setTranslation(Vector3f vector) {
-		elements[3][0] = vector.x;
-		elements[3][1] = vector.y;
-		elements[3][2] = vector.z;
+	public void setTranslation(Vector3f vec) {
+		elements[3][0] = vec.x;
+		elements[3][1] = vec.y;
+		elements[3][2] = vec.z;
 	}
-	
 	
 	// Axis must be a unit vector
 	public void rotate(float angle, Vector3f axis) {
@@ -127,6 +126,76 @@ public class Matrix4f {
 		elements[1][2] = t12;
 		elements[1][3] = t13;
 	}
+	
+	// Efficient methods for rotating about a given axis
+	
+	public void rotateX(float angle) {
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+
+        // Temporary variables for dependent values
+        float t10 = elements[1][0] * cos + elements[2][0] * sin;
+        float t11 = elements[1][1] * cos + elements[2][1] * sin;
+        float t12 = elements[1][2] * cos + elements[2][2] * sin;
+        float t13 = elements[1][3] * cos + elements[2][3] * sin;
+        
+        // Non-dependent values set directly
+        elements[2][0] = elements[1][0] * -sin + elements[2][0] * cos;
+        elements[2][1] = elements[1][1] * -sin + elements[2][1] * cos;
+        elements[2][2] = elements[1][2] * -sin + elements[2][2] * cos;
+        elements[2][3] = elements[1][3] * -sin + elements[2][3] * cos;
+        
+        elements[1][0] = t10;
+        elements[1][1] = t11;
+        elements[1][2] = t12;
+        elements[1][3] = t13;
+	}
+	
+	public void rotateY(float angle) {
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+		
+		// Temporary variables for dependent values
+        float t00 = elements[0][0] * cos + elements[2][0] * -sin;
+        float t01 = elements[0][1] * cos + elements[2][1] * -sin;
+        float t02 = elements[0][2] * cos + elements[2][2] * -sin;
+        float t03 = elements[0][3] * cos + elements[2][3] * -sin;
+        
+        // Non-dependent values set directly
+        elements[2][0] = elements[0][0] * sin + elements[2][0] * cos;
+        elements[2][1] = elements[0][1] * sin + elements[2][1] * cos;
+        elements[2][2] = elements[0][2] * sin + elements[2][2] * cos;
+        elements[2][3] = elements[0][3] * sin + elements[2][3] * cos;
+        
+        elements[0][0] = t00;
+        elements[0][1] = t01;
+        elements[0][2] = t02;
+        elements[0][3] = t03;
+	}
+	
+	public void rotateZ(float angle) {
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+		
+		// Temporary variables for dependent values
+        float t00 = elements[0][0] * cos + elements[1][0] * sin;
+        float t01 = elements[0][1] * cos + elements[1][1] * sin;
+        float t02 = elements[0][2] * cos + elements[1][2] * sin;
+        float t03 = elements[0][3] * cos + elements[1][3] * sin;
+        
+        // Non-dependent values set directly
+        elements[1][0] = elements[0][0] * -sin + elements[1][0] * cos;
+        elements[1][1] = elements[0][1] * -sin + elements[1][1] * cos;
+        elements[1][2] = elements[0][2] * -sin + elements[1][2] * cos;
+        elements[1][3] = elements[0][3] * -sin + elements[1][3] * cos;
+        
+        elements[0][0] = t00;
+        elements[0][1] = t01;
+        elements[0][2] = t02;
+        elements[0][3] = t03;
+	}
+	
+	
 	
 	public void scale(Vector3f vec) {
 		elements[0][0] = elements[0][0] * vec.x;

@@ -1,7 +1,6 @@
 package entities;
 
 import math.geometry.Matrix4f;
-import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 import model.Model;
 
@@ -95,9 +94,9 @@ public class Entity {
 	public Matrix4f getModelMatrix() {
 		modelMatrix.identity();
 		modelMatrix.translate(position);
-		modelMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
-		modelMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		modelMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		modelMatrix.rotateX((float) Math.toRadians(rotation.x));
+		modelMatrix.rotateY((float) Math.toRadians(rotation.y));
+		modelMatrix.rotateZ((float) Math.toRadians(rotation.z));
 		modelMatrix.scale(scale); // Uniform scale in all axes
 		return modelMatrix;
 	}

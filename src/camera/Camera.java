@@ -1,7 +1,6 @@
 package camera;
 
 import math.geometry.Matrix4f;
-import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 
 public class Camera {
@@ -77,9 +76,9 @@ public class Camera {
 	// For rendering
 	public Matrix4f getViewMatrix() {
 		viewMatrix.identity();
-		viewMatrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
-		viewMatrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		viewMatrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		viewMatrix.rotateX((float) Math.toRadians(rotation.x));
+		viewMatrix.rotateY((float) Math.toRadians(rotation.y));
+		viewMatrix.rotateZ((float) Math.toRadians(rotation.z));
 		Vector3f negativeTranslation = new Vector3f(position).negate();
 		viewMatrix.translate(negativeTranslation);
 		return viewMatrix;

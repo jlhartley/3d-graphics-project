@@ -1,7 +1,6 @@
 package camera;
 
 import math.geometry.Matrix4f;
-import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 import math.geometry.Vector4f;
 import ui.UIWindow;
@@ -54,9 +53,9 @@ public class RelativeControls extends CameraControls {
 		
 		Matrix4f matrix = new Matrix4f();
 		// Roll is rarely required
-		matrix.rotate((float) -Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
-		matrix.rotate((float) -Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		matrix.rotate((float) -Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
+		matrix.rotateZ((float) -Math.toRadians(rotation.z));
+		matrix.rotateY((float) -Math.toRadians(rotation.y));
+		matrix.rotateX((float) -Math.toRadians(rotation.x));
 		
 		velocity4.multiply(matrix);
 		

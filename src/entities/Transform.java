@@ -1,7 +1,6 @@
 package entities;
 
 import math.geometry.Matrix4f;
-import math.geometry.MatrixUtils;
 import math.geometry.Vector3f;
 
 public class Transform {
@@ -43,9 +42,9 @@ public class Transform {
 	public Matrix4f getMatrix() {
 		matrix.identity();
 		matrix.translate(position);
-		matrix.rotate((float) Math.toRadians(rotation.x), MatrixUtils.X_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.y), MatrixUtils.Y_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.z), MatrixUtils.Z_AXIS);
+		matrix.rotateX((float) Math.toRadians(rotation.x));
+		matrix.rotateY((float) Math.toRadians(rotation.y));
+		matrix.rotateZ((float) Math.toRadians(rotation.z));
 		matrix.scale(scale);
 		return matrix;
 	}
