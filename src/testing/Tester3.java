@@ -154,7 +154,7 @@ public class Tester3 extends Prototyper {
 		Model cubeModel = Models.getCubeModel();
 		generateCubes(cubeModel);
 		ModelBuilder cubeFieldBuilder = new ModelBuilder(cubes);
-		cubeField = new Entity(new Model(cubeFieldBuilder.build()), new Vector3f());
+		cubeField = new Entity(cubeFieldBuilder.build(), new Vector3f());
 		reset();
 	}
 	

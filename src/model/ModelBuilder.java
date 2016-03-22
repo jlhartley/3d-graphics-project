@@ -41,7 +41,7 @@ public class ModelBuilder {
 		entities.add(entity);
 	}
 	
-	public Mesh build() {
+	public Model build() {
 		
 		// Calculate initial capacities for ArrayList efficiency
 		
@@ -54,7 +54,10 @@ public class ModelBuilder {
 		}
 		
 		List<Vertex> vertices = new ArrayList<>(uniqueVertexCount);
-		List<Integer> indices = new ArrayList<>(totalVertexCount);
+		//List<Integer> indices = new ArrayList<>(totalVertexCount);
+		int[] indices = new int[totalVertexCount];
+		int verticesAddedSoFar = 0;
+		int ptrOffset = 0;
 		
 		for (Entity entity : entities) {
 			
@@ -64,10 +67,14 @@ public class ModelBuilder {
 			// Copy over the indices, offsetting them based on the
 			// number of vertices previously added, so they point to the correct
 			// set of vertices
-			int verticesAddedSoFar = vertices.size();
-			for (int index : mesh.getIndices()) {
-				indices.add(index + verticesAddedSoFar);
+			for (int i = 0; i < mesh.getIndices().size(); i++) {
+				int index = mesh.getIndices().get(i);
+				indices[i + ptrOffset] = index + verticesAddedSoFar;
 			}
+			ptrOffset += mesh.getIndices().size();
+			verticesAddedSoFar += vertices.size();
+			// Correct code: 
+			//verticesAddedSoFar = vertices.size();
 			
 			
 			for (Vertex vertex : mesh.getVertices()) {
@@ -78,14 +85,17 @@ public class ModelBuilder {
 			
 		}
 		
-		Mesh mesh = new Mesh(vertices, indices);
+		Mesh mesh = new Mesh(vertices, null);
+		
+		
+		Model m = new Model(mesh.getPositionsArray(), mesh.getNormalsArray(), indices);
 		
 		System.out.println("Built New Mesh");
 		System.out.println("Unique Vertex Count: " + mesh.getUniqueVertexCount());
-		System.out.println("Total Vertex Count: " + mesh.getTotalVertexCount());
-		System.out.println("Triangle Count: " + mesh.getTriangleCount());
+		//System.out.println("Total Vertex Count: " + mesh.getTotalVertexCount());
+		//System.out.println("Triangle Count: " + mesh.getTriangleCount());
 		
-		return mesh;
+		return m;
 		
 	}
 	

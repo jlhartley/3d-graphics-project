@@ -98,11 +98,11 @@ public class Model {
 	// Interleaved
 	public Model(Mesh mesh) {
 		
-		this(mesh.getPositionsArray(), mesh.getNormalsArray(), mesh.getIndicesArray());
+		//this(mesh.getPositionsArray(), mesh.getNormalsArray(), mesh.getIndicesArray());
 		
 		this.mesh = mesh;
 		
-		/*
+		
 		vao = glGenVertexArrays();
 		glBindVertexArray(vao);
 		
@@ -111,7 +111,7 @@ public class Model {
 		setIndices(mesh.getIndices());
 		
 		glBindVertexArray(0);
-		*/
+		
 	}
 	
 	
