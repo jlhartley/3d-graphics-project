@@ -15,7 +15,6 @@ import org.lwjgl.BufferUtils;
 import model.vertices.Mesh;
 import model.vertices.Vertex;
 import shaders.ShaderProgram;
-import util.ModelUtils;
 
 public class Model {
 	
@@ -116,7 +115,6 @@ public class Model {
 	
 	
 	// Size = number of values per vertex in the vertexData array
-	// TODO: Change vertexData to data?
 	private int addVertexAttrib(float[] data, int index, int size) {
 		
 		// Generate a new Vertex Buffer Object (VBO)
@@ -143,13 +141,14 @@ public class Model {
 		glVertexAttribPointer(index, size, GL_FLOAT, false, 0, 0);
 		glEnableVertexAttribArray(index);
 		
-		// Nothing more to do with this VBO, so unbind
+		// Nothing more needs to be done with this VBO, so unbind
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		return vbo;
 	}
 	
 	// For a list
+	/*
 	private void setIndices(List<Integer> indices) {
 		
 		this.vertexCount = indices.size();
@@ -166,7 +165,7 @@ public class Model {
 		
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 		
-	}
+	}*/
 	
 	// For an array
 	private void setIndices(int[] indices) {
