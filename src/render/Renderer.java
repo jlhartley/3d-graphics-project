@@ -21,7 +21,7 @@ public class Renderer {
 	private static final float NEAR_PLANE = 0.01f; // Near plane distance
 	private static final float FAR_PLANE = 10000; // Far plane distance
 	
-	private int clearBufferBits = GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT;
+	private int clearBufferBits = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	
 	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
 		
