@@ -1,19 +1,12 @@
 package entities.celestial;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import io.JSONSerializable;
 import math.geometry.Vector3f;
 import model.Model;
+import save.PlanetSaveData;
 
 // TODO: Should do something about MoveableEntity
 
-public class Planet extends CelestialEntity implements JSONSerializable {
-	
-	static Gson gson = new GsonBuilder()
-			.setPrettyPrinting()
-			.create();
+public class Planet extends CelestialEntity {
 	
 	public Planet(Model model) {
 		super(model);
@@ -28,9 +21,26 @@ public class Planet extends CelestialEntity implements JSONSerializable {
 	}
 	
 	
-	@Override
-	public String toJSON() {
-		return gson.toJson(this);
+	// Constructor for restoring from save
+	public Planet(Model model, PlanetSaveData saveData) {
+		this(model);
+		setPosition(saveData.position);
+		setRotation(saveData.rotation);
+		setScale(saveData.scale);
+		setVelocity(saveData.velocity);
+		setAcceleration(saveData.acceleration);
+		setMass(saveData.mass);
+	}
+	
+	public PlanetSaveData getPlanetSaveData() {
+		PlanetSaveData planetSaveData = new PlanetSaveData();
+		planetSaveData.position = getPosition();
+		planetSaveData.rotation = getRotation();
+		planetSaveData.scale = getScale();
+		planetSaveData.velocity = getVelocity();
+		planetSaveData.acceleration = getAcceleration();
+		planetSaveData.mass = getMass();
+		return planetSaveData;
 	}
 	
 }
