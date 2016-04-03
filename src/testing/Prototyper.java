@@ -63,7 +63,6 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 		renderer.setDepthTestEnabled(enabled);
 	}
 	
-	
 	@Override
 	public void onFaceCullingEnabledSet(boolean enabled) {
 		renderer.setFaceCullingEnabled(enabled);
@@ -108,6 +107,9 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 		
 		// The main loop
 		loop();
+		
+		// Allow subclass to handle closing if needed
+		close();
 		
 		// Final clean up of used resources
 		cleanUp();
@@ -179,6 +181,8 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 	protected abstract void logic(float deltaTime);
 	protected abstract void render(Renderer renderer);	
 	protected abstract void updateUI(UIWindow window);
+	
+	protected abstract void close();
 	
 	// Convenience methods
 	protected boolean isKeyPressed(int key) {

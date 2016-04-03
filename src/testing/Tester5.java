@@ -5,6 +5,9 @@ import static logging.Logger.log;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import camera.AbsoluteControls;
 import camera.Camera;
 import camera.CameraControls;
@@ -13,6 +16,7 @@ import entities.Entity;
 import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
+import io.FileUtils;
 import math.MathUtils;
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
@@ -20,6 +24,7 @@ import model.Model;
 import model.Models;
 import physics.Constants;
 import render.Renderer;
+import save.PlanetSaveData;
 import ui.Key;
 import ui.UIWindow;
 import window.MouseButton;
@@ -191,8 +196,21 @@ public class Tester5 extends Prototyper {
 			planet.setScale((float) scale);
 			planet.setVelocity(velocity);
 			
+			//planet.setAcceleration(new Vector3f(position.x * 1000, position.y * 1000, 900));
+			
 			planets.add(planet);
 		}
+		
+		/*
+		String json = FileUtils.getFileContents("planets.json");
+		PlanetSaveData[] saveDataArray = gson.fromJson(json, PlanetSaveData[].class);
+		for (PlanetSaveData saveData : saveDataArray) {
+			Planet planet = new Planet(rockModel, saveData);
+			double scale = getSphereRadius(saveData.mass, PLANET_DENSITY);
+			planet.setScale((float) scale);
+			planets.add(planet);
+		}
+		*/
 		
 	}
 	
@@ -282,6 +300,9 @@ public class Tester5 extends Prototyper {
 			Planet planet1 = planets.get(i);
 			Vector3f acceleration1 = planet1.getAcceleration();
 			
+			// Can't zero here, because we would clear our calculations so far
+			//acceleration1.zero();
+			
 			for (int j = i + 1; j < planets.size(); j++) {
 				Planet planet2 = planets.get(j);
 				Vector3f acceleration2 = planet2.getAcceleration();
@@ -302,46 +323,13 @@ public class Tester5 extends Prototyper {
 			acceleration1.zero();
 		}
 		
-		/*
 		
-		// Euler integration
-		
-		for (Planet planet1 : planets) {
-			
-			Vector3f resultantForce = new Vector3f();
-			
-			for (Planet planet2 : planets) {
-				
-				// Avoid comparing a planet to itself
-				if (planet1 == planet2) {
-					continue;
-				}
-				
-				// Add force vectors for each planet to get a resultant force
-				resultantForce.add(planet1.forceTo(planet2));
-			}
-			
-			// Add force vector for the sun to get a resultant force
-			resultantForce.add(planet1.forceTo(sun));
-			
-			// Divide force vector by mass to give acceleration vector
-			float mass = planet1.getMass();
-			Vector3f resultantAcceleration = new Vector3f(resultantForce).scale(1 / mass);
-			
-			planet1.updateVelocity(resultantAcceleration, deltaTime);
-			
-		}
-		
-		*/
-		
-		// Wait until all planet velocity values have been updated,
-		// before updating the position of each planet
-		
+		// Wait until all planet force calculations (dependent on position)
+		// are done, before updating the position of each planet
 		for (Planet planet : planets) {
-			// Update position
 			planet.updatePosition(deltaTime);
-			// Rotate planet with time
-			planet.setRotY((float) (getTime() * 100));
+			// Rotate planet with time - a full rotation in 2 seconds
+			planet.rotateY(180, deltaTime);
 		}
 		
 		
@@ -374,6 +362,22 @@ public class Tester5 extends Prototyper {
 		window.getSidePanel().updateCameraRotation(camera.getRotation());
 	}
 	
+
+	
+	
+	static Gson gson = new GsonBuilder()
+			.setPrettyPrinting()
+			.create();
+	
+	@Override
+	protected void close() {
+		List<PlanetSaveData> saveDataList = new ArrayList<>();
+		for (Planet planet : planets) {
+			saveDataList.add(planet.getPlanetSaveData());
+		}
+		String json = gson.toJson(saveDataList);
+		FileUtils.writeToFile("planets.json", json);
+	}
 	
 	
 	

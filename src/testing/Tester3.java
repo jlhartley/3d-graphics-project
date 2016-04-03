@@ -288,6 +288,11 @@ public class Tester3 extends Prototyper {
 		window.getSidePanel().updateCameraPosition(camera.getPosition());
 		window.getSidePanel().updateCameraRotation(camera.getRotation());
 	}
+
+	@Override
+	protected void close() {
+		
+	}
 	
 	
 

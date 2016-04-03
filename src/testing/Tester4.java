@@ -358,6 +358,11 @@ public class Tester4 extends Prototyper {
 		
 	}
 
+	@Override
+	protected void close() {
+		
+	}
+
 	
 
 }
