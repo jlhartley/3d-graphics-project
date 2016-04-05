@@ -62,39 +62,6 @@ public class RelativeControls extends CameraControls {
 		cameraPosition.y += velocity.y * deltaTime;
 		cameraPosition.z += velocity.z * deltaTime;
 		
-		
-		/*
-		if (window.isKeyPressed(FORWARD_KEY) || window.isKeyPressed(BACK_KEY)) {
-			
-			Vector3f cameraRotation = camera.getRotation();
-			
-			//float pitch = cameraRotation.x;
-			//float yaw = cameraRotation.y;
-			
-			
-			// Project the movement speed onto the x-z plane
-			float projectedMovementSpeed = (float) (movementSpeed * Math.cos(Math.toRadians(cameraRotation.x)));
-			
-			// Movement in x and z can now be considered as an orthographic projection
-			// Angle is z, therefore x is sin and z is cosine (against the convention)
-			cameraVelocity.x = (float) (projectedMovementSpeed * Math.sin(Math.toRadians(cameraRotation.y)));
-			// z is negated since z decreases into the screen (with depth, when considering perspective)
-			cameraVelocity.z = -(float) (projectedMovementSpeed * Math.cos(Math.toRadians(cameraRotation.y)));
-			
-			// Rotation around x increases as the camera is pointed down. Since we want to move down in y
-			// more as the camera is pointed further down, the rotation needs to be negated.
-			// Also note: sin(-theta)=-sin(theta)
-			cameraVelocity.y = (float) (movementSpeed * Math.sin(Math.toRadians(-cameraRotation.x)));
-			
-			if (window.isKeyPressed(BACK_KEY)) {
-				
-				cameraVelocity.x = -cameraVelocity.x;
-				cameraVelocity.y = -cameraVelocity.y;
-				cameraVelocity.z = -cameraVelocity.z;
-				
-			}
-			
-		}*/
 	}
 	
 	
