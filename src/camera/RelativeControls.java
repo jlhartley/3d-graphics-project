@@ -2,7 +2,6 @@ package camera;
 
 import math.geometry.Matrix4f;
 import math.geometry.Vector3f;
-import math.geometry.Vector4f;
 import ui.UIWindow;
 
 public class RelativeControls extends CameraControls {
@@ -47,8 +46,6 @@ public class RelativeControls extends CameraControls {
 			velocity.z = 1;
 		}
 		
-		Vector4f velocity4 = new Vector4f(velocity, 0);
-		
 		Vector3f rotation = camera.getRotation();
 		
 		Matrix4f matrix = new Matrix4f();
@@ -57,9 +54,7 @@ public class RelativeControls extends CameraControls {
 		matrix.rotateY((float) -Math.toRadians(rotation.y));
 		matrix.rotateX((float) -Math.toRadians(rotation.x));
 		
-		velocity4.multiply(matrix);
-		
-		velocity.set(velocity4.x, velocity4.y, velocity4.z).setMagnitude(movementSpeed);
+		velocity.multiply(matrix, 0).setMagnitude(movementSpeed);
 		
 		Vector3f cameraPosition = camera.getPosition();
 
