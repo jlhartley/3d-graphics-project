@@ -128,7 +128,7 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 		// so nothing will happen and the first run is like a trial 
 		// run to find the deltaTime
 		
-		double startTime = getTime();
+		final double startTime = getTime();
 		
 		// The logic thread
 		new Thread(new Runnable() {
