@@ -7,6 +7,10 @@ import physics.Constants;
 
 public class CelestialEntity extends Entity {
 	
+	// Apply dampening to distance calculations, to avoid divide by 0
+	private static float EPSILON = 0.1f;
+	
+	
 	private float mass;
 	
 	private Vector3f velocity;
@@ -54,9 +58,27 @@ public class CelestialEntity extends Entity {
 	
 	
 	
+	public Vector3f accelerationTo(CelestialEntity celestialEntity) {
+		
+		float accelerationMagnitude = getAccelerationMagnitude(celestialEntity);
+		
+		Vector3f pos1 = this.getPosition();
+		Vector3f pos2 = celestialEntity.getPosition();
+		
+		// Subtract position1 from position2 to get the vector between the positions
+		// Then scale the vector, such that its magnitude is the calculated value
+		Vector3f acceleration = Vector3f.sub(pos2, pos1).setMagnitude(accelerationMagnitude);
+		
+		return acceleration;
+	}
+	
+	private float getAccelerationMagnitude(CelestialEntity celestialEntity) {
+		float distanceSquared = distanceSquaredTo(celestialEntity) + EPSILON;
+		return (float) (Constants.G * celestialEntity.getMass() / distanceSquared);
+	}
+	
 	public Vector3f forceTo(CelestialEntity celestialEntity) {
 		
-		// F = m * a,  a = F / m
 		float forceMagnitude = getForceMagnitude(celestialEntity);
 		
 		Vector3f pos1 = this.getPosition();
@@ -69,16 +91,9 @@ public class CelestialEntity extends Entity {
 		return force;
 	}
 	
-	
-	
-	
 	// Newton's law of universal gravitation
 	private float getForceMagnitude(CelestialEntity celestialEntity) {
-		float distanceSquared = distanceSquaredTo(celestialEntity);
-		// Limit the maximum force by limiting the minimum distance
-		if (distanceSquared < 3) {
-			distanceSquared = 3;
-		}
+		float distanceSquared = distanceSquaredTo(celestialEntity) + EPSILON;
 		return (float) (Constants.G * this.getMass() * celestialEntity.getMass() / distanceSquared);
 	}
 	
@@ -92,6 +107,7 @@ public class CelestialEntity extends Entity {
 	public float distanceTo(CelestialEntity celestialEntity) {
 		return (float) Math.sqrt(distanceSquaredTo(celestialEntity));
 	}
+	
 	
 	
 	public Vector3f getAcceleration() {
