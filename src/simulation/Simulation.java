@@ -18,12 +18,13 @@ import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
 import ui.Key;
+import ui.MenuBar;
 import ui.SidePanel;
 import ui.UIWindow;
 import util.ModelUtils;
 import window.MouseButton;
 
-public abstract class Simulation implements SidePanel.Callbacks, Canvas.Callbacks {
+public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbacks, Canvas.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -51,7 +52,7 @@ public abstract class Simulation implements SidePanel.Callbacks, Canvas.Callback
 	private double timeMultiplier = 1;
 	
 	// Pause all logic other than camera movement
-	private boolean paused = false;
+	protected boolean paused = false;
 	
 	// Default projection matrix is perspective
 	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
@@ -200,7 +201,7 @@ public abstract class Simulation implements SidePanel.Callbacks, Canvas.Callback
 		// Create window and OpenGL context.
 		// It is important that this happens before anything else,
 		// since other stuff depends on OpenGL context creation.
-		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this);
+		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this, this);
 		
 		// Instantiate the renderer
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
@@ -216,6 +217,8 @@ public abstract class Simulation implements SidePanel.Callbacks, Canvas.Callback
 		absoluteCameraControls = new AbsoluteControls(camera, window);
 		
 		cameraControls = relativeCameraControls;
+		
+		resetCamera();
 	}
 	
 	void resetCamera() {
@@ -265,7 +268,7 @@ public abstract class Simulation implements SidePanel.Callbacks, Canvas.Callback
 					logicLogger.onFrame(currentTime);
 					cameraControls.move((float) deltaTime);
 					if (paused) {
-						return;
+						continue;
 					}
 					logic((float) (deltaTime * timeMultiplier));
 				}

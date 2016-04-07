@@ -11,10 +11,11 @@ import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
 import ui.SidePanel;
+import ui.MenuBar;
 import ui.UIWindow;
 import util.ModelUtils;
 
-public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callbacks {
+public abstract class Prototyper implements SidePanel.Callbacks, MenuBar.Callbacks, Canvas.Callbacks {
 	
 	// Constants
 	// Initial display dimensions - 16:9
@@ -82,12 +83,27 @@ public abstract class Prototyper implements SidePanel.Callbacks, Canvas.Callback
 		renderer.onFramebufferResized(width, height, projectionType);
 	}
 
+	// MenuBar Callbacks
+
+	@Override
+	public void onSave(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOpen(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
 	public Prototyper() {
 		// Create window and OpenGL context.
 		// It is important that this happens before anything else,
 		// since other stuff depends on OpenGL context creation.
-		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this);
+		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this, this);
 		
 		// Instantiate the renderer
 		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);

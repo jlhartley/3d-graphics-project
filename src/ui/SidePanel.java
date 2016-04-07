@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -26,6 +27,9 @@ import render.ProjectionType;
 public class SidePanel {
 	
 	private static final int WIDTH = 270;
+	
+	// Parent composite
+	private Shell shell;
 	
 	// All widgets in this class are the direct or indirect
 	// children of this composite.
@@ -57,6 +61,9 @@ public class SidePanel {
 	
 	private Scale speedScale;
 	
+	
+	private Callbacks callbacks;
+	
 	public interface Callbacks {
 		public void onProjectionTypeSet(ProjectionType projectionType);
 		// TODO: Have an enum for this too
@@ -70,9 +77,8 @@ public class SidePanel {
 		public void onPolygonModeSet(PolygonMode polygonMode);
 	}
 	
-	private Callbacks callbacks;
-	
 	public SidePanel(Shell shell, Callbacks callbacks) {
+		this.shell = shell;
 		this.callbacks = callbacks;
 		sidePanelComposite = new Composite(shell, SWT.BORDER);
 		initComposite();
@@ -117,8 +123,8 @@ public class SidePanel {
 			newCameraPosition.y = Float.parseFloat(yText.getText());
 			newCameraPosition.z = Float.parseFloat(zText.getText());
 		} catch (NumberFormatException e) {
-			// If there was an exception, return so that onCameraPositionSet
-			// isn't called with a new (0, 0, 0) vector
+			displayErrorDialogue(e);
+			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
 		callbacks.onCameraPositionSet(newCameraPosition);
@@ -131,11 +137,25 @@ public class SidePanel {
 			newCameraRotation.y = Float.parseFloat(yawText.getText());
 			newCameraRotation.z = Float.parseFloat(rollText.getText());
 		} catch (NumberFormatException e) {
-			// If there was an exception, return so that onCameraRotationSet
-			// isn't called with a new (0, 0, 0) vector
+			displayErrorDialogue(e);
+			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
 		callbacks.onCameraRotationSet(newCameraRotation);
+	}
+	
+	private void displayErrorDialogue(final Exception e) {
+		shell.getDisplay().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+				messageBox.setText("Invalid Input");
+				messageBox.setMessage(e.getMessage());
+				
+				messageBox.open();
+			}
+		});
 	}
 	
 	

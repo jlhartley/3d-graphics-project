@@ -16,8 +16,6 @@ import org.lwjgl.system.libffi.Closure;
 
 import math.geometry.Vector2f;
 
-import static ui.UIUtils.*;
-
 public class UIWindow implements Window {
 	
 	// Display manages the connection between SWT and the OS
@@ -39,15 +37,19 @@ public class UIWindow implements Window {
 	// Wraps the side panel composite
 	private SidePanel sidePanel;
 	
+	// Wraps the Menu object
+	//private MenuBar menuBar;
+	
 	// OpenGL debugging output
 	private Closure debugMessageCallback;
 	
-	public UIWindow(Display display, int width, int height, String title, SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
+	public UIWindow(Display display, int width, int height, String title, 
+			SidePanel.Callbacks sidePanelCallbacks, MenuBar.Callbacks menuBarCallbacks, Canvas.Callbacks canvasCallbacks) {
 		this.display = display;
 		this.title = title;
 		updateSize(width, height);
 		initShell();
-		initUI(sidePanelCallbacks, canvasCallbacks);
+		initUI(sidePanelCallbacks, menuBarCallbacks, canvasCallbacks);
 		log("SWT Version: " + SWT.getVersion());
 		log("Display Bounds: " + display.getBounds());
 		log("Window Bounds: " + shell.getBounds());
@@ -80,9 +82,10 @@ public class UIWindow implements Window {
 	}
 
 	
-	private void initUI(SidePanel.Callbacks sidePanelCallbacks, Canvas.Callbacks canvasCallbacks) {
-		// TODO: Represent as an object, like SidePanel
-		initMenu(shell);
+	private void initUI(SidePanel.Callbacks sidePanelCallbacks, MenuBar.Callbacks menuBarCallbacks, Canvas.Callbacks canvasCallbacks) {
+		
+		// Set up menu
+		new MenuBar(shell, menuBarCallbacks);
 		
 		// Root layout is a GridLayout with 2 columns
 		GridLayout rootLayout = new GridLayout();
@@ -158,8 +161,6 @@ public class UIWindow implements Window {
 	}
 	
 	
-	
-
 
 	@Override
 	public void show() {
@@ -170,7 +171,12 @@ public class UIWindow implements Window {
 	public void hide() {
 		shell.setVisible(false);
 	}
-
+	
+	@Override
+	public void setTitle(String title) {
+		this.title = title;
+		shell.setText(title);
+	}
 
 	@Override
 	public void centre() {
@@ -191,6 +197,11 @@ public class UIWindow implements Window {
 	@Override
 	public boolean shouldClose() {
 		return shell.isDisposed();
+	}
+	
+	@Override
+	public void close() {
+		shell.close();
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package simulation;
 
+import static logging.Logger.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,8 @@ public class Simulation1 extends Simulation {
 	
 	private static final int PLANET_COUNT = 250;
 	
+	
+	private static final String DEFAULT_SAVE_PATH = "autosave.json";
 	
 	
 	// Main objects
@@ -92,16 +96,7 @@ public class Simulation1 extends Simulation {
 			planets.add(planet);
 		}
 		
-		/*
-		String json = FileUtils.getFileContents("planets.json");
-		PlanetSaveData[] saveDataArray = gson.fromJson(json, PlanetSaveData[].class);
-		for (PlanetSaveData saveData : saveDataArray) {
-			Planet planet = new Planet(rockModel, saveData);
-			double scale = getSphereRadius(saveData.mass, PLANET_DENSITY);
-			planet.setScale((float) scale);
-			planets.add(planet);
-		}
-		*/
+		//onOpen(DEFAULT_SAVE_PATH);
 		
 	}
 	
@@ -161,7 +156,7 @@ public class Simulation1 extends Simulation {
 	}
 	
 	public Simulation1() {
-		resetCamera();
+		window.setTitle("Orbitator");
 		initSun();
 		initPlanets();
 		integrator = new Integrator(planets, sun);
@@ -202,18 +197,46 @@ public class Simulation1 extends Simulation {
 	
 	
 	
-	static Gson gson = new GsonBuilder()
+	private static Gson gson = new GsonBuilder()
 			.setPrettyPrinting()
 			.create();
 	
 	@Override
 	protected void close() {
-		List<PlanetSaveData> saveDataList = new ArrayList<>();
+		log("Close");
+		onSave(DEFAULT_SAVE_PATH);
+	}
+
+	@Override
+	public void onSave(String path) {
+		List<PlanetSaveData> saveDataList = new ArrayList<>(planets.size());
 		for (Planet planet : planets) {
 			saveDataList.add(planet.getPlanetSaveData());
 		}
 		String json = gson.toJson(saveDataList);
-		FileUtils.writeToFile("planets.json", json);
+		FileUtils.writeToFile(path, json);
+	}
+
+	@Override
+	public void onOpen(String path) {
+		paused = true;
+		// Have to sleep for a while to ensure the logic thread has paused
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		planets.clear();
+		String json = FileUtils.getFileContents(path);
+		PlanetSaveData[] saveDataArray = gson.fromJson(json, PlanetSaveData[].class);
+		for (PlanetSaveData saveData : saveDataArray) {
+			Planet planet = new Planet(rockModel, saveData);
+			// Manually restore scale based on mass
+			double scale = getSphereRadius(saveData.mass, PLANET_DENSITY);
+			planet.setScale((float) scale);
+			planets.add(planet);
+		}
+		paused = false;
 	}
 	
 	
