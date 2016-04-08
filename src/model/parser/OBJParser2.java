@@ -134,7 +134,6 @@ public class OBJParser2 {
 			
 			String line;
 			
-			// Read until we reach the face definitions
 			while ((line = reader.readLine()) != null) {
 				
 				if (line.startsWith("v")) {
@@ -164,7 +163,6 @@ public class OBJParser2 {
 		System.out.println("Total Vertex Count: " + mesh.getTotalVertexCount());
 		System.out.println("Triangle Count: " + mesh.getTriangleCount());
 		
-		// Currently just using the normals to colour the model
 		return mesh;
 	}
 	

@@ -145,6 +145,8 @@ public class SidePanel {
 	}
 	
 	private void displayErrorDialogue(final Exception e) {
+		// Need to asyncExec because otherwise there may be duplicate dialogs caused
+		// by focus changes
 		shell.getDisplay().asyncExec(new Runnable() {
 			
 			@Override

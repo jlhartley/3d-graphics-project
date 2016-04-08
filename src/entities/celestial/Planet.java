@@ -4,7 +4,7 @@ import math.geometry.Vector3f;
 import model.Model;
 import save.PlanetSaveData;
 
-// TODO: Should do something about MoveableEntity
+// TODO: Should do something about MovingEntity
 
 public class Planet extends CelestialEntity {
 	
