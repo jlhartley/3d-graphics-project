@@ -1,4 +1,4 @@
-#version 420 core
+#version 330 core
 
 // The naming convention I use here is:
 // Underscore case for global variables (uniforms, inputs / outputs)

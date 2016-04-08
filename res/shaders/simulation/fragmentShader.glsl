@@ -1,10 +1,8 @@
-#version 420 core
-
-// Enable early depth testing
-layout(early_fragment_tests) in;
+#version 330 core
 
 // Constants
 const float PI = 3.14159265359;
+
 const float MIN_BRIGHTNESS = 0.1;
 
 
