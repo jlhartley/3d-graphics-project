@@ -31,6 +31,9 @@ public class Simulation1 extends Simulation {
 	
 	// Constants
 	
+	private static final String TITLE = "Orbitator";
+	
+	
 	private static final double MIN_ORBITAL_RADIUS = 100;
 	private static final double MAX_ORBITAL_RADIUS = 200;
 	
@@ -156,7 +159,7 @@ public class Simulation1 extends Simulation {
 	}
 	
 	public Simulation1() {
-		window.setTitle("Orbitator");
+		window.setTitle(TITLE);
 		initSun();
 		initPlanets();
 		integrator = new Integrator(planets, sun);
