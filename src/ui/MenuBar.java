@@ -69,7 +69,7 @@ public class MenuBar {
 				FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 				fileDialog.setFilterNames(new String[] {"JSON Files (*.json)", "All Files (*.*)"});
 				fileDialog.setFilterExtensions(new String[] {"*.json", "*.*"});
-				fileDialog.setFileName("planets.json");
+				//fileDialog.setFileName("planets.json");
 				fileDialog.setOverwrite(true); // Check for overwrite
 				String path = fileDialog.open();
 				if (path != null) {
