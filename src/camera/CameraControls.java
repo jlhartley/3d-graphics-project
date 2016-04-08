@@ -10,13 +10,13 @@ import ui.UIWindow;
 public abstract class CameraControls {
 	
 	// Positional movement
-	public static final float MOVEMENT_SPEED = 60;
+	public static final float MOVEMENT_SPEED = 50;
 	
 	// Rotational movement
-	public static final float ROTATION_SPEED = 25;
+	public static final float ROTATION_SPEED = 30;
 	
 	// Scale speed for faster movement
-	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4.2f;
+	public static final float FAST_MOVEMENT_SPEED_MULTIPLIER = 4.5f;
 	public static final float FAST_ROTATION_SPEED_MULTIPLIER = 2.5f;
 	
 	// Degrees per normalised device coordinate

@@ -43,8 +43,15 @@ public class Canvas {
 	private Vector2f cursorPosition = new Vector2f();
 	
 	private boolean[] keysPressed = new boolean[400];
+	
 	private boolean pageUpPressed = false;
 	private boolean pageDownPressed = false;
+	
+	private boolean upPressed = false;
+	private boolean downPressed = false;
+	private boolean rightPressed = false;
+	private boolean leftPressed = false;
+	
 	private boolean controlPressed = false;
 	
 	private Callbacks callbacks;
@@ -115,6 +122,14 @@ public class Canvas {
 					pageDownPressed = true;
 				} else if (key == Key.CONTROL) {
 					controlPressed = true;
+				} else if (key == Key.RIGHT) {
+					rightPressed = true;
+				} else if (key == Key.LEFT) {
+					leftPressed = true;
+				} else if (key == Key.UP) {
+					upPressed = true;
+				} else if (key == Key.DOWN) {
+					downPressed = true;
 				}
 				
 				if (callbacks != null) {
@@ -135,6 +150,14 @@ public class Canvas {
 					pageDownPressed = false;
 				} else if (key == Key.CONTROL) {
 					controlPressed = false;
+				} else if (key == Key.RIGHT) {
+					rightPressed = false;
+				} else if (key == Key.LEFT) {
+					leftPressed = false;
+				} else if (key == Key.UP) {
+					upPressed = false;
+				} else if (key == Key.DOWN) {
+					downPressed = false;
 				}
 				
 				if (callbacks != null) {
@@ -212,6 +235,18 @@ public class Canvas {
 		}
 		if (Key.fromGLFW(keyCode) == Key.CONTROL) {
 			return controlPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.RIGHT) {
+			return rightPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.LEFT) {
+			return leftPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.UP) {
+			return upPressed;
+		}
+		if (Key.fromGLFW(keyCode) == Key.DOWN) {
+			return downPressed;
 		}
 		return keysPressed[keyCode];
 	}
