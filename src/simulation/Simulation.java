@@ -33,8 +33,8 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	
 	private static final String TITLE = "Default Title";
 	
-	private static final String VERTEX_SHADER_PATH = "src/shaders/vertexShader.glsl";
-	private static final String FRAGMENT_SHADER_PATH = "src/shaders/fragmentShader.glsl";
+	private static final String VERTEX_SHADER_PATH = "res/shaders/simulation/vertexShader.glsl";
+	private static final String FRAGMENT_SHADER_PATH = "res/shaders/simulation/fragmentShader.glsl";
 	
 	
 	UIWindow window;
