@@ -3,7 +3,12 @@
 // Constants
 const float PI = 3.14159265359;
 
-const float MIN_BRIGHTNESS = 0.1;
+// Lighting
+
+//const float MIN_BRIGHTNESS = 0.1;
+
+const float AMBIENT_BRIGHTNESS = 0.15;
+const vec3 AMBIENT_COLOUR = vec3(1.0, 1.0, 0.9);
 
 
 // Input
@@ -23,7 +28,7 @@ out vec4 out_color;
 void main()
 {
 	// Brightness will remain at a default of 1 if lighting is not enabled
-	float brightness = 1;
+	float diffuseBrightness = 1;
 	
 	if (lighting_enabled) {
 		
@@ -32,10 +37,14 @@ void main()
 		vec3 unitWorldNormal = normalize(world_normal);
 		vec3 unitToLight = normalize(to_light);
 		
-		// Ensure that the brightness does not fall below a minimum value
-		brightness = max(dot(unitWorldNormal, unitToLight), MIN_BRIGHTNESS);
+		// Ensure that the brightness is not negative - range is between 0 and 1
+		// Also correct for ambient lighting
+		diffuseBrightness = max(dot(unitWorldNormal, unitToLight), 0) * (1 - AMBIENT_BRIGHTNESS);
 		
 	}
     
-    out_color = vec4(pass_colour * brightness * light_colour, 1.0);
+	vec3 finalLighting = AMBIENT_COLOUR * AMBIENT_BRIGHTNESS 
+	                    + light_colour * diffuseBrightness;
+	
+    out_color = vec4(pass_colour * finalLighting, 1.0);
 }
