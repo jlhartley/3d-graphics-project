@@ -4,9 +4,13 @@ import math.geometry.Vector3f;
 
 public class Light implements LightSource {
 	
+	// The position of the light in world space
 	private Vector3f position;
 	
 	private Vector3f colour;
+	
+	// Attenuation = xd^2 + yd + z
+	//private Vector3f attenuationValues = new Vector3f(0, 0, 1);
 	
 	//private float intensity;
 	
