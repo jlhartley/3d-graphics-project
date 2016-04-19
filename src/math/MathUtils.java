@@ -13,8 +13,12 @@ public class MathUtils {
 	}
 	
 	
-	public static Vector3f project(Vector2f cursorPosition, float width, float height, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
+	public static Vector3f projectToWorld(Vector2f cursorPosition, float width, float height, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
 		return eyeToWorld(clipToEye(NDCToClip(cursorPositionToNDC(cursorPosition, width, height)), projectionMatrix), viewMatrix);
+	}
+	
+	public static Vector4f projectToEye(Vector2f cursorPosition, float width, float height, Matrix4f projectionMatrix) {
+		return clipToEye(NDCToClip(cursorPositionToNDC(cursorPosition, width, height)), projectionMatrix);
 	}
 	
 	// Note that this returns a new object

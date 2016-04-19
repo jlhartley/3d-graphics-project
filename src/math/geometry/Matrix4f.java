@@ -21,6 +21,8 @@ public class Matrix4f {
 					float e, float f, float g, float h,
 					float i, float j, float k, float l,
 					float m, float n, float o, float p) {
+		
+		/*
 		// Column 0
 		elements[0][0] = a;
 		elements[0][1] = e;
@@ -44,6 +46,33 @@ public class Matrix4f {
 		elements[3][1] = h;
 		elements[3][2] = l;
 		elements[3][3] = p;
+		*/
+		
+		
+		// Column 0
+		elements[0][0] = a;
+		elements[0][1] = b;
+		elements[0][2] = c;
+		elements[0][3] = d;
+		
+		// Column 1
+		elements[1][0] = e;
+		elements[1][1] = f;
+		elements[1][2] = g;
+		elements[1][3] = h;
+		
+		// Column 2
+		elements[2][0] = i;
+		elements[2][1] = j;
+		elements[2][2] = k;
+		elements[2][3] = l;
+		
+		// Column 3
+		elements[3][0] = m;
+		elements[3][1] = n;
+		elements[3][2] = o;
+		elements[3][3] = p;
+		
 	}
 	
 	public void identity() {

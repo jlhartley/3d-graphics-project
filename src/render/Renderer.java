@@ -217,6 +217,11 @@ public class Renderer {
 		
 	}
 	
+	
+	public Matrix4f getProjectionMatrix() {
+		return projectionMatrix;
+	}
+	
 	public void cleanUp() {
 		shaderProgram.cleanUp();
 	}
