@@ -17,16 +17,30 @@ public class Renderer {
 	// TODO: Support multiple shader programs
 	private ShaderProgram shaderProgram;
 	
+	private int framebufferWidth;
+	private int framebufferHeight;
+	
+	private Matrix4f projectionMatrix;
+	private ProjectionType projectionType;
+	
 	private static final float FOV = 70; // Field of view in degrees
 	private static final float NEAR_PLANE = 0.01f; // Near plane distance
 	private static final float FAR_PLANE = 10000; // Far plane distance
 	
 	private int clearBufferBits = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	
-	public Renderer(String vertexShaderPath, String fragmentShaderPath) {
+	public Renderer(String vertexShaderPath, String fragmentShaderPath, int framebufferWidth, int framebufferHeight) {
 		
 		shaderProgram = new ShaderProgram(vertexShaderPath, fragmentShaderPath);
 		shaderProgram.use();
+		
+		this.framebufferWidth = framebufferWidth;
+		this.framebufferHeight = framebufferHeight;
+		
+		// Default projection matrix is perspective
+		this.projectionType = ProjectionType.PERSPECTIVE;
+		
+		updateProjection();
 		
 		glEnable(GL_DEPTH_TEST);
 		
@@ -69,11 +83,11 @@ public class Renderer {
 		glClear(clearBufferBits);
 	}
 	
-	/*
+	
 	public void clear(int bits) {
 		glClear(bits);
 	}
-	*/
+	
 	
 	
 	public void setDepthTestEnabled(boolean enabled) {
@@ -121,22 +135,40 @@ public class Renderer {
 		}
 	}
 	
+	public void setProjectionType(ProjectionType projectionType) {
+		this.projectionType = projectionType;
+		updateProjection();
+	}
+	
 	// Should be called whenever the framebuffer changes size
-	public void onFramebufferResized(int width, int height, ProjectionType type) {
+	public void onFramebufferResized(int width, int height) {
+		this.framebufferWidth = width;
+		this.framebufferHeight = height;
 		// Update the viewport
 		glViewport(0, 0, width, height);
 		// Recalculate the projection matrix
-		updateProjection(width, height, type);
+		updateProjection();
+	}
+	
+	public void updateProjection() {
+		switch (projectionType) {
+		case ORTHOGRAPHIC:
+			projectionMatrix = MatrixUtils.orthographicProjection(framebufferWidth, framebufferHeight, NEAR_PLANE, FAR_PLANE);
+			break;
+		case PERSPECTIVE:
+			projectionMatrix = MatrixUtils.perspectiveProjection(framebufferWidth, framebufferHeight, NEAR_PLANE, FAR_PLANE, FOV);
+			break;
+		}
+		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	
 	public void updateProjection(int width, int height, ProjectionType projectionType) {
-		Matrix4f projectionMatrix = null;
 		switch (projectionType) {
 		case ORTHOGRAPHIC:
-			projectionMatrix = MatrixUtils.orthographicProjectionMatrix(width, height, NEAR_PLANE, FAR_PLANE);
+			projectionMatrix = MatrixUtils.orthographicProjection(width, height, NEAR_PLANE, FAR_PLANE);
 			break;
 		case PERSPECTIVE:
-			projectionMatrix = MatrixUtils.perspectiveProjectionMatrix(width, height, FOV, NEAR_PLANE, FAR_PLANE);
+			projectionMatrix = MatrixUtils.perspectiveProjection(width, height, NEAR_PLANE, FAR_PLANE, FOV);
 			break;
 		}
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);

@@ -4,18 +4,6 @@ import java.text.DecimalFormat;
 
 public class Matrix4f {
 	
-	// Factory methods
-	
-	public static Matrix4f translation(Vector3f vector) {
-		Matrix4f matrix = new Matrix4f();
-		// Set each value in the final column
-		matrix.elements[3][0] = vector.x;
-		matrix.elements[3][1] = vector.y;
-		matrix.elements[3][2] = vector.z;
-		return matrix;
-	}
-	
-	
 	// Constants
 	public static final int ROW_COUNT = 4;
 	public static final int COLUMN_COUNT = 4;
@@ -29,6 +17,34 @@ public class Matrix4f {
 		identity();
 	}
 	
+	public Matrix4f(float a, float b, float c, float d, 
+					float e, float f, float g, float h,
+					float i, float j, float k, float l,
+					float m, float n, float o, float p) {
+		// Column 0
+		elements[0][0] = a;
+		elements[0][1] = e;
+		elements[0][2] = i;
+		elements[0][3] = m;
+		
+		// Column 1
+		elements[1][0] = b;
+		elements[1][1] = f;
+		elements[1][2] = j;
+		elements[1][3] = n;
+		
+		// Column 2
+		elements[2][0] = c;
+		elements[2][1] = g;
+		elements[2][2] = k;
+		elements[2][3] = o;
+		
+		// Column 3
+		elements[3][0] = d;
+		elements[3][1] = h;
+		elements[3][2] = l;
+		elements[3][3] = p;
+	}
 	
 	public void identity() {
 		
@@ -234,6 +250,45 @@ public class Matrix4f {
 		elements[2][2] = vec.z;
 	}
 
+	
+	
+    public Matrix4f invert() {
+    	
+        float a = elements[0][0] * elements[1][1] - elements[0][1] * elements[1][0];
+        float b = elements[0][0] * elements[1][2] - elements[0][2] * elements[1][0];
+        float c = elements[0][0] * elements[1][3] - elements[0][3] * elements[1][0];
+        float d = elements[0][1] * elements[1][2] - elements[0][2] * elements[1][1];
+        float e = elements[0][1] * elements[1][3] - elements[0][3] * elements[1][1];
+        float f = elements[0][2] * elements[1][3] - elements[0][3] * elements[1][2];
+        float g = elements[2][0] * elements[3][1] - elements[2][1] * elements[3][0];
+        float h = elements[2][0] * elements[3][2] - elements[2][2] * elements[3][0];
+        float i = elements[2][0] * elements[3][3] - elements[2][3] * elements[3][0];
+        float j = elements[2][1] * elements[3][2] - elements[2][2] * elements[3][1];
+        float k = elements[2][1] * elements[3][3] - elements[2][3] * elements[3][1];
+        float l = elements[2][2] * elements[3][3] - elements[2][3] * elements[3][2];
+        
+        float det = a * l - b * k + c * j + d * i - e * h + f * g;
+        det = 1.0f / det;
+        
+    	Matrix4f inverse = new Matrix4f(( elements[1][1] * l - elements[1][2] * k + elements[1][3] * j) * det,
+                						(-elements[0][1] * l + elements[0][2] * k - elements[0][3] * j) * det,
+                						( elements[3][1] * f - elements[3][2] * e + elements[3][3] * d) * det,
+                						(-elements[2][1] * f + elements[2][2] * e - elements[2][3] * d) * det,
+                						(-elements[1][0] * l + elements[1][2] * i - elements[1][3] * h) * det,
+                						( elements[0][0] * l - elements[0][2] * i + elements[0][3] * h) * det,
+                						(-elements[3][0] * f + elements[3][2] * c - elements[3][3] * b) * det,
+                						( elements[2][0] * f - elements[2][2] * c + elements[2][3] * b) * det,
+                						( elements[1][0] * k - elements[1][1] * i + elements[1][3] * g) * det,
+                						(-elements[0][0] * k + elements[0][1] * i - elements[0][3] * g) * det,
+                						( elements[3][0] * e - elements[3][1] * c + elements[3][3] * a) * det,
+                						(-elements[2][0] * e + elements[2][1] * c - elements[2][3] * a) * det,
+                						(-elements[1][0] * j + elements[1][1] * h - elements[1][2] * g) * det,
+                						( elements[0][0] * j - elements[0][1] * h + elements[0][2] * g) * det,
+                						(-elements[3][0] * d + elements[3][1] * b - elements[3][2] * a) * det,
+                						( elements[2][0] * d - elements[2][1] * b + elements[2][2] * a) * det);
+       
+        return inverse;
+    }
 
     public String toString() {
     	String spacing = "  ";

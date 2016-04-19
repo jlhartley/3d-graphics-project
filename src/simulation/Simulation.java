@@ -4,8 +4,6 @@ import static logging.Logger.log;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
-import org.eclipse.swt.widgets.Display;
-
 import camera.AbsoluteControls;
 import camera.Camera;
 import camera.CameraControls;
@@ -54,9 +52,6 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	// Pause all logic other than camera movement
 	protected boolean paused = false;
 	
-	// Default projection matrix is perspective
-	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
-	
 	
 	// UI Callbacks
 	
@@ -66,16 +61,13 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	}
 	
 	protected void switchProjection(ProjectionType projectionType) {
-		this.projectionType = projectionType;
-		int framebufferWidth = window.getCanvas().getWidth();
-		int framebufferHeight = window.getCanvas().getHeight();
-		renderer.updateProjection(framebufferWidth, framebufferHeight, projectionType);
+		renderer.setProjectionType(projectionType);;
 	}
 	
 	@Override
 	public void onTraceSet(boolean shouldTrace) {
+		// Trace entities by not clearing the colour buffer
 		if (shouldTrace) {
-			// Trace entities by not clearing the colour buffer
 			renderer.setClearBufferBits(GL_DEPTH_BUFFER_BIT);
 		} else {
 			renderer.setClearBufferBits(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -131,7 +123,7 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		log("Framebuffer Width: " + width + ", Height: " + height);
-		renderer.onFramebufferResized(width, height, projectionType);
+		renderer.onFramebufferResized(width, height);
 	}
 	
 	// Keyboard Input
@@ -196,10 +188,10 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 		// Create window and OpenGL context.
 		// It is important that this happens before anything else,
 		// since other stuff depends on OpenGL context creation.
-		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this, this);
+		window = new UIWindow(WIDTH, HEIGHT, TITLE, this, this, this);
 		
 		// Instantiate the renderer
-		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, WIDTH, HEIGHT);
 		renderer.setClearColour(0, 0, 0); // Set clear colour to black
 		
 		// Centre window

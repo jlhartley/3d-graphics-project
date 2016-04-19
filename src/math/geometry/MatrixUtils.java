@@ -31,7 +31,7 @@ public class MatrixUtils {
 	}*/
 	
 	// Perspective projection matrix
-	public static Matrix4f perspectiveProjectionMatrix(int width, int height, float fov, float nearPlane, float farPlane) {
+	public static Matrix4f perspectiveProjection(int width, int height, float nearPlane, float farPlane, float fov) {
 		
 		// Aspect ratio
 		float ratio = (float) width / (float) height;
@@ -54,7 +54,7 @@ public class MatrixUtils {
 	}
 	
 	// Orthographic projection matrix
-	public static Matrix4f orthographicProjectionMatrix(int width, int height, float nearPlane, float farPlane) {
+	public static Matrix4f orthographicProjection(int width, int height, float nearPlane, float farPlane) {
 		
 		// Aspect ratio
 		float ratio = (float) width / (float) height;

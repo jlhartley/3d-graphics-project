@@ -51,11 +51,14 @@ public class Simulation1 extends Simulation {
 	public void onCursorPositionChanged(Vector2f cursorPosition) {
 		if (planetToAdd != null) {
 			System.out.println(cursorPosition);
+			Vector3f pos = new Vector3f();
+			int width = window.getCanvas().getWidth();
+			int height = window.getCanvas().getHeight();
+			//pos.set(MathUtils.project(cursorPosition, width, height, projectionMatrix, viewMatrix))
+			//planetToAdd.setPosition(position);
 			planetToAdd.setPosition(cursorPosition.x / 2, cursorPosition.y / 2, 10);
 		}
 	}
-	
-	Planet planetToAdd;
 	
 	// Constants
 	
@@ -83,15 +86,18 @@ public class Simulation1 extends Simulation {
 	
 	// Main objects
 	
-	Model sphereModel = Models.getIcosphereModel();
-	Model rockModel = Models.getRockModel();
+	private Model sphereModel = Models.getIcosphereModel();
+	private Model rockModel = Models.getRockModel();
 	
 	// Sun is at the origin with no velocity
-	Star sun = new Star(sphereModel);
+	private Star sun = new Star(sphereModel);
 	
-	List<Planet> planets = new ArrayList<>();
+	private List<Planet> planets = new ArrayList<>();
 	
-	Integrator integrator;
+	
+	private Planet planetToAdd;
+	
+	private Integrator integrator;
 	
 	
 	private void initPlanets() {

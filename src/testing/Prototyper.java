@@ -1,17 +1,16 @@
 package testing;
 
 import static logging.Logger.log;
-import static org.lwjgl.opengl.GL11.*;
-
-import org.eclipse.swt.widgets.Display;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
 import logging.Logger;
 import render.PolygonMode;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
-import ui.SidePanel;
 import ui.MenuBar;
+import ui.SidePanel;
 import ui.UIWindow;
 import util.ModelUtils;
 
@@ -31,9 +30,6 @@ public abstract class Prototyper implements SidePanel.Callbacks, MenuBar.Callbac
 	protected UIWindow window;
 	protected Renderer renderer;
 	
-	// Default projection matrix is perspective
-	private ProjectionType projectionType = ProjectionType.PERSPECTIVE;
-	
 	
 	// UI Callbacks
 	
@@ -43,10 +39,7 @@ public abstract class Prototyper implements SidePanel.Callbacks, MenuBar.Callbac
 	}
 	
 	protected void switchProjection(ProjectionType type) {
-		this.projectionType = type;
-		int framebufferWidth = window.getCanvas().getWidth();
-		int framebufferHeight = window.getCanvas().getHeight();
-		renderer.updateProjection(framebufferWidth, framebufferHeight, type);
+		renderer.setProjectionType(type);
 	}
 	
 	@Override
@@ -80,7 +73,7 @@ public abstract class Prototyper implements SidePanel.Callbacks, MenuBar.Callbac
 	@Override
 	public void onFramebufferResized(int width, int height) {
 		log("Framebuffer Width: " + width + ", Height: " + height);
-		renderer.onFramebufferResized(width, height, projectionType);
+		renderer.onFramebufferResized(width, height);
 	}
 
 	// MenuBar Callbacks
@@ -103,10 +96,10 @@ public abstract class Prototyper implements SidePanel.Callbacks, MenuBar.Callbac
 		// Create window and OpenGL context.
 		// It is important that this happens before anything else,
 		// since other stuff depends on OpenGL context creation.
-		window = new UIWindow(new Display(), WIDTH, HEIGHT, TITLE, this, this, this);
+		window = new UIWindow(WIDTH, HEIGHT, TITLE, this, this, this);
 		
 		// Instantiate the renderer
-		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, WIDTH, HEIGHT);
 		renderer.setClearColour(0, 0, 0); // Set clear colour to black
 		
 		// Centre window

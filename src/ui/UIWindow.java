@@ -43,9 +43,9 @@ public class UIWindow implements Window {
 	// OpenGL debugging output
 	private Closure debugMessageCallback;
 	
-	public UIWindow(Display display, int width, int height, String title, 
+	public UIWindow(int width, int height, String title, 
 			SidePanel.Callbacks sidePanelCallbacks, MenuBar.Callbacks menuBarCallbacks, Canvas.Callbacks canvasCallbacks) {
-		this.display = display;
+		this.display = new Display();
 		this.title = title;
 		updateSize(width, height);
 		initShell();
