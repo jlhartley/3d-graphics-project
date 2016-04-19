@@ -16,6 +16,8 @@ import entities.Entity;
 import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
+import input.Key;
+import input.MouseButton;
 import io.FileUtils;
 import math.MathUtils;
 import math.geometry.Vector2f;
@@ -25,9 +27,7 @@ import model.Models;
 import physics.Constants;
 import render.Renderer;
 import save.PlanetSaveData;
-import ui.Key;
 import ui.UIWindow;
-import window.MouseButton;
 
 public class Tester5 extends Prototyper {
 	

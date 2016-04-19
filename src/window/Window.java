@@ -15,8 +15,9 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
+import input.Key;
+import input.MouseButton;
 import math.geometry.Vector2f;
-import ui.Key;
 
 public class Window {
 	

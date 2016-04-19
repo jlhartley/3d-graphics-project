@@ -8,6 +8,8 @@ import java.util.List;
 import camera.Camera;
 import entities.Entity;
 import entities.MovingEntity;
+import input.Key;
+import input.MouseButton;
 import lighting.Light;
 import math.geometry.Vector2f;
 import math.geometry.Vector3f;
@@ -15,10 +17,8 @@ import model.Model;
 import model.Models;
 import render.ProjectionType;
 import render.Renderer;
-import ui.Key;
 import ui.UIWindow;
 import math.MathUtils;
-import window.MouseButton;
 
 public class Tester4 extends Prototyper {
 	

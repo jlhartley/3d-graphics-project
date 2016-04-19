@@ -1,4 +1,4 @@
-package window;
+package input;
 
 import static org.lwjgl.glfw.GLFW.*;
 

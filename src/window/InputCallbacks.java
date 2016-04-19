@@ -1,6 +1,7 @@
 package window;
 
-import ui.Key;
+import input.Key;
+import input.MouseButton;
 
 public interface InputCallbacks {
 	void onKeyPressed(Key key);

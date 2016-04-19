@@ -10,19 +10,19 @@ import camera.AbsoluteControls;
 import camera.Camera;
 import camera.CameraControls;
 import camera.RelativeControls;
+import input.Key;
+import input.MouseButton;
 import logging.Logger;
-import math.geometry.Vector2f;
 import math.geometry.Vector3f;
+import model.Models;
 import render.PolygonMode;
 import render.ProjectionType;
 import render.Renderer;
 import ui.Canvas;
-import ui.Key;
 import ui.MenuBar;
 import ui.SidePanel;
 import ui.UIWindow;
 import util.ModelUtils;
-import window.MouseButton;
 
 public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbacks, Canvas.Callbacks {
 	
@@ -65,11 +65,11 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 		switchProjection(projectionType);
 	}
 	
-	protected void switchProjection(ProjectionType type) {
-		this.projectionType = type;
+	protected void switchProjection(ProjectionType projectionType) {
+		this.projectionType = projectionType;
 		int framebufferWidth = window.getCanvas().getWidth();
 		int framebufferHeight = window.getCanvas().getHeight();
-		renderer.updateProjection(framebufferWidth, framebufferHeight, type);
+		renderer.updateProjection(framebufferWidth, framebufferHeight, projectionType);
 	}
 	
 	@Override
@@ -144,7 +144,7 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 			resetCamera();
 		} else if (key == Key.U) {
 			// Place the camera directly up in y
-			camera.setPosition(0, (float) Math.sqrt(350*350 + 350*350), 0);
+			camera.setPosition(0, (float) (350 * Math.sqrt(2)), 0);
 			// Point camera straight down
 			camera.setPitch(90);
 			camera.setYaw(0);
@@ -188,11 +188,6 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 			log("Middle mouse button up.");
 			break;
 		}
-	}
-	
-	@Override
-	public void onCursorPositionChanged(Vector2f cursorPosition) {
-		
 	}
 	
 	
@@ -328,6 +323,8 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	private void cleanUp() {
 		renderer.cleanUp();
 		ModelUtils.cleanUp();
+		Models.getIcosphereModel().cleanUp();
+		Models.getRockModel().cleanUp();
 		window.cleanUp();
 	}
 	

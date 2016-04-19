@@ -12,8 +12,10 @@ import entities.Entity;
 import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
+import input.Key;
 import io.FileUtils;
 import math.MathUtils;
+import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
@@ -28,6 +30,32 @@ public class Simulation1 extends Simulation {
 		new Simulation1().run();
 	}
 	
+	// Keyboard Input
+
+	@Override
+	public void onKeyPressed(Key key) {
+		super.onKeyPressed(key);
+		if (key == Key.ONE) {
+			planetToAdd = new Planet(rockModel, new Vector3f(0, 300, 0));
+			float mass = 1000000;
+			planetToAdd.setMass(mass);
+			planetToAdd.setScale((float) getSphereRadius(mass, PLANET_DENSITY));
+		}
+		if (key == Key.TWO && planetToAdd != null) {
+			planets.add(planetToAdd);
+			planetToAdd = null;
+		}
+	}
+	
+	@Override
+	public void onCursorPositionChanged(Vector2f cursorPosition) {
+		if (planetToAdd != null) {
+			System.out.println(cursorPosition);
+			planetToAdd.setPosition(cursorPosition.x / 2, cursorPosition.y / 2, 10);
+		}
+	}
+	
+	Planet planetToAdd;
 	
 	// Constants
 	
@@ -194,6 +222,10 @@ public class Simulation1 extends Simulation {
 		
 		for (Entity planet : planets) {
 			renderer.render(planet, camera);
+		}
+		
+		if (planetToAdd != null) {
+			renderer.render(planetToAdd, camera);
 		}
 		
 	}
