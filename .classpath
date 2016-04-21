@@ -19,5 +19,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/3D%20Graphics%20Project/lib/gson/gson-2.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jface/org.eclipse.jface_3.12.0.v20160118-2055.jar"/>
+	<classpathentry kind="lib" path="lib/jface/org.eclipse.core.commands_3.8.0.v20160125-1236.jar"/>
+	<classpathentry kind="lib" path="lib/jface/org.eclipse.equinox.common_3.8.0.v20160118-2024.jar"/>
+	<classpathentry kind="lib" path="lib/jface/org.eclipse.osgi_3.11.0.v20160121-2005.jar"/>
+	<classpathentry kind="lib" path="lib/jface/org.eclipse.ui.workbench_3.108.0.v20160127-1632.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
