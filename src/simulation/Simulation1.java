@@ -37,7 +37,7 @@ public class Simulation1 extends Simulation {
 	public void onKeyPressed(Key key) {
 		super.onKeyPressed(key);
 		if (key == Key.ONE) {
-			planetToAdd = new Planet(rockModel, new Vector3f(0, 300, 0));
+			planetToAdd = new Planet(rockModel);
 			float mass = 1000000;
 			planetToAdd.setMass(mass);
 			planetToAdd.setScale((float) getSphereRadius(mass, PLANET_DENSITY));
@@ -46,6 +46,13 @@ public class Simulation1 extends Simulation {
 			planets.add(planetToAdd);
 			planetToAdd = null;
 		}
+	}
+	
+	@Override
+	public void onAddPlanet(Vector3f velocity, float mass) {
+		planetToAdd = new Planet(rockModel, new Vector3f(), velocity);
+		planetToAdd.setMass(mass);
+		planetToAdd.setScale((float) getSphereRadius(mass, PLANET_DENSITY));
 	}
 	
 	@Override
@@ -176,6 +183,7 @@ public class Simulation1 extends Simulation {
 	// some random y variation.
 	private Vector3f getPlanetPosition() {
 		Vector3f position = new Vector3f();
+		// Random angle
 		double theta = Math.random() * 2 * Math.PI;
 		double r = MathUtils.randRange(MIN_ORBITAL_RADIUS, MAX_ORBITAL_RADIUS);
 		position.x = (float) (r * Math.cos(theta));
@@ -272,12 +280,20 @@ public class Simulation1 extends Simulation {
 
 	@Override
 	public void onSave(String path) {
+		paused = true;
+		// Have to sleep for a while to ensure the logic thread has paused
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		List<PlanetSaveData> saveDataList = new ArrayList<>(planets.size());
 		for (Planet planet : planets) {
 			saveDataList.add(planet.getPlanetSaveData());
 		}
 		String json = gson.toJson(saveDataList);
 		FileUtils.writeToFile(path, json);
+		paused = false;
 	}
 
 	@Override

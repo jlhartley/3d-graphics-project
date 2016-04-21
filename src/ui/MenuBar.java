@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import math.geometry.Vector3f;
+
 public class MenuBar {
 	
 	private Shell shell;
@@ -21,6 +23,7 @@ public class MenuBar {
 	public interface Callbacks {
 		public void onSave(String path);
 		public void onOpen(String path);
+		public void onAddPlanet(Vector3f velocity, float mass);
 	}
 	
 	public MenuBar(Shell shell, Callbacks callbacks) {
@@ -105,6 +108,17 @@ public class MenuBar {
 		// Menu items
 		MenuItem addPlanetMenuItem = new MenuItem(editMenu, SWT.NONE);
 		addPlanetMenuItem.setText("Add Planet");
+		addPlanetMenuItem.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				AddPlanetDialog dialog = new AddPlanetDialog(shell);
+				dialog.open();
+				callbacks.onAddPlanet(dialog.getVelocity(), dialog.getMass());
+			}
+			
+		});
+		
 		new MenuItem(editMenu, SWT.SEPARATOR); // Separator
 		MenuItem undoMenuItem = new MenuItem(editMenu, SWT.NONE);
 		undoMenuItem.setText("Undo");
@@ -127,13 +141,11 @@ public class MenuBar {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				// Replace with MessageDialog.openInformation?
 				MessageBox messageBox = new MessageBox(shell);
 				messageBox.setText("About Orbitator");
 				messageBox.setMessage("Orbitator was developed for simulating orbital motion. It is an illustration of the n-body problem.\n© James Hartley");
-				int response = messageBox.open();
-				if (response == SWT.YES) {
-					shell.close();
-				}
+				messageBox.open();
 			}
 			
 		});
