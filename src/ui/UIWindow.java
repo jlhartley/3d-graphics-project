@@ -239,7 +239,9 @@ public class UIWindow implements Window {
 		return canvas.getCursorPosition();
 	}
 	
-	
+	public void pack() {
+		shell.pack();
+	}
 	
 	
 	// Cleanup
