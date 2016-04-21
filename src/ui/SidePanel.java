@@ -1,6 +1,8 @@
 package ui;
 
-import static ui.UIUtils.*;
+import static ui.UIUtils.displayErrorDialogue;
+import static ui.UIUtils.getFillHorizontalGridData;
+import static ui.UIUtils.getGroupFillLayout;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -15,7 +17,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -123,7 +124,7 @@ public class SidePanel {
 			newCameraPosition.y = Float.parseFloat(yText.getText());
 			newCameraPosition.z = Float.parseFloat(zText.getText());
 		} catch (NumberFormatException e) {
-			displayErrorDialogue(e);
+			displayErrorDialogue(shell, e);
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
@@ -137,27 +138,11 @@ public class SidePanel {
 			newCameraRotation.y = Float.parseFloat(yawText.getText());
 			newCameraRotation.z = Float.parseFloat(rollText.getText());
 		} catch (NumberFormatException e) {
-			displayErrorDialogue(e);
+			displayErrorDialogue(shell, e);
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
 		callbacks.onCameraRotationSet(newCameraRotation);
-	}
-	
-	private void displayErrorDialogue(final Exception e) {
-		// Need to asyncExec because otherwise there may be duplicate dialogs caused
-		// by focus changes
-		shell.getDisplay().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-				messageBox.setText("Invalid Input");
-				messageBox.setMessage(e.getMessage());
-				
-				messageBox.open();
-			}
-		});
 	}
 	
 	
