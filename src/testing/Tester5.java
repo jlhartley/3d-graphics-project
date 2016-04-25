@@ -378,6 +378,18 @@ public class Tester5 extends Prototyper {
 		String json = gson.toJson(saveDataList);
 		FileUtils.writeToFile("planets.json", json);
 	}
+
+	@Override
+	public void onNew() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

@@ -363,6 +363,20 @@ public class Tester4 extends Prototyper {
 		
 	}
 
+
+	@Override
+	public void onNew() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

@@ -293,6 +293,18 @@ public class Tester3 extends Prototyper {
 	protected void close() {
 		
 	}
+
+	@Override
+	public void onNew() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
