@@ -71,7 +71,7 @@ public class AddPlanetDialog extends TitleAreaDialog {
 			velocity.z = Float.parseFloat(zText.getText());
 			mass = Float.parseFloat(massText.getText());
 		} catch (NumberFormatException e) {
-			displayErrorDialogue(getShell(), e);
+			displayErrorDialogue(getShell(), e.getMessage());
 			return;
 		}
 		super.okPressed();

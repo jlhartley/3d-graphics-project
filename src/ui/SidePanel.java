@@ -60,6 +60,8 @@ public class SidePanel {
 	private Text yawText;
 	private Text rollText;
 	
+	private Text[] textBoxes = new Text[6];
+	
 	private Scale speedScale;
 	
 	
@@ -124,7 +126,7 @@ public class SidePanel {
 			newCameraPosition.y = Float.parseFloat(yText.getText());
 			newCameraPosition.z = Float.parseFloat(zText.getText());
 		} catch (NumberFormatException e) {
-			displayErrorDialogue(shell, e);
+			displayErrorDialogue(shell, e.getMessage());
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
@@ -138,7 +140,7 @@ public class SidePanel {
 			newCameraRotation.y = Float.parseFloat(yawText.getText());
 			newCameraRotation.z = Float.parseFloat(rollText.getText());
 		} catch (NumberFormatException e) {
-			displayErrorDialogue(shell, e);
+			displayErrorDialogue(shell, e.getMessage());
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
@@ -339,6 +341,7 @@ public class SidePanel {
 		xText.setLayoutData(getFillHorizontalGridData());
 		xText.addSelectionListener(cameraPositionTextSelectionListener);
 		xText.addFocusListener(cameraPositionTextFocusListener);
+		textBoxes[0] = xText;
 		
 		Label yLabel = new Label(cameraPositioningGroup, SWT.NONE);
 		yLabel.setText("Y: ");
@@ -346,6 +349,7 @@ public class SidePanel {
 		yText.setLayoutData(getFillHorizontalGridData());
 		yText.addSelectionListener(cameraPositionTextSelectionListener);
 		yText.addFocusListener(cameraPositionTextFocusListener);
+		textBoxes[1] = yText;
 		
 		Label zLabel = new Label(cameraPositioningGroup, SWT.NONE);
 		zLabel.setText("Z: ");
@@ -353,6 +357,7 @@ public class SidePanel {
 		zText.setLayoutData(getFillHorizontalGridData());
 		zText.addSelectionListener(cameraPositionTextSelectionListener);
 		zText.addFocusListener(cameraPositionTextFocusListener);
+		textBoxes[2] = zText;
 		
 		
 		

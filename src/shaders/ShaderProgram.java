@@ -122,7 +122,7 @@ public class ShaderProgram {
 		// Delete the shaders
 		glDeleteShader(vertexShaderId);
 		glDeleteShader(fragmentShaderId);
-		//Delete the program
+		// Delete the program
 		glDeleteProgram(programId);
 	}
 

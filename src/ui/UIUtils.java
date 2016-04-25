@@ -33,7 +33,7 @@ public class UIUtils {
 	// There can only be one error dialog displayed, so protect statically
 	private static boolean errorDialogDisplayed = false;
 	
-	public static void displayErrorDialogue(final Shell shell, final Exception e) {
+	public static void displayErrorDialogue(final Shell shell, final String message) {
 		
 		if (errorDialogDisplayed) {
 			return;
@@ -43,7 +43,7 @@ public class UIUtils {
 		
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 		messageBox.setText("Invalid Input");
-		messageBox.setMessage(e.getMessage());
+		messageBox.setMessage(message);
 		
 		messageBox.open();
 		

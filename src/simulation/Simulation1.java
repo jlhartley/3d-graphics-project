@@ -14,6 +14,7 @@ import entities.Entity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
 import input.Key;
+import input.MouseButton;
 import io.FileUtils;
 import math.MathUtils;
 import math.geometry.Matrix4f;
@@ -43,25 +44,9 @@ public class Simulation1 extends Simulation {
 			double volume = mass / PLANET_DENSITY;
 			planetToAdd.setScale((float) getSphereRadius(volume));
 		}
-		if (key == Key.TWO && planetToAdd != null) {
-			// If autoVelocity is true, then override current velocity with a stable one.
-			if (autoVelocity) {
-				planetToAdd.setVelocity(getStableOrbitalVelocity(planetToAdd, sun));
-			}
-			planets.add(planetToAdd);
-			planetToAdd = null;
-		}
 	}
 	
-	@Override
-	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
-		planetToAdd = new Planet(rockModel);
-		planetToAdd.setMass(mass);
-		double volume = mass / PLANET_DENSITY;
-		planetToAdd.setScale((float) getSphereRadius(volume));
-		planetToAdd.setVelocity(velocity);
-		this.autoVelocity = autoVelocity;
-	}
+	// Mouse Input
 	
 	@Override
 	public void onCursorPositionChanged(Vector2f cursorPosition) {
@@ -96,6 +81,33 @@ public class Simulation1 extends Simulation {
 			//planetToAdd.setPosition(cursorPosition.x / 2, cursorPosition.y / 2, 10);
 		}
 	}
+	
+	@Override
+	public void onMouseDown(MouseButton mouseButton) {
+		super.onMouseDown(mouseButton);
+		if (mouseButton == MouseButton.LEFT && planetToAdd != null) {
+			// If autoVelocity is true, then override current velocity with a stable one.
+			if (autoVelocity) {
+				planetToAdd.setVelocity(getStableOrbitalVelocity(planetToAdd, sun));
+			}
+			planets.add(planetToAdd);
+			planetToAdd = null;
+		}
+	}
+	
+	
+	// UI Callbacks
+
+	@Override
+	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
+		planetToAdd = new Planet(rockModel);
+		planetToAdd.setMass(mass);
+		double volume = mass / PLANET_DENSITY;
+		planetToAdd.setScale((float) getSphereRadius(volume));
+		planetToAdd.setVelocity(velocity);
+		this.autoVelocity = autoVelocity;
+	}
+	
 	
 	// Constants
 	
