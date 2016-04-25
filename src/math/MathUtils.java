@@ -8,8 +8,14 @@ import math.geometry.Vector4f;
 public class MathUtils {
 	
 	// Returns uniformly distributed random doubles in a given range
+	// Maximum and minimum don't actually have to be this way round
 	public static double randRange(double min, double max) {
 		return min + Math.random() * (max - min);
+	}
+	
+	// Calculate the radius from the volume
+	public static double getSphereRadius(double volume) {
+		return Math.cbrt((3 * volume) / (4 * Math.PI));
 	}
 	
 	
