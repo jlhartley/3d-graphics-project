@@ -103,11 +103,6 @@ public class Integrator {
 			float mass = planet1.getMass();
 			acceleration1.scale(1 / mass);
 			
-			Vector3f velocity = planet1.getVelocity();
-			velocity.x = velocity.x + acceleration1.x * deltaTime;
-			velocity.y = velocity.y + acceleration1.y * deltaTime;
-			velocity.z = velocity.z + acceleration1.z * deltaTime;
-			
 		}
 		
 		// Wait until all planet force calculations (dependent on position)
@@ -117,6 +112,10 @@ public class Integrator {
 			Vector3f position = planet.getPosition();
 			Vector3f velocity = planet.getVelocity();
 			Vector3f acceleration = planet.getAcceleration();
+			
+			velocity.x = velocity.x + acceleration.x * deltaTime;
+			velocity.y = velocity.y + acceleration.y * deltaTime;
+			velocity.z = velocity.z + acceleration.z * deltaTime;
 			
 			position.x = position.x + velocity.x * deltaTime - (0.5f * acceleration.x * deltaTime * deltaTime);
 			// Neat effect
