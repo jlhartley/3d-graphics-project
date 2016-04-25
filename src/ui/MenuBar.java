@@ -23,7 +23,8 @@ public class MenuBar {
 	public interface Callbacks {
 		public void onSave(String path);
 		public void onOpen(String path);
-		public void onAddPlanet(Vector3f velocity, float mass);
+		public void onNew();
+		public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass);
 	}
 	
 	public MenuBar(Shell shell, Callbacks callbacks) {
@@ -45,6 +46,14 @@ public class MenuBar {
 		// Menu items
 		MenuItem newMenuItem = new MenuItem(fileMenu, SWT.NONE);
 		newMenuItem.setText("New");
+		newMenuItem.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				callbacks.onNew();
+			}
+			
+		});
 		MenuItem openMenuItem = new MenuItem(fileMenu, SWT.NONE);
 		openMenuItem.setText("Open");
 		openMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -60,7 +69,6 @@ public class MenuBar {
 					callbacks.onOpen(path);
 				}
 			}
-			
 			
 		});
 		MenuItem saveMenuItem = new MenuItem(fileMenu, SWT.NONE);
@@ -114,7 +122,7 @@ public class MenuBar {
 			public void widgetSelected(SelectionEvent e) {
 				AddPlanetDialog dialog = new AddPlanetDialog(shell);
 				dialog.open();
-				callbacks.onAddPlanet(dialog.getVelocity(), dialog.getMass());
+				callbacks.onAddPlanet(dialog.getVelocity(), dialog.getAutoVelocity(), dialog.getMass());
 			}
 			
 		});

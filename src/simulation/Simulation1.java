@@ -1,6 +1,8 @@
 package simulation;
 
 import static logging.Logger.log;
+import static math.MathUtils.getSphereRadius;
+import static physics.PhysicsUtils.getStableOrbitalVelocity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import entities.Entity;
-import entities.celestial.CelestialEntity;
 import entities.celestial.Planet;
 import entities.celestial.Star;
 import input.Key;
@@ -20,7 +21,6 @@ import math.geometry.Vector2f;
 import math.geometry.Vector3f;
 import model.Model;
 import model.Models;
-import physics.Constants;
 import physics.Integrator;
 import render.Renderer;
 import save.PlanetSaveData;
@@ -40,19 +40,27 @@ public class Simulation1 extends Simulation {
 			planetToAdd = new Planet(rockModel);
 			float mass = 1000000;
 			planetToAdd.setMass(mass);
-			planetToAdd.setScale((float) getSphereRadius(mass, PLANET_DENSITY));
+			double volume = mass / PLANET_DENSITY;
+			planetToAdd.setScale((float) getSphereRadius(volume));
 		}
 		if (key == Key.TWO && planetToAdd != null) {
+			// If autoVelocity is true, then override current velocity with a stable one.
+			if (autoVelocity) {
+				planetToAdd.setVelocity(getStableOrbitalVelocity(planetToAdd, sun));
+			}
 			planets.add(planetToAdd);
 			planetToAdd = null;
 		}
 	}
 	
 	@Override
-	public void onAddPlanet(Vector3f velocity, float mass) {
-		planetToAdd = new Planet(rockModel, new Vector3f(), velocity);
+	public void onAddPlanet(Vector3f velocity, boolean autoVelocity, float mass) {
+		planetToAdd = new Planet(rockModel);
 		planetToAdd.setMass(mass);
-		planetToAdd.setScale((float) getSphereRadius(mass, PLANET_DENSITY));
+		double volume = mass / PLANET_DENSITY;
+		planetToAdd.setScale((float) getSphereRadius(volume));
+		planetToAdd.setVelocity(velocity);
+		this.autoVelocity = autoVelocity;
 	}
 	
 	@Override
@@ -126,6 +134,8 @@ public class Simulation1 extends Simulation {
 	
 	private Planet planetToAdd;
 	
+	private boolean autoVelocity;
+	
 	private Integrator integrator;
 	
 	
@@ -151,10 +161,11 @@ public class Simulation1 extends Simulation {
 			planet.setPosition(position);
 			
 			// Dependent values
-			double scale = getSphereRadius(mass, PLANET_DENSITY);
-			Vector3f velocity = getOrbitalVelocity(planet, sun);
-			
+			double volume = mass / PLANET_DENSITY;
+			double scale = getSphereRadius(volume);
 			planet.setScale((float) scale);
+			
+			Vector3f velocity = getStableOrbitalVelocity(planet, sun);
 			planet.setVelocity(velocity);
 			
 			//planet.setAcceleration(new Vector3f(position.x * 1000, position.y * 1000, 900));
@@ -169,13 +180,6 @@ public class Simulation1 extends Simulation {
 	// Generate a random mass
 	private double getPlanetMass() {
 		return MathUtils.randRange(MIN_PLANET_MASS, MAX_PLANET_MASS);
-	}
-	
-	// Calculate the radius from the mass
-	private double getSphereRadius(double mass, double density) {
-		double volume = mass / density;
-		double radius = Math.cbrt((3 * volume) / (4 * Math.PI));
-		return radius;
 	}
 	
 	// Get random planet position as a point on a circle
@@ -193,31 +197,12 @@ public class Simulation1 extends Simulation {
 		return position;
 	}
 	
-	// Get a stable orbital velocity for a circular orbit of entity1 around entity2.
-	// This is assuming entity2 is stationary, and both entities lie in the same plane.
-	private Vector3f getOrbitalVelocity(CelestialEntity entity1, CelestialEntity entity2) {
-		Vector3f p1 = entity1.getPosition();
-		Vector3f p2 = entity2.getPosition();
-		float m1 = entity1.getMass();
-		float m2 = entity2.getMass();
-		Vector3f r = Vector3f.sub(p2, p1);
-		
-		Vector3f velocity = new Vector3f();
-		// Perpendicular vector in the x-z plane
-		velocity.x = -r.z;
-		velocity.z = r.x;
-		// Calculate velocity magnitude (speed)
-		double distance = r.magnitude();
-		double speed = Math.sqrt(Constants.G  * (m1 + m2) / distance);
-		velocity.setMagnitude((float) speed);
-		
-		return velocity;
-	}
 	
 	
 	private void initSun() {
 		double mass = 1E6;
-		double scale = getSphereRadius(mass, STAR_DENSITY);
+		double volume = mass / STAR_DENSITY;
+		double scale = getSphereRadius(volume);
 		sun.setMass((float) mass);
 		sun.setScale((float) scale);
 	}
@@ -228,6 +213,8 @@ public class Simulation1 extends Simulation {
 		initPlanets();
 		integrator = new Integrator(planets, sun);
 	}
+	
+	
 	
 	@Override
 	protected void logic(float deltaTime) {
@@ -283,7 +270,7 @@ public class Simulation1 extends Simulation {
 		paused = true;
 		// Have to sleep for a while to ensure the logic thread has paused
 		try {
-			Thread.sleep(100);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -301,7 +288,7 @@ public class Simulation1 extends Simulation {
 		paused = true;
 		// Have to sleep for a while to ensure the logic thread has paused
 		try {
-			Thread.sleep(100);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -311,10 +298,24 @@ public class Simulation1 extends Simulation {
 		for (PlanetSaveData saveData : saveDataArray) {
 			Planet planet = new Planet(rockModel, saveData);
 			// Manually restore scale based on mass
-			double scale = getSphereRadius(saveData.mass, PLANET_DENSITY);
+			double volume = saveData.mass / PLANET_DENSITY;
+			double scale = getSphereRadius(volume);
 			planet.setScale((float) scale);
 			planets.add(planet);
 		}
+		paused = false;
+	}
+
+	@Override
+	public void onNew() {
+		paused = true;
+		// Have to sleep for a while to ensure the logic thread has paused
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		initPlanets();
 		paused = false;
 	}
 	
