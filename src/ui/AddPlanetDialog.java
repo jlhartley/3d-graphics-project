@@ -74,6 +74,13 @@ public class AddPlanetDialog extends TitleAreaDialog {
 			displayErrorDialogue(getShell(), e.getMessage());
 			return;
 		}
+		if (!Validator.validate(velocity)) {
+			String message = "The entered velocity value or values are not within the required range. " + 
+			" Values must be in the range " + Validator.MIN_VALUE + " to " + Validator.MAX_VALUE;
+			displayErrorDialogue(getShell(), message);
+			// Return so that superclass implementation isn't called
+			return;
+		}
 		super.okPressed();
 	}
 
@@ -86,32 +93,23 @@ public class AddPlanetDialog extends TitleAreaDialog {
 		velocityGroup.setLayout(new GridLayout(2, false));
 		
 		
-		/*
-		GridData separatorData = new GridData();
-		separatorData.horizontalSpan = 2;
-		separatorData.horizontalAlignment = SWT.FILL;
-		Label separator = new Label(container, SWT.HORIZONTAL);
-		separator.setLayoutData(separatorData);
-		separator.setText("Initial Velocity");
-		*/
-		
 		Label xLabel = new Label(velocityGroup, SWT.NONE);
 		xLabel.setText("X: ");
 		xText = new Text(velocityGroup, SWT.BORDER);
 		xText.setLayoutData(getFillHorizontalGridData());
-		xText.setText("0");
+		xText.setText("0.0");
 		
 		Label yLabel = new Label(velocityGroup, SWT.NONE);
 		yLabel.setText("Y: ");
 		yText = new Text(velocityGroup, SWT.BORDER);
 		yText.setLayoutData(getFillHorizontalGridData());
-		yText.setText("0");
+		yText.setText("0.0");
 		
 		Label zLabel = new Label(velocityGroup, SWT.NONE);
 		zLabel.setText("Z: ");
 		zText = new Text(velocityGroup, SWT.BORDER);
 		zText.setLayoutData(getFillHorizontalGridData());
-		zText.setText("0");
+		zText.setText("0.0");
 		
 		Button autoVelocityButton = new Button(velocityGroup, SWT.CHECK);
 		GridData layoutData = getFillHorizontalGridData();
@@ -124,17 +122,17 @@ public class AddPlanetDialog extends TitleAreaDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (autoVelocityButton.getSelection()) {
-					//xText.setEnabled(false);
-					//yText.setEnabled(false);
-					//zText.setEnabled(false);
-					xText.setEditable(false);
-					yText.setEditable(false);
-					zText.setEditable(false);
+					xText.setEnabled(false);
+					yText.setEnabled(false);
+					zText.setEnabled(false);
+					//xText.setEditable(false);
+					//yText.setEditable(false);
+					//zText.setEditable(false);
 					autoVelocity = true;
 				} else {
-					xText.setEditable(true);
-					yText.setEditable(true);
-					zText.setEditable(true);
+					xText.setEnabled(true);
+					yText.setEnabled(true);
+					zText.setEnabled(true);
 					autoVelocity = false;
 				}
 			}
@@ -143,7 +141,6 @@ public class AddPlanetDialog extends TitleAreaDialog {
 	}
 	
 	private void createMassInput(Composite container) {
-		
 		Group propertiesGroup = new Group(container, SWT.NONE);
 		propertiesGroup.setText("Properties");
 		GridData layoutData = getFillHorizontalGridData();
