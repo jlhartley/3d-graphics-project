@@ -69,7 +69,7 @@ public class OBJParser2 {
 	private void parseFaceLine(String line) {
 		String[] lineParts = line.split(" ");
 		
-		// Iterate though each of the 3 vertices that makes up a face, starting
+		// Iterate through each of the 3 vertices that makes up a face, starting
 		// at index 1 because the first part of the line is the "f " identifier
 		for (int vertex = 1; vertex <= VERTICES_PER_FACE; vertex++) {
 			

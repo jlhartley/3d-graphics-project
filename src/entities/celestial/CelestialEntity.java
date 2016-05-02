@@ -8,7 +8,7 @@ import physics.Constants;
 public class CelestialEntity extends Entity {
 	
 	// Apply dampening to distance calculations, to avoid divide by 0
-	private static float EPSILON = 0.1f;
+	private static float EPSILON = 0.001f;
 	
 	
 	private float mass;

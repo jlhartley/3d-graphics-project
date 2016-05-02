@@ -25,9 +25,9 @@ import util.ModelUtils;
 public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbacks, Canvas.Callbacks {
 	
 	// Constants
-	// Initial display dimensions - 16:9
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
+	// Initial Display Dimensions - 1280:720 = 16:9
+	private static final int INITIAL_WIDTH = 1280;
+	private static final int INITIAL_HEIGHT = 720;
 	
 	private static final String TITLE = "Default Title";
 	
@@ -189,10 +189,10 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 		// Create window and OpenGL context.
 		// It is important that this happens before anything else,
 		// since other stuff depends on OpenGL context creation.
-		window = new UIWindow(WIDTH, HEIGHT, TITLE, this, this, this);
+		window = new UIWindow(INITIAL_WIDTH, INITIAL_HEIGHT, TITLE, this, this, this);
 		
 		// Instantiate the renderer
-		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, WIDTH, HEIGHT);
+		renderer = new Renderer(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, INITIAL_WIDTH, INITIAL_HEIGHT);
 		renderer.setClearColour(0, 0, 0); // Set clear colour to black
 		
 		// Centre window

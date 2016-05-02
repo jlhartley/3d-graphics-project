@@ -23,9 +23,9 @@ public class Renderer {
 	private Matrix4f projectionMatrix;
 	private ProjectionType projectionType;
 	
-	private static final float FOV = 70; // Field of view in degrees
-	private static final float NEAR_PLANE = 0.01f; // Near plane distance
-	private static final float FAR_PLANE = 10000; // Far plane distance
+	private static final float FOV = 70; // Field Of View (in degrees)
+	private static final float NEAR_PLANE = 0.01f; // Near Plane Distance
+	private static final float FAR_PLANE = 10000; // Far Plane Distance
 	
 	private int clearBufferBits = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	
@@ -58,6 +58,9 @@ public class Renderer {
 		glCullFace(GL_BACK);
 	}
 	
+	
+	// Buffer Clearing Methods
+	
 	public void setClearColour(Vector3f colour) {
 		setClearColour(colour.x, colour.y, colour.z);
 	}
@@ -89,6 +92,7 @@ public class Renderer {
 	}
 	
 	
+	// Depth Test Methods
 	
 	public void setDepthTestEnabled(boolean enabled) {
 		if (enabled) {
@@ -106,6 +110,8 @@ public class Renderer {
 		glDisable(GL_DEPTH_TEST);
 	}
 	
+	
+	// Face Culling Methods
 	
 	public void setFaceCullingEnabled(boolean enabled) {
 		if (enabled) {
@@ -192,6 +198,9 @@ public class Renderer {
 		//Model.unbindAll();
 	}
 	
+	
+	// Uniform setting methods
+	
 	public void enableLighting() {
 		shaderProgram.setUniformValue("lighting_enabled", true);
 	}
@@ -208,16 +217,13 @@ public class Renderer {
 	}
 	
 	private void setMatrices(Entity entity, Camera camera) {
-		
 		Matrix4f modelMatrix = entity.getModelMatrix();
 		shaderProgram.setUniformValue("model_matrix", modelMatrix);
-		
 		Matrix4f viewMatrix = camera.getViewMatrix();
 		shaderProgram.setUniformValue("view_matrix", viewMatrix);
-		
 	}
 	
-	
+	// Projection Matrix may be needed for ray casting
 	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
