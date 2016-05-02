@@ -128,6 +128,13 @@ public class SidePanel {
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
 			return;
 		}
+		if (!Validator.validate(newCameraPosition)) {
+			String message = "The entered position value or values are not within the required range. " + 
+			" Values must be in the range " + Validator.MIN_VALUE + " to " + Validator.MAX_VALUE;
+			displayErrorDialogue(shell, message);
+			// Return so that onCameraPosition isn't called
+			return;
+		}
 		callbacks.onCameraPositionSet(newCameraPosition);
 	}
 	
@@ -140,6 +147,13 @@ public class SidePanel {
 		} catch (NumberFormatException e) {
 			displayErrorDialogue(shell, e.getMessage());
 			// Return so that onCameraPosition isn't called with a new (0, 0, 0) vector
+			return;
+		}
+		if (!Validator.validate(newCameraRotation)) {
+			String message = "The entered rotation value or values are not within the required range. " + 
+			" Values must be in the range " + Validator.MIN_VALUE + " to " + Validator.MAX_VALUE;
+			displayErrorDialogue(shell, message);
+			// Return so that onCameraPosition isn't called
 			return;
 		}
 		callbacks.onCameraRotationSet(newCameraRotation);
