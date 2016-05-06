@@ -163,12 +163,6 @@ public class Simulation1 extends Simulation {
 			double mass = getPlanetMass();
 			Vector3f position = getPlanetPosition();
 			
-			/*
-			if (i % 50 == 0) {
-				mass *= 500;
-			}
-			*/
-			
 			planet.setMass((float) mass);
 			planet.setPosition(position);
 			
@@ -180,12 +174,8 @@ public class Simulation1 extends Simulation {
 			Vector3f velocity = getStableOrbitalVelocity(planet, sun);
 			planet.setVelocity(velocity);
 			
-			//planet.setAcceleration(new Vector3f(position.x * 1000, position.y * 1000, 900));
-			
 			planets.add(planet);
 		}
-		
-		//onOpen(DEFAULT_SAVE_PATH);
 		
 	}
 	

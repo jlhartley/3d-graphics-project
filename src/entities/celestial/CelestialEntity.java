@@ -40,42 +40,7 @@ public class CelestialEntity extends Entity {
 	}
 	
 	
-	// Euler integration
 	
-	public void updateVelocity(Vector3f acceleration, float deltaTime) {
-		velocity.x += acceleration.x * deltaTime;
-		velocity.y += acceleration.y * deltaTime;
-		velocity.z += acceleration.z * deltaTime;
-	}
-	
-	
-	public void updatePosition(float deltaTime) {
-		Vector3f position = getPosition();
-		position.x += velocity.x * deltaTime;
-		position.y += velocity.y * deltaTime;
-		position.z += velocity.z * deltaTime;
-	}
-	
-	
-	
-	public Vector3f accelerationTo(CelestialEntity celestialEntity) {
-		
-		float accelerationMagnitude = getAccelerationMagnitude(celestialEntity);
-		
-		Vector3f pos1 = this.getPosition();
-		Vector3f pos2 = celestialEntity.getPosition();
-		
-		// Subtract position1 from position2 to get the vector between the positions
-		// Then scale the vector, such that its magnitude is the calculated value
-		Vector3f acceleration = Vector3f.sub(pos2, pos1).setMagnitude(accelerationMagnitude);
-		
-		return acceleration;
-	}
-	
-	private float getAccelerationMagnitude(CelestialEntity celestialEntity) {
-		float distanceSquared = distanceSquaredTo(celestialEntity) + EPSILON;
-		return (float) (Constants.G * celestialEntity.getMass() / distanceSquared);
-	}
 	
 	public Vector3f forceTo(CelestialEntity celestialEntity) {
 		
