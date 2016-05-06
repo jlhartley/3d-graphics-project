@@ -74,7 +74,7 @@ public class AddPlanetDialog extends TitleAreaDialog {
 			displayErrorDialogue(getShell(), e.getMessage());
 			return;
 		}
-		if (!Validator.validate(velocity)) {
+		if (!autoVelocity && !Validator.validate(velocity)) {
 			String message = "The entered velocity value or values are not within the required range. " + 
 			" Values must be in the range " + Validator.MIN_VALUE + " to " + Validator.MAX_VALUE;
 			displayErrorDialogue(getShell(), message);
