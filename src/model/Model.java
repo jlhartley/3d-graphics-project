@@ -13,7 +13,6 @@ import java.util.List;
 import org.lwjgl.BufferUtils;
 
 import model.vertices.Mesh;
-import model.vertices.Vertex;
 import shaders.ShaderProgram;
 
 public class Model {
@@ -23,10 +22,6 @@ public class Model {
 	
 	// Track the Index Buffer Object (IBO) for cleanup purposes
 	private int ibo;
-	
-	// VBOs for vertex attributes
-	private int positionsVbo;
-	private int normalsVbo;
 	
 	// Track the Vertex Buffer Objects (VBOs) for cleanup purposes
 	private List<Integer> vbos = new ArrayList<>();
@@ -46,60 +41,38 @@ public class Model {
 		glBindVertexArray(vao);
 		
 		// Call methods to add each vertex attribute.
-		positionsVbo = addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		normalsVbo = addVertexAttrib(vertexNormals, ShaderProgram.NORMAL_ATTRIB_LOCATION, 3);
+		addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
+		addVertexAttrib(vertexNormals, ShaderProgram.NORMAL_ATTRIB_LOCATION, 3);
 		
 		// Set the indices data in the IBO
 		setIndices(indices);
 		
 		// Unbind the VAO, so no more state can be changed until it is bound again.
-		// TODO: Replace with something like GL.NULL
 		glBindVertexArray(0);
 	}
 	
 	public Model(float[] vertexPositions, float[] vertexNormals, float[] vertexColours, int[] indices) {
 		
-		// Generate and bind the Vertex Array Object (VAO)
-		vao = glGenVertexArrays();
+		this(vertexPositions, vertexNormals, indices);
+		
 		// Binding ensures that subsequent state information is captured, when
 		// we add the vertex attributes and set the indices.
 		glBindVertexArray(vao);
 		
 		// Call methods to add each vertex attribute.
-		addVertexAttrib(vertexPositions, ShaderProgram.POSITION_ATTRIB_LOCATION, 3);
-		addVertexAttrib(vertexNormals, ShaderProgram.NORMAL_ATTRIB_LOCATION, 3);
 		addVertexAttrib(vertexColours, ShaderProgram.COLOUR_ATTRIB_LOCATION, 3);
 		
-		// Set the indices data in the IBO
-		setIndices(indices);
-		
 		// Unbind the VAO, so no more state can be changed until it is bound again.
-		// TODO: Replace with something like NULL
 		glBindVertexArray(0);
 	}
 	
-	// SCRAP
-	public Model(List<VertexAttribute> vertexAttributes) {
-		
-		vao = glGenVertexArrays();
-		glBindVertexArray(vao);
-		
-		for (VertexAttribute vertexAttribute : vertexAttributes) {
-			float[] data = vertexAttribute.data;
-			int index = vertexAttribute.index;
-			int size = vertexAttribute.size;
-			addVertexAttrib(data, index, size);
-		}
-		
-		glBindVertexArray(0);
-	}
-	
-	// Interleaved
 	public Model(Mesh mesh) {
 		
 		this(mesh.getPositionsArray(), mesh.getNormalsArray(), mesh.getIndicesArray());
 		
 		this.mesh = mesh;
+		
+		// Interleaved
 		
 		/*
 		vao = glGenVertexArrays();
@@ -147,26 +120,6 @@ public class Model {
 		return vbo;
 	}
 	
-	// For a list
-	/*
-	private void setIndices(List<Integer> indices) {
-		
-		this.vertexCount = indices.size();
-		
-		ibo = glGenBuffers();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		
-		// Transfer the content of the indices list to the Java NIO buffer
-		IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
-		for (int index : indices) {
-			indicesBuffer.put(index);
-		}
-		indicesBuffer.flip();
-		
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
-		
-	}*/
-	
 	// For an array
 	private void setIndices(int[] indices) {
 		
@@ -187,33 +140,8 @@ public class Model {
 		
 		// Note - must not unbind since the binding is part of VAO state
 	}
-	
-	// Currently just for testing
-	public void updateFromMesh() {
-		for (int i = 0; i < mesh.getVertices().size(); i++) {
-			Vertex vertex = mesh.getVertices().get(i);
-			vertex.position.scale((float) (1 + Math.random() / 100));
-			vertex.normal.x *= Math.random();
-		}
-		glBindBuffer(GL_ARRAY_BUFFER, positionsVbo);
-		float[] vertexPositions = mesh.getPositionsArray();
-		// Transfer the float array to a Java NIO buffer so that it can be passed to the OpenGL call.
-		FloatBuffer vertexDataBuffer = BufferUtils.createFloatBuffer(vertexPositions.length);
-		vertexDataBuffer.put(vertexPositions);
-		vertexDataBuffer.flip();
-		glBufferData(GL_ARRAY_BUFFER, vertexDataBuffer, GL_STATIC_DRAW);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, normalsVbo);
-		float[] vertexNormals = mesh.getNormalsArray();
-		// Transfer the float array to a Java NIO buffer so that it can be passed to the OpenGL call.
-		FloatBuffer vertexNormalBuffer = BufferUtils.createFloatBuffer(vertexNormals.length);
-		vertexNormalBuffer.put(vertexPositions);
-		vertexNormalBuffer.flip();
-		glBufferData(GL_ARRAY_BUFFER, vertexDataBuffer, GL_STATIC_DRAW);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
 
+	
 	public void bind() {
 		glBindVertexArray(vao);
 	}

@@ -4,10 +4,8 @@ import math.geometry.Vector3f;
 import model.Model;
 import save.PlanetSaveData;
 
-// TODO: Should do something about MovingEntity
-
 public class Planet extends CelestialEntity {
-	
+
 	public Planet(Model model) {
 		super(model);
 	}
@@ -15,12 +13,11 @@ public class Planet extends CelestialEntity {
 	public Planet(Model model, Vector3f position) {
 		super(model, position);
 	}
-	
+
 	public Planet(Model model, Vector3f position, Vector3f velocity) {
 		super(model, position, velocity);
 	}
-	
-	
+
 	// Constructor for restoring from save
 	public Planet(Model model, PlanetSaveData saveData) {
 		this(model);
@@ -31,7 +28,7 @@ public class Planet extends CelestialEntity {
 		setAcceleration(saveData.acceleration);
 		setMass(saveData.mass);
 	}
-	
+
 	public PlanetSaveData getPlanetSaveData() {
 		PlanetSaveData planetSaveData = new PlanetSaveData();
 		planetSaveData.position = getPosition();
@@ -42,5 +39,5 @@ public class Planet extends CelestialEntity {
 		planetSaveData.mass = getMass();
 		return planetSaveData;
 	}
-	
+
 }

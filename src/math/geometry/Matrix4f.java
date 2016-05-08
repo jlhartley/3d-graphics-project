@@ -49,6 +49,11 @@ public class Matrix4f {
 		*/
 		
 		
+		// [ a , e , i , m ]
+		// [ b , f , j , n ]
+		// [ c , g , k , o ]
+		// [ d , h , l , p ]
+		
 		// Column 0
 		elements[0][0] = a;
 		elements[0][1] = b;
@@ -121,68 +126,17 @@ public class Matrix4f {
 		elements[3][2] = vec.z;
 	}
 	
-	// Axis must be a unit vector
-	public void rotate(float angle, Vector3f axis) {
-		
-		// Only operates on the 3x3 portion
-		
-		float c = (float) Math.cos(angle);
-		float s = (float) Math.sin(angle);
-		float oneminusc = 1.0f - c;
-		float xy = axis.x*axis.y;
-		float yz = axis.y*axis.z;
-		float xz = axis.x*axis.z;
-		float xs = axis.x*s;
-		float ys = axis.y*s;
-		float zs = axis.z*s;
-
-		float f00 = axis.x*axis.x*oneminusc+c;
-		float f01 = xy*oneminusc+zs;
-		float f02 = xz*oneminusc-ys;
-		
-		float f10 = xy*oneminusc-zs;
-		float f11 = axis.y*axis.y*oneminusc+c;
-		float f12 = yz*oneminusc+xs;
-		
-		float f20 = xz*oneminusc+ys;
-		float f21 = yz*oneminusc-xs;
-		float f22 = axis.z*axis.z*oneminusc+c;
-
-		float t00 = elements[0][0] * f00 + elements[1][0] * f01 + elements[2][0] * f02;
-		float t01 = elements[0][1] * f00 + elements[1][1] * f01 + elements[2][1] * f02;
-		float t02 = elements[0][2] * f00 + elements[1][2] * f01 + elements[2][2] * f02;
-		float t03 = elements[0][3] * f00 + elements[1][3] * f01 + elements[2][3] * f02;
-		float t10 = elements[0][0] * f10 + elements[1][0] * f11 + elements[2][0] * f12;
-		float t11 = elements[0][1] * f10 + elements[1][1] * f11 + elements[2][1] * f12;
-		float t12 = elements[0][2] * f10 + elements[1][2] * f11 + elements[2][2] * f12;
-		float t13 = elements[0][3] * f10 + elements[1][3] * f11 + elements[2][3] * f12;
-		
-		elements[2][0] = elements[0][0] * f20 + elements[1][0] * f21 + elements[2][0] * f22;
-		elements[2][1] = elements[0][1] * f20 + elements[1][1] * f21 + elements[2][1] * f22;
-		elements[2][2] = elements[0][2] * f20 + elements[1][2] * f21 + elements[2][2] * f22;
-		elements[2][3] = elements[0][3] * f20 + elements[1][3] * f21 + elements[2][3] * f22;
-		
-		elements[0][0] = t00;
-		elements[0][1] = t01;
-		elements[0][2] = t02;
-		elements[0][3] = t03;
-		elements[1][0] = t10;
-		elements[1][1] = t11;
-		elements[1][2] = t12;
-		elements[1][3] = t13;
-	}
-	
-	// Efficient methods for rotating about a given axis
+	// Methods for rotating about a given axis
 	
 	public void rotateX(float angle) {
 		float cos = (float) Math.cos(angle);
 		float sin = (float) Math.sin(angle);
 
         // Temporary variables for dependent values
-        float t10 = elements[1][0] * cos + elements[2][0] * sin;
-        float t11 = elements[1][1] * cos + elements[2][1] * sin;
-        float t12 = elements[1][2] * cos + elements[2][2] * sin;
-        float t13 = elements[1][3] * cos + elements[2][3] * sin;
+        float temp10 = elements[1][0] * cos + elements[2][0] * sin;
+        float temp11 = elements[1][1] * cos + elements[2][1] * sin;
+        float temp12 = elements[1][2] * cos + elements[2][2] * sin;
+        float temp13 = elements[1][3] * cos + elements[2][3] * sin;
         
         // Non-dependent values set directly
         elements[2][0] = elements[1][0] * -sin + elements[2][0] * cos;
@@ -190,21 +144,22 @@ public class Matrix4f {
         elements[2][2] = elements[1][2] * -sin + elements[2][2] * cos;
         elements[2][3] = elements[1][3] * -sin + elements[2][3] * cos;
         
-        elements[1][0] = t10;
-        elements[1][1] = t11;
-        elements[1][2] = t12;
-        elements[1][3] = t13;
+        elements[1][0] = temp10;
+        elements[1][1] = temp11;
+        elements[1][2] = temp12;
+        elements[1][3] = temp13;
 	}
+	
 	
 	public void rotateY(float angle) {
 		float cos = (float) Math.cos(angle);
 		float sin = (float) Math.sin(angle);
 		
 		// Temporary variables for dependent values
-        float t00 = elements[0][0] * cos + elements[2][0] * -sin;
-        float t01 = elements[0][1] * cos + elements[2][1] * -sin;
-        float t02 = elements[0][2] * cos + elements[2][2] * -sin;
-        float t03 = elements[0][3] * cos + elements[2][3] * -sin;
+        float temp00 = elements[0][0] * cos + elements[2][0] * -sin;
+        float temp01 = elements[0][1] * cos + elements[2][1] * -sin;
+        float temp02 = elements[0][2] * cos + elements[2][2] * -sin;
+        float temp03 = elements[0][3] * cos + elements[2][3] * -sin;
         
         // Non-dependent values set directly
         elements[2][0] = elements[0][0] * sin + elements[2][0] * cos;
@@ -212,10 +167,10 @@ public class Matrix4f {
         elements[2][2] = elements[0][2] * sin + elements[2][2] * cos;
         elements[2][3] = elements[0][3] * sin + elements[2][3] * cos;
         
-        elements[0][0] = t00;
-        elements[0][1] = t01;
-        elements[0][2] = t02;
-        elements[0][3] = t03;
+        elements[0][0] = temp00;
+        elements[0][1] = temp01;
+        elements[0][2] = temp02;
+        elements[0][3] = temp03;
 	}
 	
 	public void rotateZ(float angle) {
@@ -223,10 +178,10 @@ public class Matrix4f {
 		float sin = (float) Math.sin(angle);
 		
 		// Temporary variables for dependent values
-        float t00 = elements[0][0] * cos + elements[1][0] * sin;
-        float t01 = elements[0][1] * cos + elements[1][1] * sin;
-        float t02 = elements[0][2] * cos + elements[1][2] * sin;
-        float t03 = elements[0][3] * cos + elements[1][3] * sin;
+        float temp00 = elements[0][0] * cos + elements[1][0] * sin;
+        float temp01 = elements[0][1] * cos + elements[1][1] * sin;
+        float temp02 = elements[0][2] * cos + elements[1][2] * sin;
+        float temp03 = elements[0][3] * cos + elements[1][3] * sin;
         
         // Non-dependent values set directly
         elements[1][0] = elements[0][0] * -sin + elements[1][0] * cos;
@@ -234,10 +189,10 @@ public class Matrix4f {
         elements[1][2] = elements[0][2] * -sin + elements[1][2] * cos;
         elements[1][3] = elements[0][3] * -sin + elements[1][3] * cos;
         
-        elements[0][0] = t00;
-        elements[0][1] = t01;
-        elements[0][2] = t02;
-        elements[0][3] = t03;
+        elements[0][0] = temp00;
+        elements[0][1] = temp01;
+        elements[0][2] = temp02;
+        elements[0][3] = temp03;
 	}
 	
 	
@@ -321,7 +276,9 @@ public class Matrix4f {
 
     public String toString() {
     	String spacing = "  ";
-        DecimalFormat formatter = new DecimalFormat(spacing + "0.000E0; -");
+    	// The ";" separates positive and negative subpatterns
+    	// For a negative number, one of the spaces is replaced with a "-"
+        DecimalFormat formatter = new DecimalFormat(spacing + "0.0000E0; -");
         StringBuilder sb = new StringBuilder();
         
 		for (int row = 0; row < ROW_COUNT; row++) {
@@ -333,6 +290,8 @@ public class Matrix4f {
 			sb.append(spacing + "]\n");
 		}
 		
+		// Use regular expression to replace all "E"s followed by a digit with "E+"
+		// This aligns all the positive powers with any negative powers
 		return sb.toString().replaceAll("E(\\d+)", "E+$1");
     }
 	

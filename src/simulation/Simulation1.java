@@ -222,11 +222,7 @@ public class Simulation1 extends Simulation {
 	protected void logic(float deltaTime) {
 		
 		// Integration
-		
-		//integrator.symplecticEuler(deltaTime);
 		integrator.symplecticEuler2(deltaTime);
-		//integrator.verlet(deltaTime);
-		
 		
 	}
 	

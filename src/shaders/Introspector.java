@@ -20,7 +20,7 @@ public class Introspector {
 	public Introspector(int program) {
 		this.program = program;
 		
-		// Concept of mapping between Java side classes
+		// Concept of mapping between Java client side classes
 		// and shader data types
 		
 		//Map<Class<?>, Integer> classDataTypeMap = new HashMap<>();

@@ -5,7 +5,6 @@ import math.geometry.Vector3f;
 
 public class PhysicsUtils {
 	
-	// Bit of a stupid level of abstraction here - not really needed
 	
 	public static double getVolume(double mass, double density) {
 		return mass / density;
@@ -29,7 +28,6 @@ public class PhysicsUtils {
 		float m2 = entity2.getMass();
 		Vector3f r = Vector3f.sub(p2, p1);
 		
-		//Vector3f velocity = Vector3f.cross(r, new Vector3f((float)Math.random() - 0.5f, (float)Math.random() - 0.5f, (float)Math.random() - 0.5f));
 		Vector3f velocity = Vector3f.cross(r, new Vector3f(0, 1, 0));
 		
 		// Calculate velocity magnitude (speed)

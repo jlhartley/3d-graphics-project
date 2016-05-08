@@ -12,8 +12,6 @@ public class Light implements LightSource {
 	// Attenuation = xd^2 + yd + z
 	//private Vector3f attenuationValues = new Vector3f(0, 0, 1);
 	
-	//private float intensity;
-	
 	// Empty constructor puts light at the origin
 	public Light() {
 		this(new Vector3f());

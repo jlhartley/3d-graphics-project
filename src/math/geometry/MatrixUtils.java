@@ -2,34 +2,6 @@ package math.geometry;
 
 public class MatrixUtils {
 	
-	// Basis vectors
-	public static final Vector3f X_AXIS = new Vector3f(1.0f, 0.0f, 0.0f);
-	public static final Vector3f Y_AXIS = new Vector3f(0.0f, 1.0f, 0.0f);
-	public static final Vector3f Z_AXIS = new Vector3f(0.0f, 0.0f, 1.0f);
-	
-	/*
-	// Model matrix
-	public static Matrix4f modelMatrix(Vector3f translation, Vector3f rotation, float scale) {
-		Matrix4f matrix = new Matrix4f();
-		matrix.translate(translation);
-		matrix.rotate((float) Math.toRadians(rotation.x), X_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.y), Y_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.z), Z_AXIS);
-		matrix.scale(new Vector3f(scale, scale, scale)); // Uniform scale in all axes
-		return matrix;
-	}
-	
-	// View matrix
-	public static Matrix4f viewMatrix(Vector3f translation, Vector3f rotation) {
-		Matrix4f matrix = new Matrix4f();
-		matrix.rotate((float) Math.toRadians(rotation.x), X_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.y), Y_AXIS);
-		matrix.rotate((float) Math.toRadians(rotation.z), Z_AXIS);
-		Vector3f negativeTranslation = new Vector3f(translation).negate();
-		matrix.translate(negativeTranslation);
-		return matrix;
-	}*/
-	
 	// Perspective projection matrix
 	public static Matrix4f perspectiveProjection(int width, int height, float nearPlane, float farPlane, float fov) {
 		
