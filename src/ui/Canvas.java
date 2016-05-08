@@ -1,5 +1,7 @@
 package ui;
 
+import static logging.Logger.*;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -114,7 +116,10 @@ public class Canvas {
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				char character = Character.toUpperCase(e.character);
+				log("Key Press Event: " + e);
+				//char character = Character.toUpperCase(e.character);
+				// Modifier keys can interfere with the e.character field, so use keyCode instead
+				char character = (char) Character.toUpperCase(e.keyCode);
 				keysPressed[character] = true;
 				
 				Key key = Key.fromSWT(e.keyCode);
@@ -142,8 +147,13 @@ public class Canvas {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				char character = Character.toUpperCase(e.character);
-				keysPressed[character] = false;;
+				log("Key Release event: " + e);
+				//char character = Character.toUpperCase(e.character);
+				// When a character is released the e.character field is no longer set strangely,
+				// so use e.keyCode instead
+				// This is related in some way to the SWT patch
+				char character = (char) Character.toUpperCase(e.keyCode);
+				keysPressed[character] = false;
 				
 				Key key = Key.fromSWT(e.keyCode);
 				
@@ -230,28 +240,25 @@ public class Canvas {
 	}
 
 	public boolean isKeyPressed(int keyCode) {
-		if (Key.fromGLFW(keyCode) == Key.PAGEUP) {
+		switch (Key.fromGLFW(keyCode)) {
+		case PAGEUP:
 			return pageUpPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.PAGEDOWN) {
+		case PAGEDOWN:
 			return pageDownPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.CONTROL) {
+		case CONTROL:
 			return controlPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.RIGHT) {
+		case RIGHT:
 			return rightPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.LEFT) {
+		case LEFT:
 			return leftPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.UP) {
+		case UP:
 			return upPressed;
-		}
-		if (Key.fromGLFW(keyCode) == Key.DOWN) {
+		case DOWN:
 			return downPressed;
+		default:
+			// Printable keys map to capital ASCII keys for GLFW
+			return keysPressed[keyCode];
 		}
-		return keysPressed[keyCode];
 	}
 
 	public Vector2f getCursorPosition() {
