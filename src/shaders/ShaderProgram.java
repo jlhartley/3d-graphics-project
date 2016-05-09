@@ -30,8 +30,8 @@ public class ShaderProgram {
 	
 	public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
 		
-		vertexShaderId = loadShaderFromFile(vertexShaderPath, GL_VERTEX_SHADER);
-		fragmentShaderId = loadShaderFromFile(fragmentShaderPath, GL_FRAGMENT_SHADER);
+		vertexShaderId = compileShaderFromFile(vertexShaderPath, GL_VERTEX_SHADER);
+		fragmentShaderId = compileShaderFromFile(fragmentShaderPath, GL_FRAGMENT_SHADER);
 		
 		programId = glCreateProgram();
 		
@@ -53,7 +53,7 @@ public class ShaderProgram {
 		glBindAttribLocation(programId, COLOUR_ATTRIB_LOCATION, "colour");
 	}
 	
-	private static int loadShaderFromFile(String path, int type) {
+	private static int compileShaderFromFile(String path, int type) {
 		
 		String shaderSource = FileUtils.getFileContents(path);
 		

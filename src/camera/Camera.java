@@ -68,8 +68,8 @@ public class Camera {
 	
 	
 	// Translate position by a vector
-	public void translate(Vector3f vec) {
-		position.translate(vec);
+	public void translate(Vector3f vector) {
+		position.translate(vector);
 	}
 	
 	

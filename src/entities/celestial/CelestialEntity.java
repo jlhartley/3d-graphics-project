@@ -88,6 +88,7 @@ public class CelestialEntity extends Entity {
 		acceleration.set(x, y, z);
 	}
 	
+	
 	public Vector3f getVelocity() {
 		return velocity;
 	}
@@ -101,12 +102,13 @@ public class CelestialEntity extends Entity {
 		velocity.set(x, y, z);
 	}
 	
-	public void setMass(float mass) {
-		this.mass = mass;
-	}
 	
 	public float getMass() {
 		return mass;
+	}
+	
+	public void setMass(float mass) {
+		this.mass = mass;
 	}
 
 }
