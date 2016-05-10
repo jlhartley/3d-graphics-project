@@ -65,7 +65,7 @@ public class CelestialEntity extends Entity {
 	private float distanceSquaredTo(CelestialEntity celestialEntity) {
 		Vector3f pos1 = this.getPosition();
 		Vector3f pos2 = celestialEntity.getPosition();
-		Vector3f r = Vector3f.sub(pos2, pos1);;
+		Vector3f r = Vector3f.sub(pos2, pos1);
 		return r.magnitudeSquared();
 	}
 	

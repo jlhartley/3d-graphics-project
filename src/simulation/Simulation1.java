@@ -65,20 +65,11 @@ public class Simulation1 extends Simulation {
 			
 			pos.scale(300);
 			
-			//pos.x *= 300;
-			//pos.y *= 300;
-			
-			//pos.z = -300;
-			//pos.w = 1;
 			
 			pos.multiply(viewInverse, 1);
-			//pos.normalise();
 			
 			
-			//pos.set(MathUtils.projectToWorld(cursorPosition, width, height, projMatrix, viewMatrix));
-			System.out.println(pos);
 			planetToAdd.setPosition(pos);
-			//planetToAdd.setPosition(cursorPosition.x / 2, cursorPosition.y / 2, 10);
 		}
 	}
 	
