@@ -44,7 +44,6 @@ public abstract class CameraControls {
 	boolean mouseDown = false;
 	
 	
-	// TODO: Sort the accessibility issue
 	protected Camera camera;
 	protected UIWindow window;
 	

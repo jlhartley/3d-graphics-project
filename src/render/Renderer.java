@@ -14,7 +14,6 @@ import shaders.ShaderProgram;
 public class Renderer {
 	
 	// Currently supporting just one shader program
-	// TODO: Support multiple shader programs
 	private ShaderProgram shaderProgram;
 	
 	private int framebufferWidth;

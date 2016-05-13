@@ -2,13 +2,6 @@ package math.geometry;
 
 public class Vector3f {
 	
-	// TODO: Have a base vector class / interface that is independent of dimension
-	// TODO: Have a bunch of static factory methods for the basis vectors
-	
-	// TODO: Review performance of the setMagnitude method
-	
-	
-	// TODO: Make a VectorUtils class
 	
 	// Note that the mutator methods use a fluid interface
 	

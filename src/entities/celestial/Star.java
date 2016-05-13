@@ -6,7 +6,7 @@ import model.Model;
 
 public class Star extends CelestialEntity implements LightSource {
 	
-	// Consider having light as a field here
+	// RGB light colour
 	Vector3f lightColour = new Vector3f(1, 1, 0.65f);
 	
 	public Star(Model model) {

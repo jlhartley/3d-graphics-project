@@ -21,8 +21,7 @@ public class ModelUtils {
 		SEPARATE
 	}
 	
-	// TODO: Replace with set, just in case the same VBO were used 
-	// for two separate VAOs
+
 	private static List<Integer> vbos = new ArrayList<>();
 	
 	public static void setVertexAttributes(List<Vertex> vertices) {
@@ -40,8 +39,6 @@ public class ModelUtils {
 			Vector3f position = vertex.position;
 			Vector3f normal = vertex.normal;
 			
-			// For now, just colour using normals
-			//Vector3f colour = vertex.normal;
 			
 			verticesBuffer.put(position.x).put(position.y).put(position.z);
 			verticesBuffer.put(normal.x).put(normal.y).put(normal.z);
