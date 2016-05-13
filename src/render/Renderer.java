@@ -179,8 +179,6 @@ public class Renderer {
 		shaderProgram.setUniformValue("projection_matrix", projectionMatrix);
 	}
 	
-	// Associate entities with a given model for batch rendering
-	//HashMap<Model, List<Entity>> entityModelMap = new HashMap<>();
 	
 	public void render(Entity entity, Camera camera) {
 		

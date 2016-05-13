@@ -50,7 +50,6 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 	private double timeMultiplier = 1;
 	
 	// Pause all logic other than camera movement
-	// Should be volatile?
 	protected boolean paused = false;
 	
 	

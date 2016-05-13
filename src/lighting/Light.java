@@ -75,7 +75,6 @@ public class Light implements LightSource {
 		return colour;
 	}
 	
-	// TODO: Use intensity field
 	@Override
 	public float getLightIntensity() {
 		return 1;
