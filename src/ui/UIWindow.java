@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.system.libffi.Closure;
+import org.lwjgl.system.Callback;
 
 import math.geometry.Vector2f;
 
@@ -41,7 +41,7 @@ public class UIWindow implements Window {
 	//private MenuBar menuBar;
 	
 	// OpenGL debugging output
-	private Closure debugMessageCallback;
+	private Callback debugMessageCallback;
 	
 	public UIWindow(int width, int height, String title, 
 			SidePanel.Callbacks sidePanelCallbacks, MenuBar.Callbacks menuBarCallbacks, Canvas.Callbacks canvasCallbacks) {
@@ -247,7 +247,7 @@ public class UIWindow implements Window {
 	// Cleanup
 	public void cleanUp() {
 		if (debugMessageCallback != null) {
-			debugMessageCallback.release();
+			debugMessageCallback.free();
 		}
 		// Once the shell is disposed, the display should be disposed
 		display.dispose();

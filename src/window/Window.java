@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.system.libffi.Closure;
+import org.lwjgl.system.Callback;
 
 import input.Key;
 import input.MouseButton;
@@ -43,7 +43,7 @@ public class Window {
 	private GLFWWindowSizeCallback windowSizeCallback;
 	private GLFWCursorPosCallback cursorPosCollback;
 	
-	private Closure debugMessageCallback;
+	private Callback debugMessageCallback;
 	
 	// Method to call whenever the size of the window changes
 	private void updateSize(int width, int height) {
@@ -63,8 +63,8 @@ public class Window {
 		
 		// Initialise GLFW - this is required before most GLFW functions
 		// can be called
-		int initSuccess = glfwInit();
-		if (initSuccess == GL_FALSE) {
+		boolean initSuccess = glfwInit();
+		if (!initSuccess) {
 			System.err.println("Could not initialise GLFW!");
 			cleanup();
 			// Exiting with non-zero status code indicates abnormal termination
@@ -238,11 +238,11 @@ public class Window {
 	}
 	
 	public void setShouldClose(boolean value) {
-		glfwSetWindowShouldClose(window, value ? GL_TRUE : GL_FALSE);
+		glfwSetWindowShouldClose(window, value);
 	}
 	
 	public boolean shouldClose() {
-		return glfwWindowShouldClose(window) == GL_TRUE;
+		return glfwWindowShouldClose(window);
 	}
 	
 	
@@ -267,26 +267,26 @@ public class Window {
 	// Handles GLFW and GL cleanup and exit
 	public void cleanup() {
 		if (debugMessageCallback != null) {
-			debugMessageCallback.release();
+			debugMessageCallback.free();
 		}
 		if (window != NULL) {
 			glfwDestroyWindow(window);
 		}
 		// Callbacks need to be released because they use native resources
 		if (keyCallback != null) {
-			keyCallback.release();
+			keyCallback.free();
 		}
 		if (framebufferSizeCallback != null) {
-			framebufferSizeCallback.release();
+			framebufferSizeCallback.free();
 		}
 		if (windowSizeCallback != null) {
-			windowSizeCallback.release();
+			windowSizeCallback.free();
 		}
 		if (cursorPosCollback != null) {
-			cursorPosCollback.release();
+			cursorPosCollback.free();
 		}
 		glfwTerminate();
-		errorCallback.release();
+		errorCallback.free();
 	}
 
 }
