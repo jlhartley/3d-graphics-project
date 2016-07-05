@@ -49,7 +49,7 @@ public class RelativeControls extends CameraControls {
 		Vector3f rotation = camera.getRotation();
 		
 		Matrix4f matrix = new Matrix4f();
-		// Roll is rarely required
+		// Roll is rarely required, but included for completeness
 		matrix.rotateZ((float) -Math.toRadians(rotation.z));
 		matrix.rotateY((float) -Math.toRadians(rotation.y));
 		matrix.rotateX((float) -Math.toRadians(rotation.x));

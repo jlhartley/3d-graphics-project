@@ -209,7 +209,7 @@ public abstract class Simulation implements SidePanel.Callbacks, MenuBar.Callbac
 		resetCamera();
 	}
 	
-	void resetCamera() {
+	protected void resetCamera() {
 		camera.setPosition(0, 350, 350);
 		// Point camera downwards at 45 degrees
 		camera.setPitch(45);

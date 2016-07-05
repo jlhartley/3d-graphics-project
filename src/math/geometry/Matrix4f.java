@@ -333,6 +333,8 @@ public class Matrix4f {
 			sb.append(spacing + "]\n");
 		}
 		
+		// Use regular expression to replace all "E"s followed by digits with "E+", followed by those digits
+		// This aligns all the positive powers with any negative powers
 		return sb.toString().replaceAll("E(\\d+)", "E+$1");
     }
 	
