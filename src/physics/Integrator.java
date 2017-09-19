@@ -113,15 +113,25 @@ public class Integrator {
 			Vector3f velocity = planet.getVelocity();
 			Vector3f acceleration = planet.getAcceleration();
 			
-			velocity.x = velocity.x + acceleration.x * deltaTime;
-			velocity.y = velocity.y + acceleration.y * deltaTime;
-			velocity.z = velocity.z + acceleration.z * deltaTime;
+			// v(t) = v(0) + a*t
+			//velocity.x += acceleration.x * deltaTime;
+			//velocity.y += acceleration.y * deltaTime;
+			//velocity.z += acceleration.z * deltaTime;
 			
-			position.x = position.x + velocity.x * deltaTime - (0.5f * acceleration.x * deltaTime * deltaTime);
-			// Neat effect
-			//position.y = position.y + velocity.x * deltaTime - (0.5f * acceleration.y * deltaTime * deltaTime);
-			position.y = position.y + velocity.y * deltaTime - (0.5f * acceleration.y * deltaTime * deltaTime);
-			position.z = position.z + velocity.z * deltaTime - (0.5f * acceleration.z * deltaTime * deltaTime);
+			// s(t) = s(0) + v(t)*t - 0.5*a*t^2
+			//position.x += velocity.x * deltaTime - (0.5f * acceleration.x * deltaTime * deltaTime);
+			//position.y += velocity.y * deltaTime - (0.5f * acceleration.y * deltaTime * deltaTime);
+			//position.z += velocity.z * deltaTime - (0.5f * acceleration.z * deltaTime * deltaTime);
+			
+			// s(t) = s(0) + v(0)*t + 0.5*a*t^2
+			position.x += velocity.x * deltaTime + (0.5f * acceleration.x * deltaTime * deltaTime);
+			position.y += velocity.y * deltaTime + (0.5f * acceleration.y * deltaTime * deltaTime);
+			position.z += velocity.z * deltaTime + (0.5f * acceleration.z * deltaTime * deltaTime);
+			
+			//v(t) = v(0) + a*t
+			velocity.x += acceleration.x * deltaTime;
+			velocity.y += acceleration.y * deltaTime;
+			velocity.z += acceleration.z * deltaTime;
 			
 			// Rotate planet with time - a full rotation in 2 seconds
 			planet.rotateY(180, deltaTime);
