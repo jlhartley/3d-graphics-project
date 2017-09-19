@@ -224,7 +224,7 @@ public class Simulation1 extends Simulation {
 		// Integration
 		
 		//integrator.symplecticEuler(deltaTime);
-		integrator.symplecticEuler2(deltaTime);
+		integrator.symplecticEuler4(deltaTime);
 		//integrator.verlet(deltaTime);
 		
 		
